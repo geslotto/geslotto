@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EventU</string>
+    <string name="action_settings">Configuración</string>
+    <string name="titulo">Event-U</string>
+
+    <!-- MainActivity -->
+    <string name="txtFecha">Fecha</string>
+    <string name="hint_fecha">dd/mm/aaaa</string>
+    <string name="txtFiltro">Filtro</string>
+    <string name="hint_filtro">Nombre evento, provincia</string>
+    <string name="txtBuscar">Buscar</string>
+    <string name="txtLimpiar">Limpiar</string>
+    <string name="txtCrearEvento">Crear Evento</string>
+    <string name="Categorias">Categorias</string>
+    <string name="Edad">Edad</string>
+
+    <!-- Crear evento -->
+    <string name="btn_inicio">Inicio</string>
+    <string name="crearEventoTitulo">Nuevo evento</string>
+    <string name="crearEventoHintDescrip">Detalles del evento</string>
+    <string name="crearEventoDatosEvento">Datos del evento</string>
+    <string name="crearEventoNombre">Nombre del evento</string>
+    <string name="crearEventoDescrip">Descripción</string>
+    <string name="crearEventoLocalEvento">Localización del evento</string>
+    <string name="crearEventoubicacion">Utilizar ubicación actual</string>
+    <string name="crearEventoProvincia">Provincia</string>
+    <string name="crearEventoPoblacion">Población</string>
+    <string name="crearEventoInformacionEvento">Información del evento</string>
+    <string name="crearEventoComentarios">Permitir comentarios</string>
+    <string name="crearEventoEdad">Edad recomendada</string>
+    <string name="crearEventoCategoria">Categoria del evento</string>
+
+</resources>

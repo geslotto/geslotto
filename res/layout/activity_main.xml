@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/cabecera" >
+
+        <TextView
+            android:id="@+id/Titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/titulo"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btnCrearEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="2dp"
+            android:background="@anim/anim_boton_pequeno"
+            android:drawableLeft="@drawable/ic_menu_btn_add"
+            android:text="@string/txtCrearEvento"
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TabHost
+        android:id="@+id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#396b9e" >
+            </TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ddd" >
+
+                <LinearLayout
+                    android:id="@+id/tab1Layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp" >
+
+                    <Button
+                        android:id="@+id/btn_recoger"
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:background="@anim/anim_boton"
+                        android:contentDescription="@string/action_settings"
+                        android:drawableRight="@android:drawable/arrow_down_float"
+                        android:text="@string/txtFiltro"
+                        android:textSize="12sp" />
+
+                    <ScrollView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:cacheColorHint="@android:color/transparent"
+                        android:divider="@android:color/transparent" >
+
+                        <LinearLayout
+                            android:id="@+id/linear_filtro"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:orientation="vertical"
+                            android:visibility="gone" >
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_marginTop="10dp" >
+
+                                <EditText
+                                    android:id="@+id/campoFiltro"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/txtfiltro"
+                                    android:background="@drawable/campo"
+                                    android:ems="10"
+                                    android:hint="@string/hint_filtro"
+                                    android:inputType="text"
+                                    android:lines="1"
+                                    android:maxLength="30" />
+
+                                <TextView
+                                    android:id="@+id/txtfiltro"
+                                    android:layout_width="50dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/txtFiltro" />
+                            </RelativeLayout>
+
+                            <TableLayout
+                                android:id="@+id/table_filtro"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:stretchColumns="1" >
+
+                                <TableRow
+                                    android:id="@+id/tb_fil_Row1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    tools:ignore="UselessParent" >
+
+                                    <TextView
+                                        android:id="@+id/txtfecha"
+                                        android:layout_width="50dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/txtFecha"
+                                        tools:ignore="TooDeepLayout" />
+
+                                    <EditText
+                                        android:id="@+id/campoFecha"
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/campo"
+                                        android:ems="10"
+                                        android:enabled="false"
+                                        android:hint="@string/hint_fecha"
+                                        android:inputType="date"
+                                        android:maxLength="10"
+                                        android:maxLines="1"
+                                        android:maxWidth="300dp" >
+                                    </EditText>
+
+                                    <Button
+                                        android:id="@+id/btnFecha"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginLeft="5dp"
+                                        android:background="@android:drawable/ic_menu_today" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:id="@+id/table_spinner"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:stretchColumns="*" >
+
+                                <TableRow
+                                    android:id="@+id/tableRow1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    tools:ignore="UselessParent" >
+
+                                    <Spinner
+                                        android:id="@+id/spiCategorias"
+                                        android:layout_height="40dp"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@anim/anim_boton"
+                                        android:minWidth="100dp"
+                                        android:prompt="@string/Categorias" />
+
+                                    <Spinner
+                                        android:id="@+id/spiEdad"
+                                        android:layout_height="40dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:background="@anim/anim_boton"
+                                        android:minWidth="100dp"
+                                        android:prompt="@string/Edad" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right" >
+
+                                <Button
+                                    android:id="@+id/btnBuscar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_toRightOf="@+id/btnLimpiar"
+                                    android:background="@anim/anim_boton"
+                                    android:drawableLeft="@android:drawable/ic_menu_search"
+                                    android:text="@string/txtBuscar"
+                                    android:textColor="@android:color/background_light" />
+
+                                <Button
+                                    android:id="@+id/btnLimpiar"
+                                    android:layout_width="46dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@anim/anim_boton"
+                                    android:drawableLeft="@android:drawable/ic_menu_delete"
+                                    android:textColor="@android:color/background_light" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <com.desipal.EventU.ExpandableHeightGridView
+                        android:id="@+id/gridResultados"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:columnWidth="140dp"
+                        android:gravity="center"
+                        android:horizontalSpacing="5dp"
+                        android:numColumns="auto_fit"
+                        android:stretchMode="spacingWidthUniform"
+                        android:verticalSpacing="5dp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/tab2Layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp" >
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/mapa" />
+                </RelativeLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</RelativeLayout>

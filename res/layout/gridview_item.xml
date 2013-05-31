@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_gridView_item"
+    android:layout_width="140dp"
+    android:layout_height="120dp"
+    android:minHeight="120dp"
+    android:minWidth="140dp" >
+
+    <TextView
+        android:id="@+id/txtTiutlo_evento"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#80000000"
+        android:paddingLeft="10dp"
+        android:text="@string/titulo"
+        android:textColor="#FFF"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/txtDesc_evento"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#80000000"
+        android:paddingLeft="10dp"
+        android:text="@string/titulo"
+        android:textColor="#FFF"
+        android:textSize="15sp" />
+
+</RelativeLayout>

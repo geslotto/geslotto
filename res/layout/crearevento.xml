@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/relCabecera"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/cabecera" >
+
+        <TextView
+            android:id="@+id/Titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/crearEventoTitulo"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:background="@anim/anim_boton_pequeno"
+            android:drawableLeft="@drawable/ic_menu_home"
+            android:text="@string/btn_inicio"
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/relCabecera"
+        android:background="#ddd" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <!-- DATOS DEL EVENTO -->
+
+            <TextView
+                android:id="@+id/txtDatosEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/crearEventoDatosEvento"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/crearEventoNombre" />
+
+            <EditText
+                android:id="@+id/editNombre"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/campo"
+                android:hint="@string/crearEventoNombre"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="30" >
+
+                <requestFocus android:layout_width="match_parent" />
+            </EditText>
+
+            <TextView
+                android:id="@+id/txtDescrip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/crearEventoDescrip" />
+
+            <EditText
+                android:id="@+id/editDescrip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/campo"
+                android:hint="@string/crearEventoHintDescrip"
+                android:inputType="textMultiLine" />
+
+            <!-- LOCALIZACION -->
+
+            <TextView
+                android:id="@+id/txtLocalizacionEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/crearEventoLocalEvento"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtUbicacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/togUbicacion"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/crearEventoubicacion" />
+
+                <ToggleButton
+                    android:id="@+id/togUbicacion"
+                    android:layout_width="64dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/txtUbicacion"
+                    android:background="@drawable/toggle_bg"
+                    android:checked="false"
+                    android:textOff=""
+                    android:textOn="" />
+            </RelativeLayout>
+
+            <TableLayout
+                android:id="@+id/tableLocalizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*" >
+
+                <TableRow
+                    android:id="@+id/tableRow1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/txtPoblacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/crearEventoPoblacion" />
+
+                    <TextView
+                        android:id="@+id/txtProvincia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/crearEventoProvincia" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tableRow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/editPoblacion"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/campo"
+                        android:hint="@string/crearEventoPoblacion"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLength="30" />
+
+                    <EditText
+                        android:id="@+id/editProvincia"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/campo"
+                        android:hint="@string/crearEventoProvincia"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLength="30" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/txtinformacionEvento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/crearEventoInformacionEvento"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtEdad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/crearEventoEdad" />
+
+            <Spinner
+                android:id="@+id/spiEdad"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@anim/anim_boton"
+                android:minWidth="100dp"
+                android:prompt="@string/Edad" />
+
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/crearEventoCategoria" />
+
+            <Spinner
+                android:id="@+id/spiCategorias"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@anim/anim_boton"
+                android:minWidth="100dp"
+                android:prompt="@string/Categorias" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

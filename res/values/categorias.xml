@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="categorias">
+        <item>Categorias</item>
+        <item>Actuaciones</item>
+        <item>Espectáculos</item>
+        <item>Parques infantiles</item>
+        <item>Verbenas</item>
+    </string-array>
+    <string-array name="edad">
+        <item>Edad</item>
+        <item>infantil</item>
+        <item>+18</item>
+        <item>3ªEdad</item>
+        <item>Todos los públicos</item>
+    </string-array>
+
+</resources>
