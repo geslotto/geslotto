@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		getWindow().setBackgroundDrawableResource(android.R.color.black);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
@@ -160,7 +161,6 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
-
 	}
 
 	// //////// VENTANA MODAL PARA INTRODUCIR FECHA
@@ -171,7 +171,6 @@ public class MainActivity extends Activity {
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
 		return new DatePickerDialog(this, datePickerListener, year, month, day);
-
 	}
 
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
@@ -190,8 +189,6 @@ public class MainActivity extends Activity {
 			// set selected date into textview
 			txtFecha.setText(new StringBuilder().append(dia).append("/")
 					.append(mes).append("/").append(year));
-
 		}
 	};
-
 }

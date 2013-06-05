@@ -8,10 +8,10 @@
     <!-- MainActivity -->
     <string name="txtFecha">Fecha</string>
     <string name="hint_fecha">dd/mm/aaaa</string>
+    <string name="hint_hora">hh:mm</string>
     <string name="txtFiltro">Filtro</string>
     <string name="hint_filtro">Nombre evento, provincia</string>
     <string name="txtBuscar">Buscar</string>
-    <string name="txtLimpiar">Limpiar</string>
     <string name="txtCrearEvento">Crear Evento</string>
     <string name="Categorias">Categorias</string>
     <string name="Edad">Edad</string>
@@ -28,8 +28,16 @@
     <string name="crearEventoProvincia">Provincia</string>
     <string name="crearEventoPoblacion">Población</string>
     <string name="crearEventoInformacionEvento">Información del evento</string>
-    <string name="crearEventoComentarios">Permitir comentarios</string>
     <string name="crearEventoEdad">Edad recomendada</string>
     <string name="crearEventoCategoria">Categoria del evento</string>
+    <string name="crearEventoFechaDelEvento">Fecha del evento</string>
+    <string name="crearEventoTodoElDia">Todo el día</string>
+    <string name="crearEventoHoraInicio">Hora inicio</string>
+    <string name="crearEventoFechaInicio">Fecha inicio</string>
+    <string name="crearEventoHoraFin">Hora fin</string>
+    <string name="crearEventoFechaFin">Fecha fin</string>
+    <string name="crearEventoBoton">Crear evento</string>
+    <string name="crearEventoComentarios">Comentarios del evento</string>
+    <string name="crearEventoPerComentarios">Permitir comentarios</string>
 
 </resources>
