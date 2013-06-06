@@ -5,8 +5,11 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="10"
         android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
 
     <application
         android:allowBackup="true"
@@ -27,7 +30,6 @@
             android:name="com.desipal.EventU.crearEventoActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" />
-
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ public class eventoEN {
 	private boolean validado;
 	private boolean comentarios;
 	private String poblacion;
+	private String provincia;
 	private int idEdad;
 	private int idCategoria;
 	private int idFecha;
@@ -117,5 +118,13 @@ public class eventoEN {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
 	}
 }

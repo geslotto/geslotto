@@ -12,7 +12,7 @@
 
     <translate
         android:background="#000000"
-        android:duration="5000"
+        android:duration="300"
         android:fillAfter="true"
         android:fromXDelta="0"
         android:toXDelta="0" />

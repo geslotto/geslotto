@@ -1,6 +1,7 @@
 package com.desipal.EventU;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import com.desipal.EventU.R;
 
@@ -21,13 +22,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	/** Called when the activity is first created. */
+
+	static Locale currentLocale = new Locale("es", "ES");
 
 	private TextView txtFecha;
 
@@ -56,8 +59,7 @@ public class MainActivity extends Activity {
 
 		spec = tabs.newTabSpec("Cerca de mí");
 		spec.setContent(R.id.tab2Layout);
-		spec.setIndicator("Cerca de mí",
-				res.getDrawable(android.R.drawable.ic_menu_myplaces));
+		spec.setIndicator("Cerca de mí", res.getDrawable(android.R.drawable.ic_menu_myplaces));
 		tabs.addTab(spec);
 		tabs.setCurrentTab(0);
 
@@ -79,12 +81,9 @@ public class MainActivity extends Activity {
 				final LinearLayout filtro = (LinearLayout) findViewById(R.id.linear_filtro);
 				Handler handler = new Handler();
 				if (recogido) {
-
-					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-							android.R.drawable.arrow_up_float, 0);
+					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
 					GridView gridview = (GridView) findViewById(R.id.gridResultados);
-					TranslateAnimation anim_trans = new TranslateAnimation(0,
-							0, 0, filtro.getHeight());
+					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
 					anim_trans.setDuration(200);
 					gridview.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
@@ -94,11 +93,10 @@ public class MainActivity extends Activity {
 							anim_alpha.setDuration(200);
 							filtro.startAnimation(anim_alpha);
 						}
-					}, 200);
+					}, 220);
 					recogido = false;
 				} else {
-					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-							android.R.drawable.arrow_down_float, 0);
+					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
 					AlphaAnimation anim_trans = new AlphaAnimation(1, 0);
 					anim_trans.setDuration(200);
 					filtro.startAnimation(anim_trans);
@@ -106,8 +104,7 @@ public class MainActivity extends Activity {
 						public void run() {
 							filtro.setVisibility(View.GONE);
 							GridView gridview = (GridView) findViewById(R.id.gridResultados);
-							TranslateAnimation anim_trans = new TranslateAnimation(
-									0, 0, filtro.getHeight(), 0);
+							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
 							anim_trans.setDuration(200);
 							gridview.startAnimation(anim_trans);
 						}
@@ -117,13 +114,13 @@ public class MainActivity extends Activity {
 			}
 		});
 		Spinner spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
-		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-				this, R.array.categorias, R.layout.spinner_item);
+		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
+				R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
 		Spinner spiEdad = (Spinner) findViewById(R.id.spiEdad);
-		ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(
-				this, R.array.edad, R.layout.spinner_item);
+		ArrayAdapter<CharSequence> adapter2 = ArrayAdapter
+				.createFromResource(this, R.array.edad, R.layout.spinner_item);
 		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiEdad.setAdapter(adapter2);
 
@@ -137,7 +134,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		Button btnLimpiar = (Button) findViewById(R.id.btnLimpiar);
+		ImageButton btnLimpiar = (ImageButton) findViewById(R.id.btnLimpiar);
 		btnLimpiar.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -156,8 +153,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(MainActivity.this,
-						crearEventoActivity.class);
+				Intent i = new Intent(MainActivity.this, crearEventoActivity.class);
 				startActivity(i);
 			}
 		});
@@ -175,8 +171,7 @@ public class MainActivity extends Activity {
 
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear,
-				int selectedMonth, int selectedDay) {
+		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
@@ -187,8 +182,7 @@ public class MainActivity extends Activity {
 			if (month + 1 < 10)
 				mes = "0" + mes;
 			// set selected date into textview
-			txtFecha.setText(new StringBuilder().append(dia).append("/")
-					.append(mes).append("/").append(year));
+			txtFecha.setText(new StringBuilder().append(dia).append("/").append(mes).append("/").append(year));
 		}
 	};
 }

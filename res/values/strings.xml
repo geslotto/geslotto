@@ -4,7 +4,8 @@
     <string name="app_name">EventU</string>
     <string name="action_settings">Configuración</string>
     <string name="titulo">Event-U</string>
-
+    <string name="descImagen">Imagen</string>
+    
     <!-- MainActivity -->
     <string name="txtFecha">Fecha</string>
     <string name="hint_fecha">dd/mm/aaaa</string>
@@ -39,5 +40,7 @@
     <string name="crearEventoBoton">Crear evento</string>
     <string name="crearEventoComentarios">Comentarios del evento</string>
     <string name="crearEventoPerComentarios">Permitir comentarios</string>
+    <string name="crearEventoImagenes">Imágenes del evento</string>
+    <string name="crearEventoCargarImagen">Cargar imagen</string>
 
 </resources>
