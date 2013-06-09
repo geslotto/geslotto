@@ -5,7 +5,8 @@ public class eventoEN {
 	private String idCreador;
 	private String nombre;
 	private String descripcion;
-	private String ubicacion;
+	private double latitud;
+	private double longitud;
 	private int asistencia;
 	private boolean validado;
 	private boolean comentarios;
@@ -48,13 +49,6 @@ public class eventoEN {
 		this.descripcion = descripcion;
 	}
 
-	public String getUbicacion() {
-		return ubicacion;
-	}
-
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
-	}
 
 	public int getAsistencia() {
 		return asistencia;
@@ -126,5 +120,21 @@ public class eventoEN {
 
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
+	}
+
+	public double getLatitud() {
+		return latitud;
+	}
+
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+
+	public double getLongitud() {
+		return longitud;
+	}
+
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
 	}
 }

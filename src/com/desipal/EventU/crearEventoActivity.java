@@ -6,34 +6,28 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
 import com.desipal.Entidades.eventoEN;
 import com.desipal.Entidades.fechaEN;
-
+import com.desipal.Servidor.creacionEvento;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings.Secure;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -60,7 +54,8 @@ import android.widget.ToggleButton;
 public class crearEventoActivity extends Activity {
 
 	private int ESCALAMAXIMA = 300;// Tamaño máximo de las imagenes subidas
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy hh:mm", MainActivity.currentLocale);
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"dd/mm/yyyy hh:mm", MainActivity.currentLocale);
 	private static Activity actividad;
 	private TextView txtFecha;
 	private TextView txtHora;
@@ -69,8 +64,12 @@ public class crearEventoActivity extends Activity {
 	private int day;
 	private int hour;
 	private int minute;
+	public static boolean Creacionsatisfactoria;
+	private boolean error = false;
 
-	public static List<Bitmap> arrayImagen = new ArrayList<Bitmap>();
+	public static List<Bitmap> arrayImagen;
+	double Latitud;
+	double Longitud;
 	InputStream is;
 
 	@Override
@@ -88,9 +87,10 @@ public class crearEventoActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.crearevento);
 		actividad = this;
+		arrayImagen = new ArrayList<Bitmap>();
 		Spinner spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
-		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
-				R.layout.spinner_item);
+		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
+				this, R.array.categorias, R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
 
@@ -99,14 +99,16 @@ public class crearEventoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				finish();
-				overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+				overridePendingTransition(R.anim.slide_in_right,
+						R.anim.slide_out_right);
 			}
 		});
 
 		CheckBox chTodo = (CheckBox) findViewById(R.id.chTodoElDia);
 		chTodo.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
 				final TableRow filaFin = (TableRow) findViewById(R.id.table2Row4);
 				final TableRow filaTexFin = (TableRow) findViewById(R.id.table2Row3);
 				final RelativeLayout relImagenes = (RelativeLayout) findViewById(R.id.relImagenes);
@@ -120,8 +122,10 @@ public class crearEventoActivity extends Activity {
 						public void run() {
 							filaFin.setVisibility(View.GONE);
 							filaTexFin.setVisibility(View.GONE);
-							int altura = filaFin.getHeight() + filaTexFin.getHeight();
-							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, altura, 0);
+							int altura = filaFin.getHeight()
+									+ filaTexFin.getHeight();
+							TranslateAnimation anim_trans = new TranslateAnimation(
+									0, 0, altura, 0);
 							anim_trans.setDuration(200);
 							relImagenes.startAnimation(anim_trans);
 						}
@@ -129,7 +133,8 @@ public class crearEventoActivity extends Activity {
 
 				} else {
 					int altura = filaFin.getHeight() + filaTexFin.getHeight();
-					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, altura);
+					TranslateAnimation anim_trans = new TranslateAnimation(0,
+							0, 0, altura);
 					anim_trans.setDuration(200);
 					relImagenes.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
@@ -185,7 +190,8 @@ public class crearEventoActivity extends Activity {
 		tgUbicacion.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
 				final TableLayout tableLocalizacion = (TableLayout) findViewById(R.id.tableLocalizacion);
 				final RelativeLayout relFechas = (RelativeLayout) findViewById(R.id.relFechas);
 				Handler handler = new Handler();
@@ -196,15 +202,25 @@ public class crearEventoActivity extends Activity {
 					handler.postDelayed(new Runnable() {
 						public void run() {
 							tableLocalizacion.setVisibility(View.GONE);
-							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, tableLocalizacion.getHeight(),
-									0);
+							TranslateAnimation anim_trans = new TranslateAnimation(
+									0, 0, tableLocalizacion.getHeight(), 0);
 							anim_trans.setDuration(200);
 							relFechas.startAnimation(anim_trans);
 						}
 					}, 200);
-
+					try {
+						LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+						Location loc = locManager
+								.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+						Latitud = loc.getLatitude();
+						Longitud = loc.getLongitude();
+					} catch (Exception e) {
+						Toast.makeText(actividad, "Error:" + e.getMessage(),
+								Toast.LENGTH_LONG).show();						
+					}
 				} else {
-					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, tableLocalizacion.getHeight());
+					TranslateAnimation anim_trans = new TranslateAnimation(0,
+							0, 0, tableLocalizacion.getHeight());
 					anim_trans.setDuration(200);
 					relFechas.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
@@ -223,21 +239,19 @@ public class crearEventoActivity extends Activity {
 		btnSubirImagen.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+				Intent pickPhoto = new Intent(
+						Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(pickPhoto, 1);
 			}
 		});
 
-		Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+		final Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 		btnCrearEvento.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				boolean error = crearEvento();
-				if (error)
-					Toast.makeText(actividad, "ERROR AL CREAR EVENTO", Toast.LENGTH_SHORT).show();
-				else
-					Toast.makeText(actividad, "EVENTO CREADO", Toast.LENGTH_SHORT).show();
+				btnCrearEvento.setEnabled(false);
+				crearEvento();
 			}
 		});
 	}
@@ -250,13 +264,15 @@ public class crearEventoActivity extends Activity {
 			year = c.get(Calendar.YEAR);
 			month = c.get(Calendar.MONTH);
 			day = c.get(Calendar.DAY_OF_MONTH);
-			DatePickerDialog datePicker = new DatePickerDialog(this, datePickerListener, year, month, day);
+			DatePickerDialog datePicker = new DatePickerDialog(this,
+					datePickerListener, year, month, day);
 			datePicker.setTitle("Introduzca fecha");
 			return datePicker;
 		} else {
 			hour = c.get(Calendar.HOUR);
 			minute = c.get(Calendar.MINUTE);
-			TimePickerDialog timPicker = new TimePickerDialog(this, timePickerListener, hour, minute, true);
+			TimePickerDialog timPicker = new TimePickerDialog(this,
+					timePickerListener, hour, minute, true);
 			timPicker.setTitle("Introduzca hora");
 			return timPicker;
 		}
@@ -265,18 +281,20 @@ public class crearEventoActivity extends Activity {
 
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+		public void onDateSet(DatePicker view, int selectedYear,
+				int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			String dia = Integer.toString(day + 1);
+			String dia = Integer.toString(day);
 			String mes = Integer.toString(month + 1);
-			if (day + 1 < 10)
+			if (day < 10)
 				dia = "0" + dia;
 			if (month + 1 < 10)
 				mes = "0" + mes;
 			// set selected date into textview
-			txtFecha.setText(new StringBuilder().append(dia).append("/").append(mes).append("/").append(year));
+			txtFecha.setText(new StringBuilder().append(dia).append("/")
+					.append(mes).append("/").append(year));
 		}
 	};
 
@@ -291,28 +309,31 @@ public class crearEventoActivity extends Activity {
 				hor = "0" + hor;
 			if (minute < 10)
 				min = "0" + min;
-			txtHora.setText(new StringBuilder().append(hor).append(":").append(min));
+			txtHora.setText(new StringBuilder().append(hor).append(":")
+					.append(min));
 		}
 	};
 
 	// //////// SELECCIONAR IMAGEN
-	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent imageReturnedIntent) {
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 		if (resultCode == RESULT_OK) {
 			try {
 				Uri selectedImage = imageReturnedIntent.getData();
-				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
+				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver()
+						.openInputStream(selectedImage));
 				arrayImagen.add(bmp);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		} else
-			Toast.makeText(this, "No ha seleccionado ninguna imágen", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "No ha seleccionado ninguna imágen",
+					Toast.LENGTH_SHORT).show();
 		refrescarLista();
 	}
 
 	protected boolean crearEvento() {
-		boolean error = false;
 		try {
 			eventoEN evento = new eventoEN();
 			fechaEN fecha = new fechaEN();
@@ -343,9 +364,11 @@ public class crearEventoActivity extends Activity {
 				error = true;
 
 			if (tgUbicacion.isChecked()) {
-				evento.setUbicacion("Automatica");
+				evento.setLongitud(Longitud);
+				evento.setLatitud(Latitud);
 			} else {
-				evento.setUbicacion("");
+				evento.setLongitud(0.0);
+				evento.setLatitud(0.0);
 				if (!edPoblacion.getText().equals(""))
 					evento.setPoblacion(edPoblacion.getText().toString());
 				else
@@ -363,14 +386,14 @@ public class crearEventoActivity extends Activity {
 
 			if (chTodoElDia.isChecked()) {
 				if (!edFechaIni.getText().equals(""))
-					fecha.setFechaInicio(dateFormat.parse(edFechaIni.getText().toString() + " "
-							+ edHoraIni.getText().toString()));
+					fecha.setFechaInicio(dateFormat.parse(edFechaIni.getText()
+							.toString() + " " + edHoraIni.getText().toString()));
 				else
 					error = true;
 				fecha.setTodoElDia(true);
 			} else {
-				fecha.setFechaFin(dateFormat.parse(edFechaFin.getText().toString() + " "
-						+ edHoraFin.getText().toString()));
+				fecha.setFechaFin(dateFormat.parse(edFechaFin.getText()
+						.toString() + " " + edHoraFin.getText().toString()));
 				fecha.setTodoElDia(false);
 			}
 
@@ -382,63 +405,113 @@ public class crearEventoActivity extends Activity {
 					int i = 1;
 					for (Bitmap imagen : arrayImagen) {
 						ByteArrayOutputStream bao = new ByteArrayOutputStream();
-						imagen = Herramientas.escalarImagen(imagen, ESCALAMAXIMA);
+						imagen = Herramientas.escalarImagen(imagen,
+								ESCALAMAXIMA);
 						imagen.compress(Bitmap.CompressFormat.JPEG, 80, bao);
 						byte[] ba = bao.toByteArray();
 						String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
-						nameValuePairs.add(new BasicNameValuePair("imagen" + i, ba1));
+						nameValuePairs.add(new BasicNameValuePair("imagen" + i,
+								ba1));
 						i++;
 					}
 
-					String android_id = Secure.getString(actividad.getContentResolver(), Secure.ANDROID_ID);
-					nameValuePairs.add(new BasicNameValuePair("idCreador", android_id));
-					nameValuePairs.add(new BasicNameValuePair("nombre", evento.getNombre()));
-					nameValuePairs.add(new BasicNameValuePair("descripcion", evento.getDescripcion()));
-					nameValuePairs.add(new BasicNameValuePair("ubicacion", evento.getUbicacion()));
-					nameValuePairs.add(new BasicNameValuePair("poblacion", evento.getPoblacion()));
-					nameValuePairs.add(new BasicNameValuePair("provincia", evento.getProvincia()));
+					String android_id = Secure.getString(
+							actividad.getContentResolver(), Secure.ANDROID_ID);
+					nameValuePairs.add(new BasicNameValuePair("idCreador",
+							android_id));
+					nameValuePairs.add(new BasicNameValuePair("nombre", evento
+							.getNombre()));
+					nameValuePairs.add(new BasicNameValuePair("descripcion",
+							evento.getDescripcion()));
+					nameValuePairs.add(new BasicNameValuePair("latitud",String.valueOf(
+							evento.getLatitud())));
+					nameValuePairs.add(new BasicNameValuePair("longitud",String.valueOf(
+							evento.getLongitud())));
+					nameValuePairs.add(new BasicNameValuePair("poblacion",
+							evento.getPoblacion()));
+					nameValuePairs.add(new BasicNameValuePair("provincia",
+							evento.getProvincia()));
 					if (evento.isComentarios())
-						nameValuePairs.add(new BasicNameValuePair("comentarios", "1"));
+						nameValuePairs.add(new BasicNameValuePair(
+								"comentarios", "1"));
 					else
-						nameValuePairs.add(new BasicNameValuePair("comentarios", "0"));
-					nameValuePairs.add(new BasicNameValuePair("idCategoria", evento.getIdCategoria() + ""));
+						nameValuePairs.add(new BasicNameValuePair(
+								"comentarios", "0"));
+					nameValuePairs.add(new BasicNameValuePair("idCategoria",
+							evento.getIdCategoria() + ""));
 
 					// FECHAS
-					String fechaInicio = edFechaIni.getText().toString() + " " + edHoraIni.getText().toString();
-					nameValuePairs.add(new BasicNameValuePair("fechaInicio", fechaInicio));
+					String fechaInicio = edFechaIni.getText().toString() + " "
+							+ edHoraIni.getText().toString();
+					nameValuePairs.add(new BasicNameValuePair("fechaInicio",
+							fechaInicio));
 					if (fecha.isTodoElDia())
-						nameValuePairs.add(new BasicNameValuePair("todoElDia", "1"));
+						nameValuePairs.add(new BasicNameValuePair("todoElDia",
+								"1"));
 					else {
-						String fechaFin = edFechaFin.getText().toString() + " " + edHoraFin.getText().toString();
-						nameValuePairs.add(new BasicNameValuePair("fechaFin", fechaFin));
-						nameValuePairs.add(new BasicNameValuePair("todoElDia", "0"));
+						String fechaFin = edFechaFin.getText().toString() + " "
+								+ edHoraFin.getText().toString();
+						nameValuePairs.add(new BasicNameValuePair("fechaFin",
+								fechaFin));
+						nameValuePairs.add(new BasicNameValuePair("todoElDia",
+								"0"));
 					}
+					crearEventoActivity.Creacionsatisfactoria = false;
+					String URL = "http://desipal.hol.es/app/eventos/alta.php";
+					final creacionEvento peticion = new creacionEvento(
+							nameValuePairs);
+					peticion.execute(new String[] { URL });
+					final Handler handler = new Handler();
+					final Context co = getApplicationContext();
+					handler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							Status s = peticion.getStatus();
+							if (s.name().equals("FINISHED"))
+								if (crearEventoActivity.Creacionsatisfactoria) {
+									arrayImagen.clear();
+									finish();
+									Toast.makeText(co, "Evento creado",
+											Toast.LENGTH_SHORT).show();
+								} else {
+									Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+									btnCrearEvento.setEnabled(true);
+									Toast.makeText(co, "Error al crear evento",
+											Toast.LENGTH_SHORT).show();
+								}
+							else
+								handler.postDelayed(this, 500);
 
-					HttpClient httpclient = new DefaultHttpClient();
-					HttpPost httppost = new HttpPost("http://desipal.hol.es/app/eventos/alta.php");
-					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-					HttpResponse response = httpclient.execute(httppost);
-					HttpEntity entity = response.getEntity();
-					is = entity.getContent();
-					error = false;
+						}
+					}, 500);
+
 				} catch (Exception e) {
-					Toast.makeText(actividad, "Error in http connection " + e.toString(), Toast.LENGTH_LONG).show();
+					Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+					btnCrearEvento.setEnabled(true);
+					Toast.makeText(actividad, "Error:" + e.getMessage(),
+							Toast.LENGTH_LONG).show();
 					error = true;
 				}
 		} catch (Exception e) {
-			Toast.makeText(actividad, "Error in http connection " + e.toString(), Toast.LENGTH_LONG).show();
+			Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+			btnCrearEvento.setEnabled(true);
+			Toast.makeText(actividad, "Error:" + e.getMessage(),
+					Toast.LENGTH_LONG).show();
 			error = true;
 		}
 		return error;
 	}
 
 	protected static void refrescarLista() {
-		GridView gridview = (GridView) actividad.findViewById(R.id.listImagenes);
+		GridView gridview = (GridView) actividad
+				.findViewById(R.id.listImagenes);
 		gridview.setAdapter(new listaImagenesAdapter(actividad, arrayImagen));
 		int altura = 50 * arrayImagen.size();// Tamaño de la imagen
 		if (altura > 0)
 			gridview.setVisibility(View.VISIBLE);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, altura);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
+				altura);
 		gridview.setLayoutParams(params);
 	}
+
 }
