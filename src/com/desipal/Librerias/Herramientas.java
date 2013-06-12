@@ -1,12 +1,11 @@
-package com.desipal.EventU;
-
+package com.desipal.Librerias;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
-public class Herramientas {
-	
-	static Bitmap escalarImagen(Bitmap bm, int nuevaMedida) {
+public class Herramientas {	
+
+	public static Bitmap escalarImagen(Bitmap bm, int nuevaMedida) {
 		Bitmap resizedBitmap;
 		int width = bm.getWidth();
 		int height = bm.getHeight();

@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.desipal.EventU.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" >
             <intent-filter>
@@ -29,6 +30,13 @@
         </activity>
         <activity
             android:name="com.desipal.EventU.crearEventoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan" />
+        
+        <activity
+            android:name="com.desipal.EventU.detalleEventoActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" />
     </application>

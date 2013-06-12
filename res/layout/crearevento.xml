@@ -158,20 +158,28 @@
                     android:layout_height="wrap_content" >
 
                     <TextView
-                        android:id="@+id/txtPoblacion"
+                        android:id="@+id/txtDireccion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
-                        android:text="@string/crearEventoPoblacion" />
+                        android:text="@string/crearEventoDireccion" />
 
                     <TextView
-                        android:id="@+id/txtProvincia"
+                        android:id="@+id/txtNumero"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/crearEventoNumero" />
+
+                    <TextView
+                        android:id="@+id/txtCiudad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
-                        android:text="@string/crearEventoProvincia" />
+                        android:text="@string/crearEventoCiudad" />
                 </TableRow>
 
                 <TableRow
@@ -180,25 +188,37 @@
                     android:layout_height="wrap_content" >
 
                     <EditText
-                        android:id="@+id/editPoblacion"
+                        android:id="@+id/editDireccion"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/campo"
-                        android:hint="@string/crearEventoPoblacion"
+                        android:hint="@string/crearEventoHintDireccion"
                         android:inputType="text"
                         android:lines="1"
                         android:maxLength="30" />
 
                     <EditText
-                        android:id="@+id/editProvincia"
+                        android:id="@+id/editNumero"
+                        android:maxWidth="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/campo"
+                        android:hint="@string/crearEventoHintNumero"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="4" />
+
+                    <EditText
+                        android:id="@+id/editCiudad"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/campo"
-                        android:hint="@string/crearEventoProvincia"
+                        android:hint="@string/crearEventoCiudad"
                         android:inputType="text"
                         android:lines="1"
                         android:maxLength="25" />
@@ -368,11 +388,11 @@
                             android:text="@string/crearEventoCargarImagen"
                             android:textColor="#fff" />
 
-                        <com.desipal.EventU.ExpandableHeightGridView
+                        <com.desipal.Librerias.ExpandableHeightGridView
                             android:id="@+id/listImagenes"
                             android:layout_width="fill_parent"
-                            android:layout_height="wrap_content" 
-                            android:visibility="gone"/>
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txtComentariosEvento"

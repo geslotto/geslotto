@@ -7,7 +7,7 @@
     android:minWidth="140dp" >
 
     <TextView
-        android:id="@+id/txtTiutlo_evento"
+        android:id="@+id/txtFecha_evento"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,7 +19,18 @@
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/txtDesc_evento"
+        android:id="@+id/txtDist_evento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"        
+        android:paddingRight="10dp"
+        android:text="@string/titulo"
+        android:textColor="#FFF"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/txtTitulo_evento"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

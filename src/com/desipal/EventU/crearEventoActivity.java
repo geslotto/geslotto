@@ -10,8 +10,9 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import com.desipal.Entidades.eventoEN;
-import com.desipal.Entidades.fechaEN;
+import com.desipal.Librerias.Herramientas;
 import com.desipal.Servidor.creacionEvento;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -54,8 +55,7 @@ import android.widget.ToggleButton;
 public class crearEventoActivity extends Activity {
 
 	private int ESCALAMAXIMA = 300;// Tamaño máximo de las imagenes subidas
-	private SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"dd/mm/yyyy hh:mm", MainActivity.currentLocale);
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm", MainActivity.currentLocale);
 	private static Activity actividad;
 	private TextView txtFecha;
 	private TextView txtHora;
@@ -66,11 +66,36 @@ public class crearEventoActivity extends Activity {
 	private int minute;
 	public static boolean Creacionsatisfactoria;
 	private boolean error = false;
+	private boolean[] errores = new boolean[6];
 
 	public static List<Bitmap> arrayImagen;
 	double Latitud;
 	double Longitud;
 	InputStream is;
+
+	// CONTROLES
+	Button btnInicio;
+	Button btnSubirImagen;
+	Button btnCrearEvento;
+
+	EditText edNombre;
+	EditText edDesc;
+	EditText edDireccion;
+	EditText edCiudad;
+	EditText edNumero;
+	EditText edFechaIni;
+	EditText edFechaFin;
+	EditText edHoraIni;
+	EditText edHoraFin;
+
+	CheckBox chTodoElDia;
+
+	Spinner spiCategoria;
+
+	ToggleButton tgUbicacion;
+	ToggleButton tgComentarios;
+
+	private EditText[] editError = new EditText[] { edNombre, edDesc, edDireccion, edCiudad, edFechaIni, edFechaFin };
 
 	@Override
 	public void onBackPressed() {
@@ -88,27 +113,44 @@ public class crearEventoActivity extends Activity {
 		setContentView(R.layout.crearevento);
 		actividad = this;
 		arrayImagen = new ArrayList<Bitmap>();
-		Spinner spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
-		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-				this, R.array.categorias, R.layout.spinner_item);
+
+		btnInicio = (Button) findViewById(R.id.btnInicio);
+		btnSubirImagen = (Button) findViewById(R.id.btnSubirImagen);
+		btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+
+		edNombre = (EditText) findViewById(R.id.editNombre);
+		edDesc = (EditText) findViewById(R.id.editDescrip);
+		edDireccion = (EditText) findViewById(R.id.editDireccion);
+		edCiudad = (EditText) findViewById(R.id.editCiudad);
+		edNumero = (EditText) findViewById(R.id.editNumero);
+		edFechaIni = (EditText) findViewById(R.id.editFechaInicio);
+		edFechaFin = (EditText) findViewById(R.id.editFechaFin);
+		edHoraIni = (EditText) findViewById(R.id.editHoraInicio);
+		edHoraFin = (EditText) findViewById(R.id.editHoraFin);
+
+		chTodoElDia = (CheckBox) findViewById(R.id.chTodoElDia);
+
+		spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
+
+		tgUbicacion = (ToggleButton) findViewById(R.id.togUbicacion);
+		tgComentarios = (ToggleButton) findViewById(R.id.togComentarios);
+
+		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
+				R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
 
-		Button btnInicio = (Button) findViewById(R.id.btnInicio);
 		btnInicio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				finish();
-				overridePendingTransition(R.anim.slide_in_right,
-						R.anim.slide_out_right);
+				overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 			}
 		});
 
-		CheckBox chTodo = (CheckBox) findViewById(R.id.chTodoElDia);
-		chTodo.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		chTodoElDia.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				final TableRow filaFin = (TableRow) findViewById(R.id.table2Row4);
 				final TableRow filaTexFin = (TableRow) findViewById(R.id.table2Row3);
 				final RelativeLayout relImagenes = (RelativeLayout) findViewById(R.id.relImagenes);
@@ -122,10 +164,8 @@ public class crearEventoActivity extends Activity {
 						public void run() {
 							filaFin.setVisibility(View.GONE);
 							filaTexFin.setVisibility(View.GONE);
-							int altura = filaFin.getHeight()
-									+ filaTexFin.getHeight();
-							TranslateAnimation anim_trans = new TranslateAnimation(
-									0, 0, altura, 0);
+							int altura = filaFin.getHeight() + filaTexFin.getHeight();
+							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, altura, 0);
 							anim_trans.setDuration(200);
 							relImagenes.startAnimation(anim_trans);
 						}
@@ -133,8 +173,7 @@ public class crearEventoActivity extends Activity {
 
 				} else {
 					int altura = filaFin.getHeight() + filaTexFin.getHeight();
-					TranslateAnimation anim_trans = new TranslateAnimation(0,
-							0, 0, altura);
+					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, altura);
 					anim_trans.setDuration(200);
 					relImagenes.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
@@ -151,7 +190,6 @@ public class crearEventoActivity extends Activity {
 			}
 		});
 
-		EditText edFechaIni = (EditText) findViewById(R.id.editFechaInicio);
 		edFechaIni.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -160,7 +198,6 @@ public class crearEventoActivity extends Activity {
 			}
 		});
 
-		EditText edFechaFin = (EditText) findViewById(R.id.editFechaFin);
 		edFechaFin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -169,8 +206,7 @@ public class crearEventoActivity extends Activity {
 			}
 		});
 
-		EditText edHoraInicio = (EditText) findViewById(R.id.editHoraInicio);
-		edHoraInicio.setOnClickListener(new OnClickListener() {
+		edHoraIni.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				txtHora = (EditText) v.findViewById(R.id.editHoraInicio);
@@ -178,7 +214,6 @@ public class crearEventoActivity extends Activity {
 			}
 		});
 
-		EditText edHoraFin = (EditText) findViewById(R.id.editHoraFin);
 		edHoraFin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -186,15 +221,14 @@ public class crearEventoActivity extends Activity {
 				showDialog(1);
 			}
 		});
-		ToggleButton tgUbicacion = (ToggleButton) findViewById(R.id.togUbicacion);
-		tgUbicacion.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+		tgUbicacion.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				final TableLayout tableLocalizacion = (TableLayout) findViewById(R.id.tableLocalizacion);
 				final RelativeLayout relFechas = (RelativeLayout) findViewById(R.id.relFechas);
 				Handler handler = new Handler();
+				Boolean recoger = true;
 				if (isChecked) {
 					AlphaAnimation anim_alpha = new AlphaAnimation(1, 0);
 					anim_alpha.setDuration(200);
@@ -202,25 +236,31 @@ public class crearEventoActivity extends Activity {
 					handler.postDelayed(new Runnable() {
 						public void run() {
 							tableLocalizacion.setVisibility(View.GONE);
-							TranslateAnimation anim_trans = new TranslateAnimation(
-									0, 0, tableLocalizacion.getHeight(), 0);
+							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, tableLocalizacion.getHeight(),
+									0);
 							anim_trans.setDuration(200);
 							relFechas.startAnimation(anim_trans);
 						}
 					}, 200);
 					try {
 						LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-						Location loc = locManager
-								.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-						Latitud = loc.getLatitude();
-						Longitud = loc.getLongitude();
+						Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+						if (loc == null) {
+							Toast.makeText(actividad, "La ubicación no se encuentra disponible", Toast.LENGTH_LONG)
+									.show();
+							buttonView.setChecked(false);
+							recoger = true;
+						} else {
+							Latitud = loc.getLatitude();
+							Longitud = loc.getLongitude();
+							recoger = false;
+						}
 					} catch (Exception e) {
-						Toast.makeText(actividad, "Error:" + e.getMessage(),
-								Toast.LENGTH_LONG).show();						
+						Toast.makeText(actividad, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
 					}
-				} else {
-					TranslateAnimation anim_trans = new TranslateAnimation(0,
-							0, 0, tableLocalizacion.getHeight());
+				}
+				if (recoger) {
+					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, tableLocalizacion.getHeight());
 					anim_trans.setDuration(200);
 					relFechas.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
@@ -235,18 +275,15 @@ public class crearEventoActivity extends Activity {
 			}
 		});
 
-		Button btnSubirImagen = (Button) findViewById(R.id.btnSubirImagen);
 		btnSubirImagen.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent pickPhoto = new Intent(
-						Intent.ACTION_PICK,
+				Intent pickPhoto = new Intent(Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(pickPhoto, 1);
 			}
 		});
 
-		final Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 		btnCrearEvento.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -264,25 +301,21 @@ public class crearEventoActivity extends Activity {
 			year = c.get(Calendar.YEAR);
 			month = c.get(Calendar.MONTH);
 			day = c.get(Calendar.DAY_OF_MONTH);
-			DatePickerDialog datePicker = new DatePickerDialog(this,
-					datePickerListener, year, month, day);
+			DatePickerDialog datePicker = new DatePickerDialog(this, datePickerListener, year, month, day);
 			datePicker.setTitle("Introduzca fecha");
 			return datePicker;
 		} else {
 			hour = c.get(Calendar.HOUR);
 			minute = c.get(Calendar.MINUTE);
-			TimePickerDialog timPicker = new TimePickerDialog(this,
-					timePickerListener, hour, minute, true);
+			TimePickerDialog timPicker = new TimePickerDialog(this, timePickerListener, hour, minute, true);
 			timPicker.setTitle("Introduzca hora");
 			return timPicker;
 		}
-
 	}
 
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear,
-				int selectedMonth, int selectedDay) {
+		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
@@ -293,8 +326,7 @@ public class crearEventoActivity extends Activity {
 			if (month + 1 < 10)
 				mes = "0" + mes;
 			// set selected date into textview
-			txtFecha.setText(new StringBuilder().append(dia).append("/")
-					.append(mes).append("/").append(year));
+			txtFecha.setText(new StringBuilder().append(dia).append("/").append(mes).append("/").append(year));
 		}
 	};
 
@@ -309,74 +341,71 @@ public class crearEventoActivity extends Activity {
 				hor = "0" + hor;
 			if (minute < 10)
 				min = "0" + min;
-			txtHora.setText(new StringBuilder().append(hor).append(":")
-					.append(min));
+			txtHora.setText(new StringBuilder().append(hor).append(":").append(min));
 		}
 	};
 
 	// //////// SELECCIONAR IMAGEN
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent imageReturnedIntent) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 		if (resultCode == RESULT_OK) {
 			try {
 				Uri selectedImage = imageReturnedIntent.getData();
-				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver()
-						.openInputStream(selectedImage));
+				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
 				arrayImagen.add(bmp);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		} else
-			Toast.makeText(this, "No ha seleccionado ninguna imágen",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "No ha seleccionado ninguna imágen", Toast.LENGTH_SHORT).show();
 		refrescarLista();
 	}
 
 	protected boolean crearEvento() {
 		try {
 			eventoEN evento = new eventoEN();
-			fechaEN fecha = new fechaEN();
-			EditText edNombre = (EditText) findViewById(R.id.editNombre);
-			EditText edDesc = (EditText) findViewById(R.id.editDescrip);
 
-			ToggleButton tgUbicacion = (ToggleButton) findViewById(R.id.togUbicacion);
-			EditText edPoblacion = (EditText) findViewById(R.id.editPoblacion);
-			EditText edProvincia = (EditText) findViewById(R.id.editProvincia);
+			editError[0] = edNombre;
+			editError[1] = edDesc;
+			editError[2] = edDireccion;
+			editError[3] = edCiudad;
+			editError[4] = edFechaIni;
+			editError[5] = edFechaFin;
 
-			CheckBox chTodoElDia = (CheckBox) findViewById(R.id.chTodoElDia);
-			EditText edFechaIni = (EditText) findViewById(R.id.editFechaInicio);
-			EditText edFechaFin = (EditText) findViewById(R.id.editFechaFin);
-			EditText edHoraIni = (EditText) findViewById(R.id.editHoraInicio);
-			EditText edHoraFin = (EditText) findViewById(R.id.editHoraFin);
-
-			Spinner spCate = (Spinner) findViewById(R.id.spiCategorias);
-
-			ToggleButton tgComentarios = (ToggleButton) findViewById(R.id.togComentarios);
-
-			if (!edNombre.getText().equals(""))
+			if (edNombre.getText().length() > 0) {
+				errores[0] = false;
 				evento.setNombre(edNombre.getText().toString());
-			else
-				error = true;
-			if (!edDesc.getText().equals(""))
+			} else
+				errores[0] = true;
+			if (edDesc.getText().length() > 0) {
+				errores[1] = false;
 				evento.setDescripcion(edDesc.getText().toString());
-			else
-				error = true;
+			} else
+				errores[1] = true;
 
 			if (tgUbicacion.isChecked()) {
 				evento.setLongitud(Longitud);
 				evento.setLatitud(Latitud);
+				evento.setDireccion("");
+				errores[2] = false;// Quitamos el error de direccion
+				errores[3] = false;// Quitamos el error de ciudad
 			} else {
 				evento.setLongitud(0.0);
 				evento.setLatitud(0.0);
-				if (!edPoblacion.getText().equals(""))
-					evento.setPoblacion(edPoblacion.getText().toString());
-				else
-					error = true;
-				if (!edProvincia.getText().equals(""))
-					evento.setProvincia(edProvincia.getText().toString());
-				else
-					error = true;
+				String direccion = "";
+				if (edDireccion.getText().length() > 0) {
+					direccion = edDireccion.getText().toString();
+					errores[2] = false;// Quitamos el error de direccion
+					if (edNumero.getText().length() > 0)
+						direccion = direccion + "," + edNumero.getText().toString();
+					if (edCiudad.getText().length() > 0) {
+						direccion = direccion + "," + edCiudad.getText().toString();
+						evento.setDireccion(direccion);
+						errores[3] = false;// Quitamos el error de ciudad
+					} else
+						errores[3] = true;
+				} else
+					errores[2] = true;
 			}
 
 			if (tgComentarios.isChecked())
@@ -385,19 +414,49 @@ public class crearEventoActivity extends Activity {
 				evento.setComentarios(false);
 
 			if (chTodoElDia.isChecked()) {
-				if (!edFechaIni.getText().equals(""))
-					fecha.setFechaInicio(dateFormat.parse(edFechaIni.getText()
-							.toString() + " " + edHoraIni.getText().toString()));
-				else
-					error = true;
-				fecha.setTodoElDia(true);
+				if (edFechaIni.getText().length() > 0) {
+					errores[4] = false;// Quitamos el error de FechaInicio
+					if (edHoraIni.getText().length() > 0)
+						evento.setFechaInicio(dateFormat.parse(edFechaIni.getText().toString() + " "
+								+ edHoraIni.getText().toString()));
+					else
+						evento.setFechaInicio(dateFormat.parse(edFechaIni.getText().toString() + " 00:00"));
+				} else
+					errores[4] = true;
+				evento.setTodoElDia(true);
+				errores[5] = false;// Quitamos el error de FechaFin
 			} else {
-				fecha.setFechaFin(dateFormat.parse(edFechaFin.getText()
-						.toString() + " " + edHoraFin.getText().toString()));
-				fecha.setTodoElDia(false);
+				if (edFechaIni.getText().length() > 0) {
+					if (edHoraIni.getText().length() > 0)
+						evento.setFechaInicio(dateFormat.parse(edFechaIni.getText().toString() + " "
+								+ edHoraIni.getText().toString()));
+					else
+						evento.setFechaInicio(dateFormat.parse(edFechaIni.getText().toString() + " 00:00"));
+					errores[4] = false;// Quitamos el error de FechaInicio
+				} else
+					errores[4] = true;
+				if (edFechaFin.getText().length() > 0) {
+					if (edHoraFin.getText().length() > 0)
+						evento.setFechaFin(dateFormat.parse(edFechaFin.getText().toString() + " "
+								+ edHoraFin.getText().toString()));
+					else
+						evento.setFechaFin(dateFormat.parse(edFechaFin.getText().toString() + " 00:00"));
+					errores[5] = false;
+				} else
+					errores[5] = true;// Quitamos el error de FechaFin
+
+				evento.setTodoElDia(false);
+			}
+			evento.setIdCategoria((int) spiCategoria.getSelectedItemId());
+
+			for (int i = 0; i < errores.length; i++) {
+				if (errores[i]) {
+					error = true;
+					editError[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.camporojo));
+				} else
+					editError[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.campo));
 			}
 
-			evento.setIdCategoria((int) spCate.getSelectedItemId());
 			if (!error)
 				try {
 					ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -405,61 +464,40 @@ public class crearEventoActivity extends Activity {
 					int i = 1;
 					for (Bitmap imagen : arrayImagen) {
 						ByteArrayOutputStream bao = new ByteArrayOutputStream();
-						imagen = Herramientas.escalarImagen(imagen,
-								ESCALAMAXIMA);
+						imagen = Herramientas.escalarImagen(imagen, ESCALAMAXIMA);
 						imagen.compress(Bitmap.CompressFormat.JPEG, 80, bao);
 						byte[] ba = bao.toByteArray();
 						String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
-						nameValuePairs.add(new BasicNameValuePair("imagen" + i,
-								ba1));
+						nameValuePairs.add(new BasicNameValuePair("imagen" + i, ba1));
 						i++;
 					}
 
-					String android_id = Secure.getString(
-							actividad.getContentResolver(), Secure.ANDROID_ID);
-					nameValuePairs.add(new BasicNameValuePair("idCreador",
-							android_id));
-					nameValuePairs.add(new BasicNameValuePair("nombre", evento
-							.getNombre()));
-					nameValuePairs.add(new BasicNameValuePair("descripcion",
-							evento.getDescripcion()));
-					nameValuePairs.add(new BasicNameValuePair("latitud",String.valueOf(
-							evento.getLatitud())));
-					nameValuePairs.add(new BasicNameValuePair("longitud",String.valueOf(
-							evento.getLongitud())));
-					nameValuePairs.add(new BasicNameValuePair("poblacion",
-							evento.getPoblacion()));
-					nameValuePairs.add(new BasicNameValuePair("provincia",
-							evento.getProvincia()));
+					String android_id = Secure.getString(actividad.getContentResolver(), Secure.ANDROID_ID);
+					nameValuePairs.add(new BasicNameValuePair("idCreador", android_id));
+					nameValuePairs.add(new BasicNameValuePair("nombre", evento.getNombre()));
+					nameValuePairs.add(new BasicNameValuePair("descripcion", evento.getDescripcion()));
+					nameValuePairs.add(new BasicNameValuePair("latitud", String.valueOf(evento.getLatitud())));
+					nameValuePairs.add(new BasicNameValuePair("longitud", String.valueOf(evento.getLongitud())));
+					nameValuePairs.add(new BasicNameValuePair("direccion", evento.getDireccion()));
 					if (evento.isComentarios())
-						nameValuePairs.add(new BasicNameValuePair(
-								"comentarios", "1"));
+						nameValuePairs.add(new BasicNameValuePair("comentarios", "1"));
 					else
-						nameValuePairs.add(new BasicNameValuePair(
-								"comentarios", "0"));
-					nameValuePairs.add(new BasicNameValuePair("idCategoria",
-							evento.getIdCategoria() + ""));
+						nameValuePairs.add(new BasicNameValuePair("comentarios", "0"));
+					nameValuePairs.add(new BasicNameValuePair("idCategoria", evento.getIdCategoria() + ""));
 
 					// FECHAS
-					String fechaInicio = edFechaIni.getText().toString() + " "
-							+ edHoraIni.getText().toString();
-					nameValuePairs.add(new BasicNameValuePair("fechaInicio",
-							fechaInicio));
-					if (fecha.isTodoElDia())
-						nameValuePairs.add(new BasicNameValuePair("todoElDia",
-								"1"));
+					String fechaInicio = edFechaIni.getText().toString() + " " + edHoraIni.getText().toString();
+					nameValuePairs.add(new BasicNameValuePair("fechaInicio", fechaInicio));
+					if (evento.isTodoElDia())
+						nameValuePairs.add(new BasicNameValuePair("todoElDia", "1"));
 					else {
-						String fechaFin = edFechaFin.getText().toString() + " "
-								+ edHoraFin.getText().toString();
-						nameValuePairs.add(new BasicNameValuePair("fechaFin",
-								fechaFin));
-						nameValuePairs.add(new BasicNameValuePair("todoElDia",
-								"0"));
+						String fechaFin = edFechaFin.getText().toString() + " " + edHoraFin.getText().toString();
+						nameValuePairs.add(new BasicNameValuePair("fechaFin", fechaFin));
+						nameValuePairs.add(new BasicNameValuePair("todoElDia", "0"));
 					}
 					crearEventoActivity.Creacionsatisfactoria = false;
 					String URL = "http://desipal.hol.es/app/eventos/alta.php";
-					final creacionEvento peticion = new creacionEvento(
-							nameValuePairs);
+					final creacionEvento peticion = new creacionEvento(nameValuePairs);
 					peticion.execute(new String[] { URL });
 					final Handler handler = new Handler();
 					final Context co = getApplicationContext();
@@ -471,46 +509,41 @@ public class crearEventoActivity extends Activity {
 								if (crearEventoActivity.Creacionsatisfactoria) {
 									arrayImagen.clear();
 									finish();
-									Toast.makeText(co, "Evento creado",
-											Toast.LENGTH_SHORT).show();
+									Toast.makeText(co, "Evento creado", Toast.LENGTH_SHORT).show();
 								} else {
-									Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 									btnCrearEvento.setEnabled(true);
-									Toast.makeText(co, "Error al crear evento",
-											Toast.LENGTH_SHORT).show();
+									Toast.makeText(co, "Error al crear evento", Toast.LENGTH_SHORT).show();
 								}
 							else
 								handler.postDelayed(this, 500);
-
 						}
 					}, 500);
 
 				} catch (Exception e) {
-					Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 					btnCrearEvento.setEnabled(true);
-					Toast.makeText(actividad, "Error:" + e.getMessage(),
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(actividad, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
 					error = true;
 				}
+			else {
+				Toast.makeText(actividad, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+				btnCrearEvento.setEnabled(true);
+			}
 		} catch (Exception e) {
-			Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 			btnCrearEvento.setEnabled(true);
-			Toast.makeText(actividad, "Error:" + e.getMessage(),
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(actividad, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
 			error = true;
 		}
+
 		return error;
 	}
 
 	protected static void refrescarLista() {
-		GridView gridview = (GridView) actividad
-				.findViewById(R.id.listImagenes);
+		GridView gridview = (GridView) actividad.findViewById(R.id.listImagenes);
 		gridview.setAdapter(new listaImagenesAdapter(actividad, arrayImagen));
 		int altura = 50 * arrayImagen.size();// Tamaño de la imagen
 		if (altura > 0)
 			gridview.setVisibility(View.VISIBLE);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
-				altura);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, altura);
 		gridview.setLayoutParams(params);
 	}
 

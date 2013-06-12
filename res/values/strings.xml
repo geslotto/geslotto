@@ -5,7 +5,7 @@
     <string name="action_settings">Configuración</string>
     <string name="titulo">Event-U</string>
     <string name="descImagen">Imagen</string>
-    
+
     <!-- MainActivity -->
     <string name="txtFecha">Fecha</string>
     <string name="hint_fecha">dd/mm/aaaa</string>
@@ -16,6 +16,7 @@
     <string name="txtCrearEvento">Crear Evento</string>
     <string name="Categorias">Categorias</string>
     <string name="Edad">Edad</string>
+    <string name="Radio">Radio</string>
 
     <!-- Crear evento -->
     <string name="btn_inicio">Inicio</string>
@@ -26,8 +27,11 @@
     <string name="crearEventoDescrip">Descripción</string>
     <string name="crearEventoLocalEvento">Localización del evento</string>
     <string name="crearEventoubicacion">Utilizar ubicación actual</string>
-    <string name="crearEventoProvincia">Provincia</string>
-    <string name="crearEventoPoblacion">Población</string>
+    <string name="crearEventoCiudad">Ciudad</string>
+    <string name="crearEventoDireccion">Dirección</string>
+    <string name="crearEventoHintDireccion">Calle de los robles</string>
+    <string name="crearEventoNumero">Número</string>
+    <string name="crearEventoHintNumero">Nº</string>
     <string name="crearEventoInformacionEvento">Información del evento</string>
     <string name="crearEventoEdad">Edad recomendada</string>
     <string name="crearEventoCategoria">Categoria del evento</string>
@@ -42,5 +46,8 @@
     <string name="crearEventoPerComentarios">Permitir comentarios</string>
     <string name="crearEventoImagenes">Imágenes del evento</string>
     <string name="crearEventoCargarImagen">Cargar imagen</string>
+
+    <!-- Crear evento -->
+    <string name="detalleEventoTitulo">Detalle evento</string>
 
 </resources>

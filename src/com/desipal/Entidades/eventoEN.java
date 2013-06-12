@@ -1,5 +1,7 @@
 package com.desipal.Entidades;
 
+import java.util.Date;
+
 public class eventoEN {
 	private int idEvento;
 	private String idCreador;
@@ -10,12 +12,13 @@ public class eventoEN {
 	private int asistencia;
 	private boolean validado;
 	private boolean comentarios;
-	private String poblacion;
-	private String provincia;
+	private String direccion;
 	private int idEdad;
 	private int idCategoria;
-	private int idFecha;
 	private String url;
+	private Date fechaInicio;
+	private Date fechaFin;
+	private boolean todoElDia;
 
 	public int getIdEvento() {
 		return idEvento;
@@ -49,7 +52,6 @@ public class eventoEN {
 		this.descripcion = descripcion;
 	}
 
-
 	public int getAsistencia() {
 		return asistencia;
 	}
@@ -74,14 +76,6 @@ public class eventoEN {
 		this.comentarios = comentarios;
 	}
 
-	public String getPoblacion() {
-		return poblacion;
-	}
-
-	public void setPoblacion(String poblacion) {
-		this.poblacion = poblacion;
-	}
-
 	public int getIdEdad() {
 		return idEdad;
 	}
@@ -98,28 +92,12 @@ public class eventoEN {
 		this.idCategoria = idCategoria;
 	}
 
-	public int getIdFecha() {
-		return idFecha;
-	}
-
-	public void setIdFecha(int idFecha) {
-		this.idFecha = idFecha;
-	}
-
 	public String getUrl() {
 		return url;
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getProvincia() {
-		return provincia;
-	}
-
-	public void setProvincia(String provincia) {
-		this.provincia = provincia;
 	}
 
 	public double getLatitud() {
@@ -136,5 +114,37 @@ public class eventoEN {
 
 	public void setLongitud(double longitud) {
 		this.longitud = longitud;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public boolean isTodoElDia() {
+		return todoElDia;
+	}
+
+	public void setTodoElDia(boolean todoElDia) {
+		this.todoElDia = todoElDia;
 	}
 }

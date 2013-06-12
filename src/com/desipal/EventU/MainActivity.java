@@ -1,22 +1,37 @@
 package com.desipal.EventU;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import com.desipal.Entidades.adaptadorEventoEN;
 import com.desipal.EventU.R;
+import com.desipal.Librerias.ExpandableHeightGridView;
+import com.desipal.Servidor.buscarEventosCerca;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.AsyncTask.Status;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,14 +39,18 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class MainActivity extends Activity {
 
 	static Locale currentLocale = new Locale("es", "ES");
 
+	public static List<adaptadorEventoEN> adaptadorEventosURL = new ArrayList<adaptadorEventoEN>();
+	public static Display display;
 	private TextView txtFecha;
 
 	private boolean recogido = true;
@@ -47,6 +66,7 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
+		display = getWindowManager().getDefaultDisplay();
 		Resources res = getResources();
 
 		TabHost tabs = (TabHost) findViewById(R.id.tabhost);
@@ -66,7 +86,6 @@ public class MainActivity extends Activity {
 		txtFecha = (TextView) findViewById(R.id.campoFecha);
 		Button btnFecha = (Button) findViewById(R.id.btnFecha);
 		btnFecha.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				showDialog(999);
@@ -118,25 +137,18 @@ public class MainActivity extends Activity {
 				R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
-		Spinner spiEdad = (Spinner) findViewById(R.id.spiEdad);
-		ArrayAdapter<CharSequence> adapter2 = ArrayAdapter
-				.createFromResource(this, R.array.edad, R.layout.spinner_item);
-		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spiEdad.setAdapter(adapter2);
 
 		Button btnFiltrar = (Button) findViewById(R.id.btnBuscar);
 		btnFiltrar.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				GridView gridview = (GridView) findViewById(R.id.gridResultados);
-				gridview.setAdapter(new GridViewAdapter(MainActivity.this));
+				gridview.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
 			}
 		});
 
 		ImageButton btnLimpiar = (ImageButton) findViewById(R.id.btnLimpiar);
 		btnLimpiar.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				GridView gridview = (GridView) findViewById(R.id.gridResultados);
@@ -150,13 +162,124 @@ public class MainActivity extends Activity {
 
 		Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 		btnCrearEvento.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(MainActivity.this, crearEventoActivity.class);
 				startActivity(i);
 			}
 		});
+
+		final TextView txtKm = (TextView) findViewById(R.id.txtKm);
+		txtKm.setText("50 Km");
+		final SeekBar seekRadio = (SeekBar) findViewById(R.id.seekRadio);
+		seekRadio.setProgress(50);
+		seekRadio.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				txtKm.setText(progress + " Km");
+			}
+		});
+
+		ExpandableHeightGridView grid = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
+		int anchura = display.getWidth();
+
+		int ancho[] = new int[2];
+		ancho = redimensionarColumnas(anchura);
+
+		grid.setNumColumns(ancho[0]);
+		grid.setColumnWidth(ancho[1]);
+
+		grid.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
+				i.putExtra("idEvento", id);
+				startActivity(i);
+			}
+		});
+		Button btnBuscarCerca = (Button) findViewById(R.id.btnBuscarCerca);
+		btnBuscarCerca.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MainActivity.adaptadorEventosURL.clear();
+				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+				Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				Double latitud = loc.getLatitude();
+				Double longitud = loc.getLongitude();
+				int ratio = seekRadio.getProgress();
+				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+				parametros.add(new BasicNameValuePair("latitud", latitud.toString()));
+				parametros.add(new BasicNameValuePair("longitud", longitud.toString()));
+				parametros.add(new BasicNameValuePair("ratio", ratio + ""));
+
+				String URL = "http://desipal.hol.es/app/eventos/eventosCerca.php";
+				final buscarEventosCerca peticion = new buscarEventosCerca(parametros, MainActivity.this);
+				peticion.execute(new String[] { URL });
+				final Handler handler = new Handler();
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						Status s = peticion.getStatus();
+						if (s.name().equals("FINISHED")) {
+							if (adaptadorEventosURL.size() > 0) {
+								GridView gridview = (GridView) findViewById(R.id.gridResultadosCerca);
+								gridview.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
+
+							}
+						} else
+							handler.postDelayed(this, 500);
+					}
+				}, 500);
+
+			}
+		});
+
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		display = getWindowManager().getDefaultDisplay();
+		int rotation = display.getOrientation();
+		int ancho[] = new int[2];
+		ExpandableHeightGridView grid = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
+
+		int anchura = display.getWidth();
+		ancho = redimensionarColumnas(anchura);
+
+		grid.setNumColumns(ancho[0]);
+		grid.setColumnWidth(ancho[1]);
+
+	}
+
+	// //////// TAMAÑO DE LAS COLUMNAS GRIDVIEW
+	protected int[] redimensionarColumnas(int anchura) {
+		int retorno[] = new int[2];
+		if (anchura < 400) {
+			retorno[0] = 1;
+			retorno[1] = anchura - 10;
+		} else if (anchura < 600) {
+			retorno[0] = 2;
+			retorno[1] = (anchura / 2) - 10;
+		} else if (anchura < 800) {
+			retorno[0] = 3;
+			retorno[1] = (anchura / 3) - 10;
+		} else if (anchura < 1200) {
+			retorno[0] = 3;
+			retorno[1] = (anchura / 3) - 10;
+		} else {
+			retorno[0] = 4;
+			retorno[1] = (anchura / 4) - 10;
+		}
+		return retorno;
+
 	}
 
 	// //////// VENTANA MODAL PARA INTRODUCIR FECHA
