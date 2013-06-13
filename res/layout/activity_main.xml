@@ -34,20 +34,19 @@
             android:drawableLeft="@drawable/ic_menu_btn_add"
             android:text="@string/txtCrearEvento"
             android:textColor="@android:color/background_light"
-            android:textSize="12sp" />      
-
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <TabHost
         android:id="@+id/tabhost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/relativeLayout1" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="vertical" >
 
             <TabWidget
@@ -67,13 +66,15 @@
                     android:id="@+id/tab1Layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp" >
+                    android:orientation="vertical" >
 
                     <Button
                         android:id="@+id/btn_recoger"
                         android:layout_width="fill_parent"
                         android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:background="@anim/anim_boton"
                         android:contentDescription="@string/action_settings"
                         android:drawableRight="@android:drawable/arrow_down_float"
@@ -85,7 +86,9 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:cacheColorHint="@android:color/transparent"
-                        android:divider="@android:color/transparent" >
+                        android:divider="@android:color/transparent"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp" >
 
                         <LinearLayout
                             android:id="@+id/linear_filtro"
@@ -209,7 +212,6 @@
                         android:layout_marginTop="10dp"
                         android:columnWidth="140dp"
                         android:gravity="center"
-                        android:horizontalSpacing="5dp"
                         android:numColumns="auto_fit"
                         android:stretchMode="spacingWidthUniform"
                         android:verticalSpacing="5dp" />
@@ -223,7 +225,7 @@
 
                     <TableLayout
                         android:id="@+id/tableRadio"
-                        android:layout_width="match_parent"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:stretchColumns="0" >

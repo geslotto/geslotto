@@ -1,12 +1,13 @@
 package com.desipal.EventU;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.eventoEN;
-import com.desipal.Servidor.buscarEventosCerca;
 import com.desipal.Servidor.detalleEvento;
 
 import android.app.Activity;
@@ -15,14 +16,33 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.Gallery;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+@SuppressWarnings("deprecation")
 public class detalleEventoActivity extends Activity {
-
 	public static eventoEN evento;
 	TextView edNombre;
 	TextView edDesc;
+	TextView txtAsistentes;
+	TextView txtDir;
+	TextView txtDireccion;
+	TextView txtDetalleDist;
+	TextView txtDetalleDistancia;
+	TextView txtDetalleFechaIni;
+	TextView txtDetalleFechaInicio;
+	TextView txtDetalleFechaFin;
+	TextView txtDetalleFechaFinal;
+	Button btnSi;
+	Button btnNo;
+	ProgressBar progressBar;
+	Gallery galeria;
+
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", MainActivity.currentLocale);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +55,19 @@ public class detalleEventoActivity extends Activity {
 
 		edNombre = (TextView) findViewById(R.id.txtDetalleNombre);
 		edDesc = (TextView) findViewById(R.id.txtDetalleDesc);
-
+		txtAsistentes = (TextView) findViewById(R.id.txtDetalleAsistentes);
+		galeria = (Gallery) findViewById(R.id.imgDetalleImagen);
+		txtDir = (TextView) findViewById(R.id.txtDetalleDir);
+		txtDireccion = (TextView) findViewById(R.id.txtDetalleDireccion);
+		txtDetalleDist = (TextView) findViewById(R.id.txtDetalleDist);
+		txtDetalleDistancia = (TextView) findViewById(R.id.txtDetalleDistancia);
+		txtDetalleFechaIni = (TextView) findViewById(R.id.txtDetalleFechaIni);
+		txtDetalleFechaInicio = (TextView) findViewById(R.id.txtDetalleFechaInicio);
+		txtDetalleFechaFin = (TextView) findViewById(R.id.txtDetalleFechaFin);
+		txtDetalleFechaFinal = (TextView) findViewById(R.id.txtDetalleFechaFinal);
+		btnSi = (Button) findViewById(R.id.btnDetalleSi);
+		btnNo = (Button) findViewById(R.id.btnDetalleNo);
+		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 
 		long idEvento = e.getLong("idEvento");
@@ -50,7 +82,7 @@ public class detalleEventoActivity extends Activity {
 		}
 
 		String URL = "http://desipal.hol.es/app/eventos/verEvento.php";
-		final detalleEvento peticion = new detalleEvento(parametros);
+		final detalleEvento peticion = new detalleEvento(parametros, detalleEventoActivity.this);
 		peticion.execute(new String[] { URL });
 		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
@@ -71,6 +103,33 @@ public class detalleEventoActivity extends Activity {
 	public void verEvento() {
 		edNombre.setText(evento.getNombre());
 		edDesc.setText(evento.getDescripcion());
-	}
+		txtAsistentes.setText(evento.getAsistencia() + " "
+				+ detalleEventoActivity.this.getString(R.string.detalleEventoAsistencia));
+		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes()));
+		String direccion = "";
+		if (!evento.getDireccion().split(",")[4].equals(""))
+			direccion = direccion + evento.getDireccion().split(",")[4] + ",";
+		if (!evento.getDireccion().split(",")[5].equals(""))
+			direccion = direccion + evento.getDireccion().split(",")[5] + ",";
+		direccion = direccion + evento.getDireccion().split(",")[3] + "(" + evento.getDireccion().split(",")[2] + ")";
+		txtDireccion.setText(direccion);
+		txtDir.setText("Dirección: ");
+		txtDetalleDist.setText("Distancia: ");
+		String distancia = new DecimalFormat("#.##").format(evento.getDistancia()) + " Km.";
+		txtDetalleDistancia.setText(distancia);
 
+		String fechaI = dateFormat.format(evento.getFechaInicio());
+		String fechaF = dateFormat.format(evento.getFechaFin());
+
+		txtDetalleFechaIni.setText(R.string.crearEventoFechaInicio);
+		txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
+		if (!evento.isTodoElDia()) {
+			txtDetalleFechaFin.setText(R.string.crearEventoFechaFin);
+			txtDetalleFechaFinal.setText(fechaF);
+		}
+
+		btnSi.setVisibility(View.VISIBLE);
+		btnNo.setVisibility(View.VISIBLE);
+		progressBar.setVisibility(View.GONE);
+	}
 }

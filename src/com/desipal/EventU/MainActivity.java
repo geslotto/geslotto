@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Gallery.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -51,12 +52,27 @@ public class MainActivity extends Activity {
 
 	public static List<adaptadorEventoEN> adaptadorEventosURL = new ArrayList<adaptadorEventoEN>();
 	public static Display display;
-	private TextView txtFecha;
 
 	private boolean recogido = true;
 	private int year;
 	private int month;
 	private int day;
+
+	GridView gridResultados;
+	ExpandableHeightGridView gridCerca;
+
+	Button btnBuscarCerca;
+	Button btnRecoger;
+	Button btnFecha;
+	Button btnFiltrar;
+	Button btnCrearEvento;
+
+	TextView txtFecha;
+	TextView txtKm;
+
+	ImageButton btnLimpiar;
+	Spinner spiCategoria;
+	SeekBar seekRadio;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,8 +99,23 @@ public class MainActivity extends Activity {
 		tabs.addTab(spec);
 		tabs.setCurrentTab(0);
 
+		gridCerca = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
+		gridResultados = (GridView) findViewById(R.id.gridResultados);
+
+		btnBuscarCerca = (Button) findViewById(R.id.btnBuscarCerca);
+		btnRecoger = (Button) findViewById(R.id.btn_recoger);
+		btnFecha = (Button) findViewById(R.id.btnFecha);
+		btnFiltrar = (Button) findViewById(R.id.btnBuscar);
+		btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
+
+		btnLimpiar = (ImageButton) findViewById(R.id.btnLimpiar);
+
 		txtFecha = (TextView) findViewById(R.id.campoFecha);
-		Button btnFecha = (Button) findViewById(R.id.btnFecha);
+		txtKm = (TextView) findViewById(R.id.txtKm);
+
+		spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
+		seekRadio = (SeekBar) findViewById(R.id.seekRadio);
+
 		btnFecha.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -92,19 +123,16 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		final Button btnRecoger = (Button) findViewById(R.id.btn_recoger);
 		btnRecoger.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				final LinearLayout filtro = (LinearLayout) findViewById(R.id.linear_filtro);
 				Handler handler = new Handler();
 				if (recogido) {
 					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-					GridView gridview = (GridView) findViewById(R.id.gridResultados);
 					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
 					anim_trans.setDuration(200);
-					gridview.startAnimation(anim_trans);
+					gridResultados.startAnimation(anim_trans);
 					handler.postDelayed(new Runnable() {
 						public void run() {
 							filtro.setVisibility(View.VISIBLE);
@@ -122,37 +150,33 @@ public class MainActivity extends Activity {
 					handler.postDelayed(new Runnable() {
 						public void run() {
 							filtro.setVisibility(View.GONE);
-							GridView gridview = (GridView) findViewById(R.id.gridResultados);
 							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
 							anim_trans.setDuration(200);
-							gridview.startAnimation(anim_trans);
+							gridResultados.startAnimation(anim_trans);
 						}
 					}, 200);
 					recogido = true;
 				}
 			}
 		});
-		Spinner spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
+
 		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
 				R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
 
-		Button btnFiltrar = (Button) findViewById(R.id.btnBuscar);
 		btnFiltrar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				GridView gridview = (GridView) findViewById(R.id.gridResultados);
-				gridview.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
+				gridResultados.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
 			}
 		});
 
-		ImageButton btnLimpiar = (ImageButton) findViewById(R.id.btnLimpiar);
 		btnLimpiar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				GridView gridview = (GridView) findViewById(R.id.gridResultados);
-				gridview.setAdapter(null);
+
+				gridResultados.setAdapter(null);
 				EditText txtFiltro = (EditText) findViewById(R.id.campoFiltro);
 				txtFiltro.setText("");
 				EditText txtFecha = (EditText) findViewById(R.id.campoFecha);
@@ -160,7 +184,6 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		Button btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 		btnCrearEvento.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -169,12 +192,10 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		final TextView txtKm = (TextView) findViewById(R.id.txtKm);
 		txtKm.setText("50 Km");
-		final SeekBar seekRadio = (SeekBar) findViewById(R.id.seekRadio);
+
 		seekRadio.setProgress(50);
 		seekRadio.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {}
 
@@ -187,16 +208,15 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		ExpandableHeightGridView grid = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
 		int anchura = display.getWidth();
 
 		int ancho[] = new int[2];
 		ancho = redimensionarColumnas(anchura);
 
-		grid.setNumColumns(ancho[0]);
-		grid.setColumnWidth(ancho[1]);
+		gridCerca.setNumColumns(ancho[0]);
+		gridCerca.setColumnWidth(ancho[1]);
 
-		grid.setOnItemClickListener(new OnItemClickListener() {
+		gridCerca.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
@@ -204,7 +224,7 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		Button btnBuscarCerca = (Button) findViewById(R.id.btnBuscarCerca);
+
 		btnBuscarCerca.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -229,18 +249,14 @@ public class MainActivity extends Activity {
 						Status s = peticion.getStatus();
 						if (s.name().equals("FINISHED")) {
 							if (adaptadorEventosURL.size() > 0) {
-								GridView gridview = (GridView) findViewById(R.id.gridResultadosCerca);
-								gridview.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
-
+								gridCerca.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
 							}
 						} else
 							handler.postDelayed(this, 500);
 					}
 				}, 500);
-
 			}
 		});
-
 	}
 
 	@Override
@@ -249,13 +265,12 @@ public class MainActivity extends Activity {
 		display = getWindowManager().getDefaultDisplay();
 		int rotation = display.getOrientation();
 		int ancho[] = new int[2];
-		ExpandableHeightGridView grid = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
 
 		int anchura = display.getWidth();
 		ancho = redimensionarColumnas(anchura);
 
-		grid.setNumColumns(ancho[0]);
-		grid.setColumnWidth(ancho[1]);
+		gridCerca.setNumColumns(ancho[0]);
+		gridCerca.setColumnWidth(ancho[1]);
 
 	}
 
@@ -279,7 +294,6 @@ public class MainActivity extends Activity {
 			retorno[1] = (anchura / 4) - 10;
 		}
 		return retorno;
-
 	}
 
 	// //////// VENTANA MODAL PARA INTRODUCIR FECHA

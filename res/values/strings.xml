@@ -47,7 +47,11 @@
     <string name="crearEventoImagenes">Imágenes del evento</string>
     <string name="crearEventoCargarImagen">Cargar imagen</string>
 
-    <!-- Crear evento -->
+    <!-- Ver evento -->
     <string name="detalleEventoTitulo">Detalle evento</string>
+    <string name="detalleEventoSi">Si</string>
+    <string name="detalleEventoNo">No</string>
+    <string name="detalleEventoAsistencia"> personas asistiran, ¿iras?</string>
+    <string name="detalleEventoDir">Dirección: </string>
 
 </resources>

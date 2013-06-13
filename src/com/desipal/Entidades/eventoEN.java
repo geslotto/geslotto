@@ -1,6 +1,9 @@
 package com.desipal.Entidades;
 
 import java.util.Date;
+import java.util.List;
+
+import android.graphics.drawable.Drawable;
 
 public class eventoEN {
 	private int idEvento;
@@ -13,12 +16,14 @@ public class eventoEN {
 	private boolean validado;
 	private boolean comentarios;
 	private String direccion;
+	private double distancia;
 	private int idEdad;
 	private int idCategoria;
 	private String url;
 	private Date fechaInicio;
 	private Date fechaFin;
 	private boolean todoElDia;
+	private List<Drawable> imagenes;
 
 	public int getIdEvento() {
 		return idEvento;
@@ -146,5 +151,21 @@ public class eventoEN {
 
 	public void setTodoElDia(boolean todoElDia) {
 		this.todoElDia = todoElDia;
+	}
+
+	public List<Drawable> getImagenes() {
+		return imagenes;
+	}
+
+	public void setImagenes(List<Drawable> imagenes) {
+		this.imagenes = imagenes;
+	}
+
+	public double getDistancia() {
+		return distancia;
+	}
+
+	public void setDistancia(double distancia) {
+		this.distancia = distancia;
 	}
 }

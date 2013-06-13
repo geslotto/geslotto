@@ -67,8 +67,8 @@ public class buscarEventosCerca extends AsyncTask<String, Void, Void> {
 						e.setUrl(jobj.getString("url"));
 
 						if (!jobj.getString("imagen").equals("noimagen")) {
-							Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(jobj.getString("imagen"))
-									.getContent());
+							String ere = jobj.getString("imagen");
+							Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(ere).getContent());
 							Drawable d = new BitmapDrawable(mContext.getResources(), bitmap);
 							e.setImagen(d);
 						} else
