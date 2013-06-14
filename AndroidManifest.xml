@@ -38,6 +38,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.desipal.EventU.galeriaActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

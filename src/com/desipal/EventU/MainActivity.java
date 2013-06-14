@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -11,7 +12,7 @@ import org.apache.http.message.BasicNameValuePair;
 import com.desipal.Entidades.adaptadorEventoEN;
 import com.desipal.EventU.R;
 import com.desipal.Librerias.ExpandableHeightGridView;
-import com.desipal.Servidor.buscarEventosCerca;
+import com.desipal.Servidor.buscarEventos;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -36,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Gallery.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -50,7 +50,10 @@ public class MainActivity extends Activity {
 
 	static Locale currentLocale = new Locale("es", "ES");
 
-	public static List<adaptadorEventoEN> adaptadorEventosURL = new ArrayList<adaptadorEventoEN>();
+	public static List<adaptadorEventoEN> eventosCerca = new ArrayList<adaptadorEventoEN>();
+	public static List<adaptadorEventoEN> eventosFiltro = new ArrayList<adaptadorEventoEN>();
+
+	AtomicReference<List<adaptadorEventoEN>> ref = new AtomicReference<List<adaptadorEventoEN>>();
 	public static Display display;
 
 	private boolean recogido = true;
@@ -67,12 +70,13 @@ public class MainActivity extends Activity {
 	Button btnFiltrar;
 	Button btnCrearEvento;
 
+	EditText campoFiltro;
 	TextView txtFecha;
 	TextView txtKm;
 
 	ImageButton btnLimpiar;
 	Spinner spiCategoria;
-	SeekBar seekRadio;
+	SeekBar seekRadio;	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +114,7 @@ public class MainActivity extends Activity {
 
 		btnLimpiar = (ImageButton) findViewById(R.id.btnLimpiar);
 
+		campoFiltro = (EditText) findViewById(R.id.campoFiltro);
 		txtFecha = (TextView) findViewById(R.id.campoFecha);
 		txtKm = (TextView) findViewById(R.id.txtKm);
 
@@ -168,7 +173,35 @@ public class MainActivity extends Activity {
 		btnFiltrar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				gridResultados.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
+				MainActivity.eventosFiltro.clear();
+				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+				Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				Double latitud = loc.getLatitude();
+				Double longitud = loc.getLongitude();
+				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+				parametros.add(new BasicNameValuePair("filtro", campoFiltro.getText().toString()));
+				parametros.add(new BasicNameValuePair("fecha", txtFecha.getText().toString()));
+				parametros.add(new BasicNameValuePair("latitud", latitud.toString()));
+				parametros.add(new BasicNameValuePair("longitud", longitud.toString()));
+
+				String URL = "http://desipal.hol.es/app/eventos/filtro.php";
+				final buscarEventos peticion = new buscarEventos(parametros, MainActivity.this, ref);
+				peticion.execute(new String[] { URL });
+				final Handler handler = new Handler();
+				handler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						Status s = peticion.getStatus();
+						if (s.name().equals("FINISHED")) {
+							eventosFiltro = ref.get();
+							if (eventosFiltro.size() > 0) {
+								gridResultados.setAdapter(new GridViewAdapter(MainActivity.this, eventosFiltro));
+							}
+						} else
+							handler.postDelayed(this, 500);
+					}
+				}, 500);
+
 			}
 		});
 
@@ -215,8 +248,19 @@ public class MainActivity extends Activity {
 
 		gridCerca.setNumColumns(ancho[0]);
 		gridCerca.setColumnWidth(ancho[1]);
+		gridResultados.setNumColumns(ancho[0]);
+		gridResultados.setColumnWidth(ancho[1]);
 
 		gridCerca.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
+				i.putExtra("idEvento", id);
+				startActivity(i);
+			}
+		});
+
+		gridResultados.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
@@ -228,7 +272,7 @@ public class MainActivity extends Activity {
 		btnBuscarCerca.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				MainActivity.adaptadorEventosURL.clear();
+				MainActivity.eventosCerca.clear();
 				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 				Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 				Double latitud = loc.getLatitude();
@@ -240,7 +284,7 @@ public class MainActivity extends Activity {
 				parametros.add(new BasicNameValuePair("ratio", ratio + ""));
 
 				String URL = "http://desipal.hol.es/app/eventos/eventosCerca.php";
-				final buscarEventosCerca peticion = new buscarEventosCerca(parametros, MainActivity.this);
+				final buscarEventos peticion = new buscarEventos(parametros, MainActivity.this, ref);
 				peticion.execute(new String[] { URL });
 				final Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
@@ -248,8 +292,9 @@ public class MainActivity extends Activity {
 					public void run() {
 						Status s = peticion.getStatus();
 						if (s.name().equals("FINISHED")) {
-							if (adaptadorEventosURL.size() > 0) {
-								gridCerca.setAdapter(new GridViewAdapter(MainActivity.this, adaptadorEventosURL));
+							eventosCerca = ref.get();
+							if (eventosCerca.size() > 0) {
+								gridCerca.setAdapter(new GridViewAdapter(MainActivity.this, eventosCerca));
 							}
 						} else
 							handler.postDelayed(this, 500);
@@ -312,9 +357,9 @@ public class MainActivity extends Activity {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			String dia = Integer.toString(day + 1);
+			String dia = Integer.toString(day);
 			String mes = Integer.toString(month + 1);
-			if (day + 1 < 10)
+			if (day < 10)
 				dia = "0" + dia;
 			if (month + 1 < 10)
 				mes = "0" + mes;

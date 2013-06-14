@@ -64,7 +64,7 @@ public class crearEventoActivity extends Activity {
 	private int day;
 	private int hour;
 	private int minute;
-	public static boolean Creacionsatisfactoria;
+	public static int Creacionsatisfactoria = 0;
 	private boolean error = false;
 	private boolean[] errores = new boolean[6];
 
@@ -495,7 +495,7 @@ public class crearEventoActivity extends Activity {
 						nameValuePairs.add(new BasicNameValuePair("fechaFin", fechaFin));
 						nameValuePairs.add(new BasicNameValuePair("todoElDia", "0"));
 					}
-					crearEventoActivity.Creacionsatisfactoria = false;
+					crearEventoActivity.Creacionsatisfactoria = 1;
 					String URL = "http://desipal.hol.es/app/eventos/alta.php";
 					final creacionEvento peticion = new creacionEvento(nameValuePairs);
 					peticion.execute(new String[] { URL });
@@ -506,13 +506,20 @@ public class crearEventoActivity extends Activity {
 						public void run() {
 							Status s = peticion.getStatus();
 							if (s.name().equals("FINISHED"))
-								if (crearEventoActivity.Creacionsatisfactoria) {
+								if (crearEventoActivity.Creacionsatisfactoria == 0) {
 									arrayImagen.clear();
 									finish();
 									Toast.makeText(co, "Evento creado", Toast.LENGTH_SHORT).show();
 								} else {
+									if (crearEventoActivity.Creacionsatisfactoria == 1)
+										Toast.makeText(co, "Error al crear evento", Toast.LENGTH_SHORT).show();
+									else if (crearEventoActivity.Creacionsatisfactoria == 2)
+										Toast.makeText(co, "No se ha encontrado la dirección especificada.",
+												Toast.LENGTH_SHORT).show();
+									else if (crearEventoActivity.Creacionsatisfactoria == 3)
+										Toast.makeText(co, "La dirección devuelve varios resultados.",
+												Toast.LENGTH_SHORT).show();
 									btnCrearEvento.setEnabled(true);
-									Toast.makeText(co, "Error al crear evento", Toast.LENGTH_SHORT).show();
 								}
 							else
 								handler.postDelayed(this, 500);

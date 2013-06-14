@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.desipal.Entidades.adaptadorEventoEN;
-import com.desipal.EventU.MainActivity;
 import com.desipal.EventU.R.drawable;
 
 import android.content.Context;
@@ -28,16 +28,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
-public class buscarEventosCerca extends AsyncTask<String, Void, Void> {
+public class buscarEventos extends AsyncTask<String, Void, Void> {
 
 	private Context mContext;
 	private ArrayList<NameValuePair> parametros;
 	private List<adaptadorEventoEN> adaptadorEventos = new ArrayList<adaptadorEventoEN>();
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", new Locale("es", "ES"));
+	private AtomicReference<List<adaptadorEventoEN>> referencia;
 
-	public buscarEventosCerca(ArrayList<NameValuePair> parametros, Context context) {
+	public buscarEventos(ArrayList<NameValuePair> parametros, Context context,
+			AtomicReference<List<adaptadorEventoEN>> ref) {
 		this.parametros = parametros;
 		this.mContext = context;
+		referencia = ref;
 	}
 
 	@Override
@@ -87,7 +90,7 @@ public class buscarEventosCerca extends AsyncTask<String, Void, Void> {
 	}
 
 	protected void onPostExecute(Void result) {
-		MainActivity.adaptadorEventosURL = this.adaptadorEventos;
+		referencia.set(this.adaptadorEventos);
 		return;
 	}
 }

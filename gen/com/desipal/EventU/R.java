@@ -77,20 +77,21 @@ public final class R {
         public static final int editHoraInicio=0x7f080035;
         public static final int editNombre=0x7f08001d;
         public static final int editNumero=0x7f08002b;
+        public static final int galeriaFull=0x7f080055;
         public static final int gridResultados=0x7f080011;
         public static final int gridResultadosCerca=0x7f080018;
         public static final int imgDetalleImagen=0x7f080045;
         public static final int linear_filtro=0x7f080006;
         public static final int listImagenes=0x7f08003f;
-        public static final int lsBtnBorrar=0x7f08005b;
-        public static final int lsImagen=0x7f080059;
-        public static final int lsNombreImagen=0x7f08005a;
+        public static final int lsBtnBorrar=0x7f08005c;
+        public static final int lsImagen=0x7f08005a;
+        public static final int lsNombreImagen=0x7f08005b;
         public static final int progressBar=0x7f080054;
         public static final int relCabecera=0x7f080019;
         public static final int relComentarios=0x7f080041;
         public static final int relFechas=0x7f08002d;
         public static final int relImagenes=0x7f08003c;
-        public static final int rel_gridView_item=0x7f080055;
+        public static final int rel_gridView_item=0x7f080056;
         public static final int relativeLayout1=0x7f080000;
         public static final int seekRadio=0x7f080015;
         public static final int spiCategorias=0x7f08000e;
@@ -130,11 +131,11 @@ public final class R {
         public static final int txtDetalleFechaInicio=0x7f080051;
         public static final int txtDetalleNombre=0x7f080044;
         public static final int txtDireccion=0x7f080026;
-        public static final int txtDist_evento=0x7f080057;
+        public static final int txtDist_evento=0x7f080058;
         public static final int txtFechaEvento=0x7f08002e;
         public static final int txtFechaFin=0x7f080037;
         public static final int txtFechaInicio=0x7f080031;
-        public static final int txtFecha_evento=0x7f080056;
+        public static final int txtFecha_evento=0x7f080057;
         public static final int txtHoraFin=0x7f080038;
         public static final int txtHoraInicio=0x7f080032;
         public static final int txtKm=0x7f080016;
@@ -142,7 +143,7 @@ public final class R {
         public static final int txtNombre=0x7f08001c;
         public static final int txtNumero=0x7f080027;
         public static final int txtSubirImagenes=0x7f08003d;
-        public static final int txtTitulo_evento=0x7f080058;
+        public static final int txtTitulo_evento=0x7f080059;
         public static final int txtUbicacion=0x7f080022;
         public static final int txtfecha=0x7f08000b;
         public static final int txtfiltro=0x7f080008;
@@ -151,9 +152,10 @@ public final class R {
         public static final int activity_main=0x7f030000;
         public static final int crearevento=0x7f030001;
         public static final int detalleevento=0x7f030002;
-        public static final int gridview_item=0x7f030003;
-        public static final int lis_itemcargaimagen=0x7f030004;
-        public static final int spinner_item=0x7f030005;
+        public static final int galeriacompleta=0x7f030003;
+        public static final int gridview_item=0x7f030004;
+        public static final int lis_itemcargaimagen=0x7f030005;
+        public static final int spinner_item=0x7f030006;
     }
     public static final class string {
         public static final int Categorias=0x7f06000b;
