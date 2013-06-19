@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.eventoEN;
+import com.desipal.Servidor.asistenciaEvento;
 import com.desipal.Servidor.detalleEvento;
 
 import android.app.Activity;
@@ -16,20 +17,22 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
+import android.provider.Settings.Secure;
+import android.view.Display;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Gallery;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 @SuppressWarnings("deprecation")
 public class detalleEventoActivity extends Activity {
@@ -45,12 +48,12 @@ public class detalleEventoActivity extends Activity {
 	TextView txtDetalleFechaInicio;
 	TextView txtDetalleFechaFin;
 	TextView txtDetalleFechaFinal;
-	Button btnSi;
-	Button btnNo;
+	ToggleButton togAsistencia;
 	ProgressBar progressBar;
 	Gallery galeria;
 
 	static List<Drawable> imagenes;
+	public static boolean asiste;
 
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", MainActivity.currentLocale);
 
@@ -75,8 +78,7 @@ public class detalleEventoActivity extends Activity {
 			txtDetalleFechaInicio = (TextView) findViewById(R.id.txtDetalleFechaInicio);
 			txtDetalleFechaFin = (TextView) findViewById(R.id.txtDetalleFechaFin);
 			txtDetalleFechaFinal = (TextView) findViewById(R.id.txtDetalleFechaFinal);
-			btnSi = (Button) findViewById(R.id.btnDetalleSi);
-			btnNo = (Button) findViewById(R.id.btnDetalleNo);
+			togAsistencia = (ToggleButton) findViewById(R.id.togAsistencia);
 			progressBar = (ProgressBar) findViewById(R.id.progressBar);
 			ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 
@@ -90,12 +92,54 @@ public class detalleEventoActivity extends Activity {
 				parametros.add(new BasicNameValuePair("latitud", String.valueOf(latitud)));
 				parametros.add(new BasicNameValuePair("longitud", String.valueOf(longitud)));
 			}
+			String android_id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
+			parametros.add(new BasicNameValuePair("idDispositivo", android_id));
 			galeria.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 					Intent i = new Intent(detalleEventoActivity.this, galeriaActivity.class);
 					imagenes = evento.getImagenes();
 					startActivity(i);
+				}
+			});
+
+			togAsistencia.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					try {
+						if (asiste != isChecked) {
+							ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+
+							long idEvento = evento.getIdEvento();
+							parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
+							String android_id = Secure.getString(detalleEventoActivity.this.getContentResolver(),
+									Secure.ANDROID_ID);
+							parametros.add(new BasicNameValuePair("idDispositivo", android_id));
+							String asistire;
+							if (isChecked)
+								asistire = "true";
+							else
+								asistire = "false";
+							parametros.add(new BasicNameValuePair("asiste", asistire));
+							String URL = "http://desipal.hol.es/app/eventos/asistenciaEvento.php";
+							final asistenciaEvento peticion = new asistenciaEvento(parametros,
+									detalleEventoActivity.this);
+							peticion.execute(new String[] { URL });
+							final Handler handler = new Handler();
+							handler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									Status s = peticion.getStatus();
+									if (!s.name().equals("FINISHED"))
+										handler.postDelayed(this, 500);
+								}
+							}, 500);
+						}
+					} catch (Exception ex) {
+						Toast.makeText(detalleEventoActivity.this, "Error: " + ex.toString(), Toast.LENGTH_SHORT)
+								.show();
+					}
+
 				}
 			});
 
@@ -125,7 +169,8 @@ public class detalleEventoActivity extends Activity {
 		edDesc.setText(evento.getDescripcion());
 		txtAsistentes.setText(evento.getAsistencia() + " "
 				+ detalleEventoActivity.this.getString(R.string.detalleEventoAsistencia));
-		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(),false));
+		Display display = getWindowManager().getDefaultDisplay();
+		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(), false, display));
 		String direccion = "";
 		if (!evento.getDireccion().split(",")[4].equals(""))
 			direccion = direccion + evento.getDireccion().split(",")[4] + ",";
@@ -148,8 +193,13 @@ public class detalleEventoActivity extends Activity {
 			txtDetalleFechaFinal.setText(fechaF);
 		}
 
-		btnSi.setVisibility(View.VISIBLE);
-		btnNo.setVisibility(View.VISIBLE);
+		togAsistencia.setVisibility(View.VISIBLE);
+
+		if (asiste) {
+			togAsistencia.setChecked(true);
+		} else {
+			togAsistencia.setChecked(false);
+		}
 		progressBar.setVisibility(View.GONE);
 	}
 }

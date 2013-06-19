@@ -2,7 +2,6 @@ package com.desipal.EventU;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,14 +9,17 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import com.desipal.Entidades.eventoEN;
+import com.desipal.Entidades.seleccionUbicacionEN;
 import com.desipal.Librerias.Herramientas;
 import com.desipal.Servidor.creacionEvento;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +56,7 @@ import android.widget.ToggleButton;
 
 public class crearEventoActivity extends Activity {
 
-	private int ESCALAMAXIMA = 300;// Tamaño máximo de las imagenes subidas
+	private int ESCALAMAXIMA = 400;// Tamaño máximo de las imagenes subidas
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm", MainActivity.currentLocale);
 	private static Activity actividad;
 	private TextView txtFecha;
@@ -67,17 +69,19 @@ public class crearEventoActivity extends Activity {
 	public static int Creacionsatisfactoria = 0;
 	private boolean error = false;
 	private boolean[] errores = new boolean[6];
+	private boolean direccionvalida = false;
+	public static seleccionUbicacionEN[] opcionesDireccion;
 
 	public static List<Bitmap> arrayImagen;
 	double Latitud;
-	double Longitud;
-	InputStream is;
+	double Longitud;	
 
 	// CONTROLES
 	Button btnInicio;
 	Button btnSubirImagen;
 	Button btnCrearEvento;
 
+	TextView txtUbicacion;
 	EditText edNombre;
 	EditText edDesc;
 	EditText edDireccion;
@@ -94,6 +98,9 @@ public class crearEventoActivity extends Activity {
 
 	ToggleButton tgUbicacion;
 	ToggleButton tgComentarios;
+
+	TableLayout tableLocalizacion;
+	RelativeLayout relFechas;
 
 	private EditText[] editError = new EditText[] { edNombre, edDesc, edDireccion, edCiudad, edFechaIni, edFechaFin };
 
@@ -118,6 +125,7 @@ public class crearEventoActivity extends Activity {
 		btnSubirImagen = (Button) findViewById(R.id.btnSubirImagen);
 		btnCrearEvento = (Button) findViewById(R.id.btnCrearEvento);
 
+		txtUbicacion = (TextView) findViewById(R.id.txtUbicacion);
 		edNombre = (EditText) findViewById(R.id.editNombre);
 		edDesc = (EditText) findViewById(R.id.editDescrip);
 		edDireccion = (EditText) findViewById(R.id.editDireccion);
@@ -135,6 +143,9 @@ public class crearEventoActivity extends Activity {
 		tgUbicacion = (ToggleButton) findViewById(R.id.togUbicacion);
 		tgComentarios = (ToggleButton) findViewById(R.id.togComentarios);
 
+		tableLocalizacion = (TableLayout) findViewById(R.id.tableLocalizacion);
+		relFechas = (RelativeLayout) findViewById(R.id.relFechas);
+
 		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
 				R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -143,8 +154,9 @@ public class crearEventoActivity extends Activity {
 		btnInicio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish();
-				overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+				// finish();
+				// overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+				ventanaModal();
 			}
 		});
 
@@ -225,8 +237,6 @@ public class crearEventoActivity extends Activity {
 		tgUbicacion.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				final TableLayout tableLocalizacion = (TableLayout) findViewById(R.id.tableLocalizacion);
-				final RelativeLayout relFechas = (RelativeLayout) findViewById(R.id.relFechas);
 				Handler handler = new Handler();
 				Boolean recoger = true;
 				if (isChecked) {
@@ -361,6 +371,7 @@ public class crearEventoActivity extends Activity {
 		refrescarLista();
 	}
 
+	@SuppressWarnings("deprecation")
 	protected boolean crearEvento() {
 		try {
 			eventoEN evento = new eventoEN();
@@ -390,22 +401,34 @@ public class crearEventoActivity extends Activity {
 				errores[2] = false;// Quitamos el error de direccion
 				errores[3] = false;// Quitamos el error de ciudad
 			} else {
-				evento.setLongitud(0.0);
-				evento.setLatitud(0.0);
-				String direccion = "";
-				if (edDireccion.getText().length() > 0) {
-					direccion = edDireccion.getText().toString();
-					errores[2] = false;// Quitamos el error de direccion
-					if (edNumero.getText().length() > 0)
-						direccion = direccion + "," + edNumero.getText().toString();
-					if (edCiudad.getText().length() > 0) {
-						direccion = direccion + "," + edCiudad.getText().toString();
-						evento.setDireccion(direccion);
-						errores[3] = false;// Quitamos el error de ciudad
-					} else
-						errores[3] = true;
-				} else
-					errores[2] = true;
+				if (direccionvalida) {
+					evento.setLongitud(Longitud);
+					evento.setLatitud(Latitud);
+					evento.setDireccion("");
+				} else {
+					String direccion = "";
+					if (edDireccion.getText().length() > 0) {
+						direccion = edDireccion.getText().toString();
+						errores[2] = false;// Quitamos el error de direccion
+						if (edNumero.getText().length() > 0)
+							direccion = direccion + "," + edNumero.getText().toString();
+						if (edCiudad.getText().length() > 0) {
+							direccion = direccion + "," + edCiudad.getText().toString();
+							evento.setDireccion(direccion);
+							errores[3] = false;// Quitamos el error de ciudad
+						} else
+							errores[3] = true;
+					} else {
+						if (edCiudad.getText().length() > 0) {
+							evento.setDireccion(edCiudad.getText().toString());
+							errores[2] = false;// Quitamos el error de direccion
+							errores[3] = false;// Quitamos el error de ciudad
+						} else {
+							errores[2] = true;
+							errores[3] = true;
+						}
+					}
+				}
 			}
 
 			if (tgComentarios.isChecked())
@@ -464,7 +487,7 @@ public class crearEventoActivity extends Activity {
 					int i = 1;
 					for (Bitmap imagen : arrayImagen) {
 						ByteArrayOutputStream bao = new ByteArrayOutputStream();
-						imagen = Herramientas.escalarImagen(imagen, ESCALAMAXIMA);
+						imagen = Herramientas.disminuirImagen(imagen, ESCALAMAXIMA);
 						imagen.compress(Bitmap.CompressFormat.JPEG, 80, bao);
 						byte[] ba = bao.toByteArray();
 						String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
@@ -516,9 +539,11 @@ public class crearEventoActivity extends Activity {
 									else if (crearEventoActivity.Creacionsatisfactoria == 2)
 										Toast.makeText(co, "No se ha encontrado la dirección especificada.",
 												Toast.LENGTH_SHORT).show();
-									else if (crearEventoActivity.Creacionsatisfactoria == 3)
+									else if (crearEventoActivity.Creacionsatisfactoria == 3) {
 										Toast.makeText(co, "La dirección devuelve varios resultados.",
 												Toast.LENGTH_SHORT).show();
+										ventanaModal();
+									}
 									btnCrearEvento.setEnabled(true);
 								}
 							else
@@ -554,4 +579,25 @@ public class crearEventoActivity extends Activity {
 		gridview.setLayoutParams(params);
 	}
 
+	protected void ventanaModal() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(actividad);
+
+		String[] resultados = new String[opcionesDireccion.length];
+		for (int i = 0; i < opcionesDireccion.length; i++) {
+			resultados[i] = opcionesDireccion[i].getDireccion();
+		}
+		alertDialogBuilder.setTitle("Existen varias opciones");
+		alertDialogBuilder.setItems(resultados, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int position) {
+				Latitud = opcionesDireccion[position].getLatitud();
+				Longitud = opcionesDireccion[position].getLongitud();
+				tgUbicacion.setEnabled(false);
+				txtUbicacion.setText("Ubicación seleccionada");
+				direccionvalida = true;
+				crearEvento();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
 }

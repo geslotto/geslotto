@@ -62,50 +62,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtDetalleDesc"
-                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TableLayout
-                android:id="@+id/tablePregunta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleAsistentes"
-                android:stretchColumns="*" >
-
-                <TableRow
-                    android:id="@+id/tableRow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <Button
-                        android:id="@+id/btnDetalleSi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="2dp"
-                        android:background="@anim/anim_boton"
-                        android:text="@string/detalleEventoSi"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@android:color/background_light"
-                        android:visibility="invisible" />
-
-                    <Button
-                        android:id="@+id/btnDetalleNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:background="@anim/anim_boton"
-                        android:text="@string/detalleEventoNo"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@android:color/background_light"
-                        android:visibility="invisible" />
-                </TableRow>
-            </TableLayout>
+            <ToggleButton
+                android:id="@+id/togAsistencia"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/txtDetalleDesc"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/txtDetalleAsistentes"
+                android:background="@drawable/toggle_bg"
+                android:checked="false"
+                android:textOff=""
+                android:textOn=""
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txtDetalleDir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tablePregunta"
+                android:layout_below="@+id/togAsistencia"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -113,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/tablePregunta"
+                android:layout_below="@+id/togAsistencia"
                 android:layout_toRightOf="@+id/txtDetalleDir"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 

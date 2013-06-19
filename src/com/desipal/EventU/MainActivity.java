@@ -70,13 +70,15 @@ public class MainActivity extends Activity {
 	Button btnFiltrar;
 	Button btnCrearEvento;
 
+	LinearLayout filtro;
+
 	EditText campoFiltro;
 	TextView txtFecha;
 	TextView txtKm;
 
 	ImageButton btnLimpiar;
 	Spinner spiCategoria;
-	SeekBar seekRadio;	
+	SeekBar seekRadio;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,7 @@ public class MainActivity extends Activity {
 
 		gridCerca = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
 		gridResultados = (GridView) findViewById(R.id.gridResultados);
+		filtro = (LinearLayout) findViewById(R.id.linear_filtro);
 
 		btnBuscarCerca = (Button) findViewById(R.id.btnBuscarCerca);
 		btnRecoger = (Button) findViewById(R.id.btn_recoger);
@@ -131,37 +134,7 @@ public class MainActivity extends Activity {
 		btnRecoger.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final LinearLayout filtro = (LinearLayout) findViewById(R.id.linear_filtro);
-				Handler handler = new Handler();
-				if (recogido) {
-					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
-					anim_trans.setDuration(200);
-					gridResultados.startAnimation(anim_trans);
-					handler.postDelayed(new Runnable() {
-						public void run() {
-							filtro.setVisibility(View.VISIBLE);
-							AlphaAnimation anim_alpha = new AlphaAnimation(0, 1);
-							anim_alpha.setDuration(200);
-							filtro.startAnimation(anim_alpha);
-						}
-					}, 220);
-					recogido = false;
-				} else {
-					btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
-					AlphaAnimation anim_trans = new AlphaAnimation(1, 0);
-					anim_trans.setDuration(200);
-					filtro.startAnimation(anim_trans);
-					handler.postDelayed(new Runnable() {
-						public void run() {
-							filtro.setVisibility(View.GONE);
-							TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
-							anim_trans.setDuration(200);
-							gridResultados.startAnimation(anim_trans);
-						}
-					}, 200);
-					recogido = true;
-				}
+				recoger();
 			}
 		});
 
@@ -195,13 +168,13 @@ public class MainActivity extends Activity {
 						if (s.name().equals("FINISHED")) {
 							eventosFiltro = ref.get();
 							if (eventosFiltro.size() > 0) {
+								recoger();
 								gridResultados.setAdapter(new GridViewAdapter(MainActivity.this, eventosFiltro));
 							}
 						} else
 							handler.postDelayed(this, 500);
 					}
 				}, 500);
-
 			}
 		});
 
@@ -241,6 +214,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		@SuppressWarnings("deprecation")
 		int anchura = display.getWidth();
 
 		int ancho[] = new int[2];
@@ -307,16 +281,50 @@ public class MainActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		display = getWindowManager().getDefaultDisplay();
-		int rotation = display.getOrientation();
+		display = getWindowManager().getDefaultDisplay();		
 		int ancho[] = new int[2];
 
+		@SuppressWarnings("deprecation")
 		int anchura = display.getWidth();
 		ancho = redimensionarColumnas(anchura);
 
 		gridCerca.setNumColumns(ancho[0]);
 		gridCerca.setColumnWidth(ancho[1]);
 
+	}
+
+	// //////// RECOGER FILTRO
+	protected void recoger() {
+		Handler handler = new Handler();
+		if (recogido) {
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
+			TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
+			anim_trans.setDuration(200);
+			gridResultados.startAnimation(anim_trans);
+			handler.postDelayed(new Runnable() {
+				public void run() {
+					filtro.setVisibility(View.VISIBLE);
+					AlphaAnimation anim_alpha = new AlphaAnimation(0, 1);
+					anim_alpha.setDuration(200);
+					filtro.startAnimation(anim_alpha);
+				}
+			}, 220);
+			recogido = false;
+		} else {
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
+			AlphaAnimation anim_trans = new AlphaAnimation(1, 0);
+			anim_trans.setDuration(200);
+			filtro.startAnimation(anim_trans);
+			handler.postDelayed(new Runnable() {
+				public void run() {
+					filtro.setVisibility(View.GONE);
+					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
+					anim_trans.setDuration(200);
+					gridResultados.startAnimation(anim_trans);
+				}
+			}, 200);
+			recogido = true;
+		}
 	}
 
 	// //////// TAMAÑO DE LAS COLUMNAS GRIDVIEW

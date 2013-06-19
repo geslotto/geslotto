@@ -32,6 +32,7 @@ public class detalleEvento extends AsyncTask<String, Void, Void> {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", new Locale("es", "ES"));
 	private eventoEN evento;
 	private Context mContext;
+	private boolean asiste = false;
 
 	public detalleEvento(ArrayList<NameValuePair> parametros, Context mContext) {
 		this.parametros = parametros;
@@ -58,24 +59,28 @@ public class detalleEvento extends AsyncTask<String, Void, Void> {
 
 				if (!total.toString().equals("null")) {
 					JSONObject jobj = new JSONObject(total.toString());
+					JSONObject jsEvento = new JSONObject(jobj.getString("evento"));
+					//JSONObject jsAsistire = new JSONObject(jobj.getString("asiste"));
 					eventoEN e = new eventoEN();
-					e.setIdEvento(jobj.getInt("idEvento"));
-					e.setIdCreador(jobj.getString("idCreador"));
-					e.setNombre(jobj.getString("nombre"));
-					e.setDescripcion(jobj.getString("descripcion"));
-					e.setLatitud(jobj.getDouble("latitud"));
-					e.setLongitud(jobj.getDouble("longitud"));
-					e.setAsistencia(jobj.getInt("asistencia"));
-					e.setValidado(Boolean.parseBoolean(jobj.getString("validado")));
-					e.setComentarios(Boolean.parseBoolean(jobj.getString("comentarios")));
-					e.setDireccion(jobj.getString("direccion"));
-					e.setIdCategoria(jobj.getInt("idCategoria"));
-					e.setDistancia(jobj.getDouble("distancia"));
-					e.setFechaInicio(dateFormat.parse(jobj.getString("fechaInicio")));
-					e.setFechaFin(dateFormat.parse(jobj.getString("fechaFin")));
-					e.setTodoElDia(Boolean.parseBoolean(jobj.getString("todoElDia")));
-					e.setUrl(jobj.getString("url"));
-					JSONObject jurls = new JSONObject(jobj.getString("urlImagenes"));
+					
+					e.setIdEvento(jsEvento.getInt("idEvento"));
+					e.setIdCreador(jsEvento.getString("idCreador"));
+					e.setNombre(jsEvento.getString("nombre"));
+					e.setDescripcion(jsEvento.getString("descripcion"));
+					e.setLatitud(jsEvento.getDouble("latitud"));
+					e.setLongitud(jsEvento.getDouble("longitud"));
+					e.setAsistencia(jsEvento.getInt("asistencia"));
+					e.setValidado(Boolean.parseBoolean(jsEvento.getString("validado")));
+					e.setComentarios(Boolean.parseBoolean(jsEvento.getString("comentarios")));
+					e.setDireccion(jsEvento.getString("direccion"));
+					e.setIdCategoria(jsEvento.getInt("idCategoria"));
+					e.setDistancia(jsEvento.getDouble("distancia"));
+					e.setFechaInicio(dateFormat.parse(jsEvento.getString("fechaInicio")));
+					e.setFechaFin(dateFormat.parse(jsEvento.getString("fechaFin")));
+					e.setTodoElDia(Boolean.parseBoolean(jsEvento.getString("todoElDia")));
+					e.setUrl(jsEvento.getString("url"));
+					asiste = jobj.getBoolean("asiste");
+					JSONObject jurls = new JSONObject(jsEvento.getString("urlImagenes"));
 					List<Drawable> imagenes = new ArrayList<Drawable>();
 					for (int i = 0; i < jurls.length(); i++) {
 						Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(jurls.getString((i + 1) + ""))
@@ -95,6 +100,7 @@ public class detalleEvento extends AsyncTask<String, Void, Void> {
 
 	protected void onPostExecute(Void result) {
 		detalleEventoActivity.evento = this.evento;
+		detalleEventoActivity.asiste = this.asiste;
 		return;
 	}
 
