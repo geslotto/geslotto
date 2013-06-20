@@ -40,6 +40,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -61,7 +62,7 @@ public class MainActivity extends Activity {
 	private int month;
 	private int day;
 
-	GridView gridResultados;
+	ListView gridResultados;
 	ExpandableHeightGridView gridCerca;
 
 	Button btnBuscarCerca;
@@ -106,7 +107,7 @@ public class MainActivity extends Activity {
 		tabs.setCurrentTab(0);
 
 		gridCerca = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
-		gridResultados = (GridView) findViewById(R.id.gridResultados);
+		gridResultados = (ListView) findViewById(R.id.gridResultados);
 		filtro = (LinearLayout) findViewById(R.id.linear_filtro);
 
 		btnBuscarCerca = (Button) findViewById(R.id.btnBuscarCerca);
@@ -214,16 +215,18 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		@SuppressWarnings("deprecation")
-		int anchura = display.getWidth();
+		// @SuppressWarnings("deprecation")
+		// int anchura = display.getWidth();
 
-		int ancho[] = new int[2];
-		ancho = redimensionarColumnas(anchura);
+		// int ancho[] = new int[2];
+		// ancho = redimensionarColumnas(anchura);
 
-		gridCerca.setNumColumns(ancho[0]);
-		gridCerca.setColumnWidth(ancho[1]);
-		gridResultados.setNumColumns(ancho[0]);
-		gridResultados.setColumnWidth(ancho[1]);
+		// gridCerca.setNumColumns(ancho[0]);
+		// gridCerca.setColumnWidth(ancho[1]);
+		// gridResultados.setNumColumns(ancho[0]);
+		// gridResultados.setColumnWidth(ancho[1]);
+		gridCerca.setNumColumns(1);
+		gridCerca.setColumnWidth(320);
 
 		gridCerca.setOnItemClickListener(new OnItemClickListener() {
 			@Override

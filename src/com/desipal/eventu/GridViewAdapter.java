@@ -8,14 +8,13 @@ import java.util.List;
 import com.desipal.Entidades.adaptadorEventoEN;
 import com.desipal.eventu.R;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class GridViewAdapter extends BaseAdapter {
@@ -43,8 +42,7 @@ public class GridViewAdapter extends BaseAdapter {
 	}
 
 	// create a new ImageView for each item referenced by the Adapter
-	@SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
+
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vista = convertView;
 		View a;
@@ -62,23 +60,18 @@ public class GridViewAdapter extends BaseAdapter {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			vista = inflater.inflate(R.layout.gridview_item, null);
 
-			RelativeLayout relLayot = (RelativeLayout) vista.findViewById(R.id.rel_gridView_item);
+			ImageView imgEvento = (ImageView) vista.findViewById(R.id.imgEvento);
+			imgEvento.setImageDrawable(item.getImagen());
 
-			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-			if (currentapiVersion > android.os.Build.VERSION_CODES.HONEYCOMB)
-				relLayot.setBackground(item.getImagen());
-			else
-				relLayot.setBackgroundDrawable(item.getImagen());
-
-			TextView txtFecha = (TextView) vista.findViewById(R.id.txtFecha_evento);
+			TextView txtFecha = (TextView) vista.findViewById(R.id.txtFechaEvento);
 			String fecha = dateFormat.format(item.getFecha());
 			txtFecha.setText(fecha);
 
-			TextView txtDist = (TextView) vista.findViewById(R.id.txtDist_evento);
+			TextView txtDist = (TextView) vista.findViewById(R.id.txtDistEvento);
 			String distancia = new DecimalFormat("#.##").format(item.getDistancia());
 			txtDist.setText(distancia + " Km");
 
-			TextView txtNombre = (TextView) vista.findViewById(R.id.txtTitulo_evento);
+			TextView txtNombre = (TextView) vista.findViewById(R.id.txtTituloEvento);
 			txtNombre.setText(item.getNombre());
 
 		} catch (Exception e) {

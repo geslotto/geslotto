@@ -191,25 +191,26 @@ containing a value of this type.
         public static final int common_signin_btn_text_normal_light=0x7f02001d;
         public static final int common_signin_btn_text_pressed_dark=0x7f02001e;
         public static final int common_signin_btn_text_pressed_light=0x7f02001f;
-        public static final int grid_1=0x7f020020;
-        public static final int grid_2=0x7f020021;
-        public static final int grid_3=0x7f020022;
-        public static final int grid_4=0x7f020023;
-        public static final int ic_launcher=0x7f020024;
-        public static final int ic_menu_btn_add=0x7f020025;
-        public static final int ic_menu_home=0x7f020026;
-        public static final int mapa=0x7f020027;
-        public static final int scrubber_control_disabled_holo=0x7f020028;
-        public static final int scrubber_control_focused_holo=0x7f020029;
-        public static final int scrubber_control_normal_holo=0x7f02002a;
-        public static final int scrubber_control_pressed_holo=0x7f02002b;
-        public static final int scrubber_primary_holo=0x7f02002c;
-        public static final int scrubber_secondary_holo=0x7f02002d;
-        public static final int scrubber_track_holo_light=0x7f02002e;
-        public static final int toggle=0x7f02002f;
-        public static final int toggle_bg=0x7f020030;
-        public static final int toggle_off=0x7f020031;
-        public static final int toggle_on=0x7f020032;
+        public static final int fondo_item=0x7f020020;
+        public static final int grid_1=0x7f020021;
+        public static final int grid_2=0x7f020022;
+        public static final int grid_3=0x7f020023;
+        public static final int grid_4=0x7f020024;
+        public static final int ic_launcher=0x7f020025;
+        public static final int ic_menu_btn_add=0x7f020026;
+        public static final int ic_menu_home=0x7f020027;
+        public static final int mapa=0x7f020028;
+        public static final int scrubber_control_disabled_holo=0x7f020029;
+        public static final int scrubber_control_focused_holo=0x7f02002a;
+        public static final int scrubber_control_normal_holo=0x7f02002b;
+        public static final int scrubber_control_pressed_holo=0x7f02002c;
+        public static final int scrubber_primary_holo=0x7f02002d;
+        public static final int scrubber_secondary_holo=0x7f02002e;
+        public static final int scrubber_track_holo_light=0x7f02002f;
+        public static final int toggle=0x7f020030;
+        public static final int toggle_bg=0x7f020031;
+        public static final int toggle_off=0x7f020032;
+        public static final int toggle_on=0x7f020033;
     }
     public static final class id {
         public static final int Titulo=0x7f060006;
@@ -238,11 +239,12 @@ containing a value of this type.
         public static final int gridResultadosCerca=0x7f06001d;
         public static final int hybrid=0x7f060004;
         public static final int imgDetalleImagen=0x7f06004a;
+        public static final int imgEvento=0x7f06005c;
         public static final int linear_filtro=0x7f06000b;
         public static final int listImagenes=0x7f060044;
-        public static final int lsBtnBorrar=0x7f060060;
-        public static final int lsImagen=0x7f06005e;
-        public static final int lsNombreImagen=0x7f06005f;
+        public static final int lsBtnBorrar=0x7f060061;
+        public static final int lsImagen=0x7f06005f;
+        public static final int lsNombreImagen=0x7f060060;
         public static final int mapa=0x7f060057;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
@@ -279,6 +281,7 @@ containing a value of this type.
         public static final int txtComentarios=0x7f060047;
         public static final int txtComentariosEvento=0x7f060045;
         public static final int txtDatosEvento=0x7f060020;
+        public static final int txtDescEvento=0x7f06005e;
         public static final int txtDescrip=0x7f060023;
         public static final int txtDetalleAsistentes=0x7f06004d;
         public static final int txtDetalleCategoria=0x7f06004b;
@@ -293,11 +296,10 @@ containing a value of this type.
         public static final int txtDetalleFechaInicio=0x7f060054;
         public static final int txtDetalleNombre=0x7f060049;
         public static final int txtDireccion=0x7f06002b;
-        public static final int txtDist_evento=0x7f06005c;
+        public static final int txtDistEvento=0x7f06005d;
         public static final int txtFechaEvento=0x7f060033;
         public static final int txtFechaFin=0x7f06003c;
         public static final int txtFechaInicio=0x7f060036;
-        public static final int txtFecha_evento=0x7f06005b;
         public static final int txtHoraFin=0x7f06003d;
         public static final int txtHoraInicio=0x7f060037;
         public static final int txtKm=0x7f06001b;
@@ -305,7 +307,7 @@ containing a value of this type.
         public static final int txtNombre=0x7f060021;
         public static final int txtNumero=0x7f06002c;
         public static final int txtSubirImagenes=0x7f060042;
-        public static final int txtTitulo_evento=0x7f06005d;
+        public static final int txtTituloEvento=0x7f06005b;
         public static final int txtUbicacion=0x7f060027;
         public static final int txtfecha=0x7f060010;
         public static final int txtfiltro=0x7f06000d;
@@ -325,62 +327,48 @@ containing a value of this type.
         public static final int Radio=0x7f070022;
         public static final int action_settings=0x7f070016;
         public static final int app_name=0x7f070015;
-        /**  Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
+        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
         public static final int auth_client_availability_notification_title=0x7f07000f;
-        /**  Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
+        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
         public static final int auth_client_play_services_err_notification_msg=0x7f070010;
-        /**  Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
+        /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
         public static final int auth_client_requested_by_msg=0x7f070011;
         /**  Crear evento 
          */
         public static final int btn_inicio=0x7f070023;
-        /** 
-         Button in confirmation dialog to enable Google Play services.  Clicking it
+        /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
-        can enable it [CHAR LIMIT=40]
-    
+        can enable it [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_enable_button=0x7f070006;
-        /** 
-         Message in confirmation dialog informing user they need to enable
-        Google Play services in application settings [CHAR LIMIT=NONE]
-    
+        /**  Message in confirmation dialog informing user they need to enable
+        Google Play services in application settings [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_enable_text=0x7f070005;
-        /** 
-         Title of confirmation dialog informing user they need to enable
-        Google Play services in application settings [CHAR LIMIT=40]
-    
+        /**  Title of confirmation dialog informing user they need to enable
+        Google Play services in application settings [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_enable_title=0x7f070004;
         /**  Button in confirmation dialog for installing Google Play services [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_install_button=0x7f070003;
-        /** 
-         (For phones) Message in confirmation dialog informing user that
-        they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE]
-    
+        /**  (For phones) Message in confirmation dialog informing user that
+        they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_install_text_phone=0x7f070001;
-        /** 
-         (For tablets) Message in confirmation dialog informing user that
-        they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE]
-    
+        /**  (For tablets) Message in confirmation dialog informing user that
+        they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_install_text_tablet=0x7f070002;
-        /** 
-         Title of confirmation dialog informing user that they need to install
-        Google Play services (from Play Store) [CHAR LIMIT=40]
-    
+        /**  Title of confirmation dialog informing user that they need to install
+        Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_install_title=0x7f070000;
-        /** 
-         Message in confirmation dialog informing user there is an unknown issue in Google Play
-        services [CHAR LIMIT=NONE]
-    
+        /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
+        services [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_unknown_issue=0x7f070009;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
@@ -392,16 +380,12 @@ containing a value of this type.
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_update_button=0x7f07000c;
-        /** 
-         Message in confirmation dialog informing user that they need to update
-        Google Play services (from Play Store) [CHAR LIMIT=NONE]
-    
+        /**  Message in confirmation dialog informing user that they need to update
+        Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_update_text=0x7f070008;
-        /** 
-         Title of confirmation dialog informing user that they need to update
-        Google Play services (from Play Store) [CHAR LIMIT=40]
-    
+        /**  Title of confirmation dialog informing user that they need to update
+        Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_update_title=0x7f070007;
         /**  Sign-in button text [CHAR LIMIT=15] 
@@ -448,8 +432,12 @@ containing a value of this type.
         public static final int hint_filtro=0x7f07001d;
         public static final int hint_hora=0x7f07001b;
         /**  Location client code resources (prefix with location_client) 
- Begin strings for location.reporting 
- Some InactiveReason names.  See more in OneUp/package/location/res/values/strings.xml 
+
+        Begin strings for location.reporting
+    
+
+        Some InactiveReason names.  See more in OneUp/package/location/res/values/strings.xml
+    
          */
         public static final int location_client_ulr_inactive_age_under_13=0x7f070012;
         public static final int location_client_ulr_inactive_age_unknown=0x7f070013;
