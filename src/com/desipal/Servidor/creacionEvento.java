@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.desipal.Entidades.seleccionUbicacionEN;
-import com.desipal.EventU.crearEventoActivity;
+import com.desipal.eventu.crearEventoActivity;
 
 import android.os.AsyncTask;
 

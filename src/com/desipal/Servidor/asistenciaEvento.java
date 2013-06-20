@@ -14,7 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.desipal.Entidades.eventoEN;
-import com.desipal.EventU.detalleEventoActivity;
+import com.desipal.eventu.detalleEventoActivity;
 
 import android.content.Context;
 import android.os.AsyncTask;

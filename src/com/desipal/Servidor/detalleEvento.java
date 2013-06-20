@@ -17,7 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import com.desipal.Entidades.eventoEN;
-import com.desipal.EventU.detalleEventoActivity;
+import com.desipal.eventu.detalleEventoActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;

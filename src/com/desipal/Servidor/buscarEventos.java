@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.desipal.Entidades.adaptadorEventoEN;
-import com.desipal.EventU.R.drawable;
+import com.desipal.eventu.R.drawable;
 
 import android.content.Context;
 import android.graphics.Bitmap;

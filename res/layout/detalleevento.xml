@@ -140,6 +140,13 @@
                 android:layout_toRightOf="@+id/txtDetalleFechaFin"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <fragment
+                android:id="@+id/mapa"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="fill_parent"
+                android:layout_height="400dp"
+                android:layout_below="@+id/txtDetalleFechaFinal" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleLarge"
