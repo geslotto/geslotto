@@ -10,45 +10,58 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.adaptadorEventoEN;
+import com.desipal.Librerias.Herramientas;
 import com.desipal.eventu.R;
-import com.desipal.Librerias.ExpandableHeightGridView;
 import com.desipal.Servidor.buscarEventos;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
+import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.ToggleButton;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
+	Double latitud;
+	Double longitud;
+	int ratio;
 	static Locale currentLocale = new Locale("es", "ES");
 
 	public static List<adaptadorEventoEN> eventosCerca = new ArrayList<adaptadorEventoEN>();
@@ -63,7 +76,7 @@ public class MainActivity extends Activity {
 	private int day;
 
 	ListView gridResultados;
-	ExpandableHeightGridView gridCerca;
+	ListView gridCerca;
 
 	Button btnBuscarCerca;
 	Button btnRecoger;
@@ -76,10 +89,17 @@ public class MainActivity extends Activity {
 	EditText campoFiltro;
 	TextView txtFecha;
 	TextView txtKm;
-
+	TextView txtErrorCerca;
+	TextView txtErrorResultados;
 	ImageButton btnLimpiar;
 	Spinner spiCategoria;
 	SeekBar seekRadio;
+
+	ProgressBar progressResult;
+	ProgressBar progressCerca;
+	ToggleButton togOpcionMapa;
+	GoogleMap map;
+	RelativeLayout LayoutMapa;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,11 +122,12 @@ public class MainActivity extends Activity {
 
 		spec = tabs.newTabSpec("Cerca de mí");
 		spec.setContent(R.id.tab2Layout);
-		spec.setIndicator("Cerca de mí", res.getDrawable(android.R.drawable.ic_menu_myplaces));
+		spec.setIndicator("Cerca de mí",
+				res.getDrawable(android.R.drawable.ic_menu_myplaces));
 		tabs.addTab(spec);
 		tabs.setCurrentTab(0);
 
-		gridCerca = (ExpandableHeightGridView) findViewById(R.id.gridResultadosCerca);
+		gridCerca = (ListView) findViewById(R.id.gridResultadosCerca);
 		gridResultados = (ListView) findViewById(R.id.gridResultados);
 		filtro = (LinearLayout) findViewById(R.id.linear_filtro);
 
@@ -124,7 +145,15 @@ public class MainActivity extends Activity {
 
 		spiCategoria = (Spinner) findViewById(R.id.spiCategorias);
 		seekRadio = (SeekBar) findViewById(R.id.seekRadio);
+		progressResult = (ProgressBar) findViewById(R.id.proResultados);
+		progressCerca = (ProgressBar) findViewById(R.id.proResulCerca);
+		txtErrorResultados = (TextView) findViewById(R.id.txtErrorResultados);
+		txtErrorCerca = (TextView) findViewById(R.id.txtErrorCerca);
+		togOpcionMapa = (ToggleButton) findViewById(R.id.togOpcionMapa);
 
+		LayoutMapa = (RelativeLayout) findViewById(R.id.relativeMapa);
+		map = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.mapaCercanos)).getMap();
 		btnFecha.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -139,27 +168,40 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.categorias,
-				R.layout.spinner_item);
+		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
+				this, R.array.categorias, R.layout.spinner_item);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
 
 		btnFiltrar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// OCULTAR TECLADO
+				InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(campoFiltro.getWindowToken(), 0);
+				btnFiltrar.setEnabled(false);
+				txtErrorResultados.setVisibility(View.GONE);
+				progressResult.setVisibility(View.VISIBLE);
+				gridResultados.setVisibility(View.GONE);
 				MainActivity.eventosFiltro.clear();
 				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-				Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				Location loc = locManager
+						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 				Double latitud = loc.getLatitude();
 				Double longitud = loc.getLongitude();
 				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
-				parametros.add(new BasicNameValuePair("filtro", campoFiltro.getText().toString()));
-				parametros.add(new BasicNameValuePair("fecha", txtFecha.getText().toString()));
-				parametros.add(new BasicNameValuePair("latitud", latitud.toString()));
-				parametros.add(new BasicNameValuePair("longitud", longitud.toString()));
+				parametros.add(new BasicNameValuePair("filtro", campoFiltro
+						.getText().toString()));
+				parametros.add(new BasicNameValuePair("fecha", txtFecha
+						.getText().toString()));
+				parametros.add(new BasicNameValuePair("latitud", latitud
+						.toString()));
+				parametros.add(new BasicNameValuePair("longitud", longitud
+						.toString()));
 
 				String URL = "http://desipal.hol.es/app/eventos/filtro.php";
-				final buscarEventos peticion = new buscarEventos(parametros, MainActivity.this, ref);
+				final buscarEventos peticion = new buscarEventos(parametros,
+						MainActivity.this, ref);
 				peticion.execute(new String[] { URL });
 				final Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
@@ -168,9 +210,16 @@ public class MainActivity extends Activity {
 						Status s = peticion.getStatus();
 						if (s.name().equals("FINISHED")) {
 							eventosFiltro = ref.get();
+							btnFiltrar.setEnabled(true);
 							if (eventosFiltro.size() > 0) {
 								recoger();
-								gridResultados.setAdapter(new GridViewAdapter(MainActivity.this, eventosFiltro));
+								gridResultados.setVisibility(View.VISIBLE);
+								gridResultados.setAdapter(new GridViewAdapter(
+										MainActivity.this, eventosFiltro));
+								progressResult.setVisibility(View.GONE);
+							} else {
+								txtErrorResultados.setVisibility(View.VISIBLE);
+								progressResult.setVisibility(View.GONE);
 							}
 						} else
 							handler.postDelayed(this, 500);
@@ -178,7 +227,7 @@ public class MainActivity extends Activity {
 				}, 500);
 			}
 		});
-
+		btnFiltrar.performClick();
 		btnLimpiar.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -194,7 +243,8 @@ public class MainActivity extends Activity {
 		btnCrearEvento.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(MainActivity.this, crearEventoActivity.class);
+				Intent i = new Intent(MainActivity.this,
+						crearEventoActivity.class);
 				startActivity(i);
 			}
 		});
@@ -204,13 +254,16 @@ public class MainActivity extends Activity {
 		seekRadio.setProgress(50);
 		seekRadio.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
 
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
 				txtKm.setText(progress + " Km");
 			}
 		});
@@ -225,13 +278,15 @@ public class MainActivity extends Activity {
 		// gridCerca.setColumnWidth(ancho[1]);
 		// gridResultados.setNumColumns(ancho[0]);
 		// gridResultados.setColumnWidth(ancho[1]);
-		gridCerca.setNumColumns(1);
-		gridCerca.setColumnWidth(320);
+		// gridCerca.setNumColumns(1);
+		// gridCerca.setColumnWidth(320);
 
 		gridCerca.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+				Intent i = new Intent(MainActivity.this,
+						detalleEventoActivity.class);
 				i.putExtra("idEvento", id);
 				startActivity(i);
 			}
@@ -239,8 +294,10 @@ public class MainActivity extends Activity {
 
 		gridResultados.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				Intent i = new Intent(MainActivity.this, detalleEventoActivity.class);
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+				Intent i = new Intent(MainActivity.this,
+						detalleEventoActivity.class);
 				i.putExtra("idEvento", id);
 				startActivity(i);
 			}
@@ -249,19 +306,28 @@ public class MainActivity extends Activity {
 		btnBuscarCerca.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				btnBuscarCerca.setEnabled(false);
+				progressCerca.setVisibility(View.VISIBLE);
+				LayoutMapa.setVisibility(View.GONE);
+				gridCerca.setVisibility(View.GONE);
+				txtErrorCerca.setVisibility(View.GONE);
 				MainActivity.eventosCerca.clear();
 				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-				Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				Double latitud = loc.getLatitude();
-				Double longitud = loc.getLongitude();
-				int ratio = seekRadio.getProgress();
+				Location loc = locManager
+						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				latitud = loc.getLatitude();
+				longitud = loc.getLongitude();
+				ratio = seekRadio.getProgress();
 				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
-				parametros.add(new BasicNameValuePair("latitud", latitud.toString()));
-				parametros.add(new BasicNameValuePair("longitud", longitud.toString()));
+				parametros.add(new BasicNameValuePair("latitud", latitud
+						.toString()));
+				parametros.add(new BasicNameValuePair("longitud", longitud
+						.toString()));
 				parametros.add(new BasicNameValuePair("ratio", ratio + ""));
 
 				String URL = "http://desipal.hol.es/app/eventos/eventosCerca.php";
-				final buscarEventos peticion = new buscarEventos(parametros, MainActivity.this, ref);
+				final buscarEventos peticion = new buscarEventos(parametros,
+						MainActivity.this, ref);
 				peticion.execute(new String[] { URL });
 				final Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
@@ -270,38 +336,88 @@ public class MainActivity extends Activity {
 						Status s = peticion.getStatus();
 						if (s.name().equals("FINISHED")) {
 							eventosCerca = ref.get();
+							btnBuscarCerca.setEnabled(true);
 							if (eventosCerca.size() > 0) {
-								gridCerca.setAdapter(new GridViewAdapter(MainActivity.this, eventosCerca));
+								if (togOpcionMapa.isChecked()) {
+									// MAPA
+									map.clear();
+									progressCerca.setVisibility(View.GONE);
+									LayoutMapa.setVisibility(View.VISIBLE);
+									// Pointer de mi posicion
+									LatLng MiPosicion = new LatLng(latitud,
+											longitud);
+									map.addMarker(new MarkerOptions().position(
+											MiPosicion).title("Estas aquí"));
+									for (adaptadorEventoEN item : eventosCerca) {
+										LatLng Posicion = new LatLng(item
+												.getLatitud(), item
+												.getLongitud());
+										map.addMarker(new MarkerOptions()
+												.position(Posicion)
+												.title(item.getNombre())
+												.icon(BitmapDescriptorFactory
+														.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+									}
+									CircleOptions circleOptions = new CircleOptions()
+											.center(MiPosicion)
+											// set center
+											.radius(ratio * 1000)
+											// set radius in meters
+											.fillColor(
+													Color.argb(20, 0, 0, 255))
+											// default
+											.strokeColor(Color.BLUE)
+											.strokeWidth((float) 1.5);
+									map.addCircle(circleOptions);
+									int zoom = Herramientas.calcularZoom(ratio);
+									map.moveCamera(CameraUpdateFactory
+											.newLatLngZoom(MiPosicion, zoom));
+									map.animateCamera(
+											CameraUpdateFactory.zoomTo(zoom),
+											2000, null);
+								} else {
+									// Lista
+									gridCerca.setVisibility(View.VISIBLE);
+									gridCerca.setAdapter(new GridViewAdapter(
+											MainActivity.this, eventosCerca));
+									progressCerca.setVisibility(View.GONE);
+								}
+							} else {
+								txtErrorCerca.setVisibility(View.VISIBLE);
+								progressCerca.setVisibility(View.GONE);
 							}
+
 						} else
 							handler.postDelayed(this, 500);
 					}
 				}, 500);
 			}
 		});
+		btnBuscarCerca.performClick();
 	}
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		display = getWindowManager().getDefaultDisplay();
-		int ancho[] = new int[2];
-
-		@SuppressWarnings("deprecation")
-		int anchura = display.getWidth();
-		ancho = redimensionarColumnas(anchura);
-
-		gridCerca.setNumColumns(ancho[0]);
-		gridCerca.setColumnWidth(ancho[1]);
-
-	}
+	/*
+	 * @Override public void onConfigurationChanged(Configuration newConfig) {
+	 * super.onConfigurationChanged(newConfig); display =
+	 * getWindowManager().getDefaultDisplay(); //int ancho[] = new int[2];
+	 * 
+	 * @SuppressWarnings("deprecation") //int anchura = display.getWidth();
+	 * //ancho = redimensionarColumnas(anchura);
+	 * 
+	 * //gridCerca.setNumColumns(ancho[0]);
+	 * //gridCerca.setColumnWidth(ancho[1]);
+	 * 
+	 * }
+	 */
 
 	// //////// RECOGER FILTRO
 	protected void recoger() {
 		Handler handler = new Handler();
 		if (recogido) {
-			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-			TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					android.R.drawable.arrow_up_float, 0);
+			TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0,
+					filtro.getHeight());
 			anim_trans.setDuration(200);
 			gridResultados.startAnimation(anim_trans);
 			handler.postDelayed(new Runnable() {
@@ -314,14 +430,16 @@ public class MainActivity extends Activity {
 			}, 220);
 			recogido = false;
 		} else {
-			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					android.R.drawable.arrow_down_float, 0);
 			AlphaAnimation anim_trans = new AlphaAnimation(1, 0);
 			anim_trans.setDuration(200);
 			filtro.startAnimation(anim_trans);
 			handler.postDelayed(new Runnable() {
 				public void run() {
 					filtro.setVisibility(View.GONE);
-					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
+					TranslateAnimation anim_trans = new TranslateAnimation(0,
+							0, filtro.getHeight(), 0);
 					anim_trans.setDuration(200);
 					gridResultados.startAnimation(anim_trans);
 				}
@@ -364,7 +482,8 @@ public class MainActivity extends Activity {
 
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+		public void onDateSet(DatePicker view, int selectedYear,
+				int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
@@ -375,7 +494,8 @@ public class MainActivity extends Activity {
 			if (month + 1 < 10)
 				mes = "0" + mes;
 			// set selected date into textview
-			txtFecha.setText(new StringBuilder().append(dia).append("/").append(mes).append("/").append(year));
+			txtFecha.setText(new StringBuilder().append(dia).append("/")
+					.append(mes).append("/").append(year));
 		}
 	};
 }

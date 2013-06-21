@@ -38,17 +38,6 @@
         android:textColor="#000"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/txtDescEvento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/imgEvento"
-        android:paddingLeft="10dp"
-        android:text="@string/crearEventoComentarios"
-        android:textColor="#000"
-        android:textSize="12sp" />
-
     <ImageView
         android:id="@+id/imgEvento"
         android:layout_width="80dp"
@@ -58,5 +47,18 @@
         android:background="#585858"
         android:contentDescription="@string/descImagen"
         android:src="@drawable/bordes" />
+
+    <TextView
+        android:id="@+id/txtDescEvento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtTituloEvento"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imgEvento"
+        android:paddingLeft="10dp"
+        android:text="@string/crearEventoComentarios"
+        android:textColor="#000"
+        android:textSize="12sp"
+        android:paddingTop="5dp" />
 
 </RelativeLayout>

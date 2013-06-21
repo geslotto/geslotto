@@ -7,11 +7,14 @@ import android.graphics.drawable.Drawable;
 public class adaptadorEventoEN {
 	private int idEvento;
 	private String nombre;
+	private String descripcion;
 	private double distancia;
 	private Date fecha;
 	private String url;
 	private Drawable imagen;
-
+	private double latitud;
+	private double longitud;
+	
 	public int getIdEvento() {
 		return idEvento;
 	}
@@ -58,5 +61,29 @@ public class adaptadorEventoEN {
 
 	public void setImagen(Drawable imagen) {
 		this.imagen = imagen;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public double getLatitud() {
+		return latitud;
+	}
+
+	public void setLatitud(double latitud) {
+		this.latitud = latitud;
+	}
+
+	public double getLongitud() {
+		return longitud;
+	}
+
+	public void setLongitud(double longitud) {
+		this.longitud = longitud;
 	}
 }

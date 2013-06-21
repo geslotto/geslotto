@@ -66,7 +66,9 @@ public class GridViewAdapter extends BaseAdapter {
 			TextView txtFecha = (TextView) vista.findViewById(R.id.txtFechaEvento);
 			String fecha = dateFormat.format(item.getFecha());
 			txtFecha.setText(fecha);
-
+			TextView txtDescrip = (TextView) vista.findViewById(R.id.txtDescEvento);
+			txtDescrip.setText(item.getDescripcion());
+			
 			TextView txtDist = (TextView) vista.findViewById(R.id.txtDistEvento);
 			String distancia = new DecimalFormat("#.##").format(item.getDistancia());
 			txtDist.setText(distancia + " Km");

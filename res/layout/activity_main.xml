@@ -205,6 +205,23 @@
                         </LinearLayout>
                     </ScrollView>
 
+                    <TextView
+                        android:id="@+id/txtErrorResultados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/filtroFallido"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/proResultados"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp" />
+
                     <ListView
                         android:id="@+id/gridResultados"
                         android:layout_width="fill_parent"
@@ -222,6 +239,17 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/togOpcionMapa"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/toggle_bg_map"
+                        android:checked="false"
+                        android:textOff=""
+                        android:textOn="" />
 
                     <TableLayout
                         android:id="@+id/tableRadio"
@@ -264,15 +292,45 @@
                         </TableRow>
                     </TableLayout>
 
-                    <com.desipal.Librerias.ExpandableHeightGridView
+                    <TextView
+                        android:id="@+id/txtErrorCerca"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/EventosFallido"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/proResulCerca"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp" />
+
+                    <ListView
                         android:id="@+id/gridResultadosCerca"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:numColumns="auto_fit"
-                        android:stretchMode="spacingWidthUniform"
-                        android:verticalSpacing="5dp" />
+                        android:background="@android:color/transparent"
+                        android:cacheColorHint="@android:color/transparent"
+                        android:divider="@android:color/transparent"
+                        android:gravity="center" />
+
+                    <RelativeLayout
+                        android:id="@+id/relativeMapa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" >
+
+                        <fragment
+                            android:id="@+id/mapaCercanos"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent" />
+                    </RelativeLayout>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

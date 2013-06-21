@@ -17,7 +17,9 @@
     <string name="Categorias">Categorias</string>
     <string name="Edad">Edad</string>
     <string name="Radio">Radio</string>
-
+    <string name="filtroFallido">El filtro no ha obtenido resultados</string>
+	<string name="EventosFallido">No hay eventos cerca de su posicion</string>
+	
     <!-- Crear evento -->
     <string name="btn_inicio">Inicio</string>
     <string name="crearEventoTitulo">Nuevo evento</string>

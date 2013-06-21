@@ -61,4 +61,19 @@ public class Herramientas {
 
 		return resizedBitmap;
 	}
+	public static int calcularZoom(int ratio) {
+	 	int zoom = 10;
+	 	if (ratio < 10)
+	 	 zoom = 12;
+	 	else if (ratio < 25)
+	 	 zoom = 11;
+	 	else if (ratio < 50)
+	 	 zoom = 10;
+	 	else if (ratio < 75)
+	 	 zoom = 9;
+	 	else if (ratio < 100)
+	 	 zoom = 8;
+
+	 	return zoom;
+	 }
 }
