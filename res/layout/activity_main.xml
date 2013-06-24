@@ -240,16 +240,31 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-                    <ToggleButton
-                        android:id="@+id/togOpcionMapa"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/toggle_bg_map"
-                        android:checked="false"
-                        android:textOff=""
-                        android:textOn="" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/txtComoVisualizar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/OpnVisualizacion"
+                            android:layout_alignBaseline="@+id/togOpcionMapa"
+                            android:paddingLeft="10dp" />
+
+                        <ToggleButton
+                            android:id="@+id/togOpcionMapa"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/toggle_bg_map"
+                            android:checked="false"
+                            android:textOff=""
+                            android:textOn="" 
+                            android:layout_toRightOf="@+id/txtComoVisualizar"/>
+                    </RelativeLayout>
 
                     <TableLayout
                         android:id="@+id/tableRadio"

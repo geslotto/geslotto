@@ -15,10 +15,12 @@ import com.desipal.eventu.R;
 import com.desipal.Servidor.buscarEventos;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.DatePickerDialog;
@@ -26,8 +28,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
@@ -100,6 +100,7 @@ public class MainActivity extends FragmentActivity {
 	ToggleButton togOpcionMapa;
 	GoogleMap map;
 	RelativeLayout LayoutMapa;
+	List<Marker> listapuntos = new ArrayList<Marker>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -154,6 +155,23 @@ public class MainActivity extends FragmentActivity {
 		LayoutMapa = (RelativeLayout) findViewById(R.id.relativeMapa);
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapaCercanos)).getMap();
+		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				for (Marker item : listapuntos) {
+					if (item.equals(marker)) {
+						int i = listapuntos.indexOf(item);
+						adaptadorEventoEN sel = eventosCerca.get(i);
+						Intent ac = new Intent(MainActivity.this,
+								detalleEventoActivity.class);
+						ac.putExtra("idEvento", (long) sel.getIdEvento());
+						startActivity(ac);
+						break;
+					}
+				}
+
+			}
+		});
 		btnFecha.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -184,11 +202,9 @@ public class MainActivity extends FragmentActivity {
 				progressResult.setVisibility(View.VISIBLE);
 				gridResultados.setVisibility(View.GONE);
 				MainActivity.eventosFiltro.clear();
-				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-				Location loc = locManager
-						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				Double latitud = loc.getLatitude();
-				Double longitud = loc.getLongitude();
+				LatLng loc= Herramientas.ObtenerLocalizacion(MainActivity.this);
+				Double latitud = loc.latitude;
+				Double longitud = loc.longitude;
 				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 				parametros.add(new BasicNameValuePair("filtro", campoFiltro
 						.getText().toString()));
@@ -312,11 +328,10 @@ public class MainActivity extends FragmentActivity {
 				gridCerca.setVisibility(View.GONE);
 				txtErrorCerca.setVisibility(View.GONE);
 				MainActivity.eventosCerca.clear();
-				LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-				Location loc = locManager
-						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				latitud = loc.getLatitude();
-				longitud = loc.getLongitude();
+				LatLng localizacion = Herramientas
+						.ObtenerLocalizacion(MainActivity.this);
+				latitud = localizacion.latitude;
+				longitud = localizacion.longitude;
 				ratio = seekRadio.getProgress();
 				ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 				parametros.add(new BasicNameValuePair("latitud", latitud
@@ -348,15 +363,17 @@ public class MainActivity extends FragmentActivity {
 											longitud);
 									map.addMarker(new MarkerOptions().position(
 											MiPosicion).title("Estas aquí"));
+									listapuntos.clear();
 									for (adaptadorEventoEN item : eventosCerca) {
 										LatLng Posicion = new LatLng(item
 												.getLatitud(), item
 												.getLongitud());
-										map.addMarker(new MarkerOptions()
-												.position(Posicion)
-												.title(item.getNombre())
-												.icon(BitmapDescriptorFactory
-														.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+										listapuntos
+												.add(map.addMarker(new MarkerOptions()
+														.position(Posicion)
+														.title(item.getNombre())
+														.icon(BitmapDescriptorFactory
+																.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 									}
 									CircleOptions circleOptions = new CircleOptions()
 											.center(MiPosicion)

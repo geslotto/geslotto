@@ -14,14 +14,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.eventoEN;
+import com.desipal.Librerias.Herramientas;
 import com.desipal.eventu.R;
 import com.desipal.Servidor.asistenciaEvento;
 import com.desipal.Servidor.detalleEvento;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
@@ -92,11 +91,10 @@ public class detalleEventoActivity extends FragmentActivity {
 
 			long idEvento = e.getLong("idEvento");
 			parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
-			LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-			Location loc = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			LatLng loc= Herramientas.ObtenerLocalizacion(detalleEventoActivity.this);
 			if (loc != null) {
-				double latitud = loc.getLatitude();
-				double longitud = loc.getLongitude();
+				double latitud = loc.latitude;
+				double longitud = loc.longitude;
 				parametros.add(new BasicNameValuePair("latitud", String.valueOf(latitud)));
 				parametros.add(new BasicNameValuePair("longitud", String.valueOf(longitud)));
 			}

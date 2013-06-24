@@ -201,7 +201,6 @@
 
                     <EditText
                         android:id="@+id/editNumero"
-                        android:maxWidth="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
@@ -209,7 +208,8 @@
                         android:hint="@string/crearEventoHintNumero"
                         android:inputType="number"
                         android:lines="1"
-                        android:maxLength="4" />
+                        android:maxLength="4"
+                        android:maxWidth="100dp" />
 
                     <EditText
                         android:id="@+id/editCiudad"
@@ -224,6 +224,20 @@
                         android:maxLength="25" />
                 </TableRow>
             </TableLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeMapa"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:visibility="gone"
+                android:paddingTop="10dp">
+
+                <fragment
+                    android:id="@+id/mapaLocalizacion"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="120dp" />
+            </RelativeLayout>
 
             <!-- FECHA DEL EVENTO -->
 

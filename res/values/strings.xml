@@ -15,10 +15,10 @@
     <string name="txtBuscar">Buscar</string>
     <string name="txtCrearEvento">Crear Evento</string>
     <string name="Categorias">Categorias</string>
-    <string name="Edad">Edad</string>
     <string name="Radio">Radio</string>
     <string name="filtroFallido">El filtro no ha obtenido resultados</string>
 	<string name="EventosFallido">No hay eventos cerca de su posicion</string>
+	 <string name="OpnVisualizacion">Opciones de visualización</string>
 	
     <!-- Crear evento -->
     <string name="btn_inicio">Inicio</string>
@@ -34,8 +34,6 @@
     <string name="crearEventoHintDireccion">Calle de los robles</string>
     <string name="crearEventoNumero">Número</string>
     <string name="crearEventoHintNumero">Nº</string>
-    <string name="crearEventoInformacionEvento">Información del evento</string>
-    <string name="crearEventoEdad">Edad recomendada</string>
     <string name="crearEventoCategoria">Categoria del evento</string>
     <string name="crearEventoFechaDelEvento">Fecha del evento</string>
     <string name="crearEventoTodoElDia">Todo el día</string>
