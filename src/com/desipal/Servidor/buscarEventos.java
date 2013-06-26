@@ -33,8 +33,7 @@ public class buscarEventos extends AsyncTask<String, Void, Void> {
 	private Context mContext;
 	private ArrayList<NameValuePair> parametros;
 	private List<adaptadorEventoEN> adaptadorEventos = new ArrayList<adaptadorEventoEN>();
-	private SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd hh:mm:ss", new Locale("es", "ES"));
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", new Locale("es", "ES"));
 	private AtomicReference<List<adaptadorEventoEN>> referencia;
 
 	public buscarEventos(ArrayList<NameValuePair> parametros, Context context,
@@ -54,8 +53,7 @@ public class buscarEventos extends AsyncTask<String, Void, Void> {
 
 				HttpResponse execute = client.execute(httppost);
 				InputStream content = execute.getEntity().getContent();
-				BufferedReader r = new BufferedReader(new InputStreamReader(
-						content));
+				BufferedReader r = new BufferedReader(new InputStreamReader(content));
 				StringBuilder total = new StringBuilder();
 				String line;
 				while ((line = r.readLine()) != null) {
@@ -76,15 +74,11 @@ public class buscarEventos extends AsyncTask<String, Void, Void> {
 
 						if (!jobj.getString("imagen").equals("noimagen")) {
 							String ere = jobj.getString("imagen");
-							Bitmap bitmap = BitmapFactory
-									.decodeStream((InputStream) new URL(ere)
-											.getContent());
-							Drawable d = new BitmapDrawable(
-									mContext.getResources(), bitmap);
+							Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(ere).getContent());
+							Drawable d = new BitmapDrawable(mContext.getResources(), bitmap);
 							e.setImagen(d);
 						} else
-							e.setImagen(mContext.getResources().getDrawable(
-									drawable.grid_1));
+							e.setImagen(mContext.getResources().getDrawable(drawable.grid_1));
 
 						e.setFecha(dateFormat.parse(jobj.getString("fecha")));
 						this.adaptadorEventos.add(e);
@@ -98,7 +92,7 @@ public class buscarEventos extends AsyncTask<String, Void, Void> {
 		return null;
 	}
 
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(Void result) {		
 		referencia.set(this.adaptadorEventos);
 		return;
 	}

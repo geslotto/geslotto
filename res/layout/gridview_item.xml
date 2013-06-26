@@ -56,9 +56,9 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/imgEvento"
         android:paddingLeft="10dp"
+        android:paddingTop="5dp"
         android:text="@string/crearEventoComentarios"
         android:textColor="#000"
-        android:textSize="12sp"
-        android:paddingTop="5dp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

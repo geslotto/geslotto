@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ddd"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_recoger"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@anim/anim_boton"
+        android:contentDescription="@string/action_settings"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:text="@string/txtFiltro"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <LinearLayout
+            android:id="@+id/linear_filtro"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <RelativeLayout
+                android:id="@+id/rel_campos"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:id="@+id/txtfiltro"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/campoFiltro"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/txtFiltro" />
+
+                <EditText
+                    android:id="@+id/campoFiltro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/txtfiltro"
+                    android:background="@drawable/campo"
+                    android:ems="10"
+                    android:hint="@string/hint_filtro"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:maxLength="30"
+                    android:minWidth="150dp"
+                    android:textSize="13sp" />
+
+                <RelativeLayout
+                    android:id="@+id/rel_fecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/campoFiltro"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:id="@+id/txtfecha"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/campoFecha"
+                        android:text="@string/txtFecha" />
+
+                    <EditText
+                        android:id="@+id/campoFecha"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/txtfecha"
+                        android:background="@drawable/campo"
+                        android:focusable="false"
+                        android:hint="@string/hint_fecha"
+                        android:maxLength="10"
+                        android:textSize="13sp" >
+                    </EditText>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <Spinner
+                android:id="@+id/spiCategorias"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:background="@anim/anim_boton"
+                android:prompt="@string/Categorias" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right" >
+
+                <Button
+                    android:id="@+id/btnBuscar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/btnLimpiar"
+                    android:background="@anim/anim_boton"
+                    android:drawableLeft="@drawable/ic_menu_search"
+                    android:text="@string/txtBuscar"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/btnLimpiar"
+                    android:layout_width="46dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@anim/anim_boton"
+                    android:contentDescription="@string/descImagen"
+                    android:src="@drawable/ic_menu_delete" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/txtErrorResultados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/filtroFallido"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/proResultados"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp" />
+
+    <com.desipal.Librerias.LoadMoreListView
+        android:id="@+id/gridResultados"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:gravity="center" />
+
+</LinearLayout>
