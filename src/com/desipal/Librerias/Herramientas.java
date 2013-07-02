@@ -1,7 +1,21 @@
 package com.desipal.Librerias;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.desipal.Entidades.categoriaEN;
+import com.desipal.eventu.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -102,6 +116,48 @@ public class Herramientas {
 			loca = null;
 		}
 		return loca;
+	}
+
+	public static List<categoriaEN> Obtenercategorias(Activity act) {
+		BufferedReader fin;
+		List<categoriaEN> lista = new ArrayList<categoriaEN>();
+		try {
+			fin = new BufferedReader(new InputStreamReader(
+					act.openFileInput(MainActivity.fCategorias)));
+			StringBuilder total = new StringBuilder();
+			String line;
+			while ((line = fin.readLine()) != null) {
+				total.append(line);
+			}
+			fin.close();
+			if (!fin.toString().equals("")) {
+				JSONArray o = new JSONArray(total.toString());
+				for (int i = 0; o.length() > i; i++) {
+					categoriaEN ca = new categoriaEN();
+					JSONObject jobj = o.getJSONObject(i);
+					ca.setIdCategoria(jobj.getInt("idCategoria"));
+					ca.setTexto(jobj.getString("texto"));
+					ca.setDescripcion(jobj.getString("descripcion"));
+					lista.add(ca);
+				}
+			} else
+				lista = null;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			lista = null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			lista = null;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			lista = null;
+		}
+
+		return lista;
+
 	}
 
 }

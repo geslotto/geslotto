@@ -3,6 +3,7 @@ package com.desipal.eventu;
 import java.util.Locale;
 
 import com.desipal.Librerias.TestFragmentAdapter;
+import com.desipal.Servidor.categorias;
 import com.desipal.eventu.R;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -20,8 +21,10 @@ public class MainActivity extends FragmentActivity {
 
 	static Locale currentLocale = new Locale("es", "ES");
 
-	boolean bloquearPeticion = false;// bandera que bloquea para no poder jhacer la peticion
-	boolean finPaginadoCerca = false;// bandera para saber que no tiene que hacer mas peticiones en cerca
+	boolean bloquearPeticion = false;// bandera que bloquea para no poder jhacer
+										// la peticion
+	boolean finPaginadoCerca = false;// bandera para saber que no tiene que
+										// hacer mas peticiones en cerca
 
 	Button btnCrearEvento;
 
@@ -29,10 +32,16 @@ public class MainActivity extends FragmentActivity {
 	ViewPager mPager;
 	PageIndicator mIndicator;
 
+	public static String fCategorias = "categorias.json";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		// Actualizacion de categorias
+		String URL = "http://desipal.hol.es/app/eventos/categorias.php";
+		categorias peticion = new categorias(MainActivity.this);
+		peticion.execute(new String[] { URL });
+		
 		getWindow().setBackgroundDrawableResource(android.R.color.black);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
@@ -49,7 +58,8 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(MainActivity.this, crearEventoActivity.class);
+				Intent i = new Intent(MainActivity.this,
+						crearEventoActivity.class);
 				startActivity(i);
 			}
 		});

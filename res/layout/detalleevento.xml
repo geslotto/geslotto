@@ -29,123 +29,148 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp" >
 
-            <Gallery
-                android:id="@+id/imgDetalleImagen"
+            <RelativeLayout
+                android:id="@+id/relInformacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:id="@+id/txtDetalleCategoria"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/imgDetalleImagen"
-                android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/txtDetalleDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imgDetalleImagen"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/txtDetalleAsistentes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleDesc"
-                android:layout_marginTop="4dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ToggleButton
-                android:id="@+id/togAsistencia"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_below="@+id/txtDetalleDesc"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/txtDetalleAsistentes"
-                android:background="@drawable/toggle_bg"
-                android:checked="false"
-                android:textOff=""
-                android:textOn=""
-                android:visibility="gone" />
+                android:background="@drawable/informacion_ver_evento"
+                android:paddingBottom="10dp"
+                android:visibility="gone" >
 
-            <TextView
-                android:id="@+id/txtDetalleDir"
+                <Gallery
+                    android:id="@+id/imgDetalleImagen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txtDetalleCategoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imgDetalleImagen"
+                    android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtDetalleDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleCategoria"
+                    android:layout_centerHorizontal="true"
+                    android:padding="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtDetalleAsistentes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleDesc"
+                    android:layout_marginTop="4dp"
+                    android:paddingLeft="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ToggleButton
+                    android:id="@+id/togAsistencia"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/txtDetalleDesc"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/txtDetalleAsistentes"
+                    android:background="@drawable/toggle_bg"
+                    android:checked="false"
+                    android:textOff=""
+                    android:textOn=""
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relsituacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/togAsistencia"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_below="@+id/relInformacion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/informacion_ver_evento"
+                android:paddingBottom="10dp"
+                android:paddingTop="5dp"
+                android:visibility="gone" >
 
-            <TextView
-                android:id="@+id/txtDetalleDireccion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/togAsistencia"
-                android:layout_toRightOf="@+id/txtDetalleDir"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleDir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/txtDetalleDist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleDireccion"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleDireccion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/txtDetalleDir"
+                    android:paddingBottom="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/txtDetalleDistancia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleDireccion"
-                android:layout_toRightOf="@+id/txtDetalleDist"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <fragment
+                    android:id="@+id/mapa"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="400dp"
+                    android:layout_below="@+id/txtDetalleDireccion" />
 
-            <TextView
-                android:id="@+id/txtDetalleFechaIni"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleDistancia"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleDist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mapa"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/txtDetalleFechaInicio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleDistancia"
-                android:layout_toRightOf="@+id/txtDetalleFechaIni"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleDistancia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mapa"
+                    android:layout_toRightOf="@+id/txtDetalleDist"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/txtDetalleFechaFin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleFechaInicio"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleFechaIni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleDistancia"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/txtDetalleFechaFinal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDetalleFechaInicio"
-                android:layout_toRightOf="@+id/txtDetalleFechaFin"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/txtDetalleFechaInicio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleDistancia"
+                    android:layout_toRightOf="@+id/txtDetalleFechaIni"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <fragment
-                android:id="@+id/mapa"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="400dp"
-                android:layout_below="@+id/txtDetalleFechaFinal" />
+                <TextView
+                    android:id="@+id/txtDetalleFechaFin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleFechaInicio"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtDetalleFechaFinal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleFechaInicio"
+                    android:layout_toRightOf="@+id/txtDetalleFechaFin"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </RelativeLayout>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -153,7 +178,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:paddingBottom="20dp" />
         </RelativeLayout>
     </ScrollView>
 

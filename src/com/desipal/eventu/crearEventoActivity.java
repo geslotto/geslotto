@@ -4,13 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import com.desipal.Entidades.eventoEN;
 import com.desipal.Entidades.seleccionUbicacionEN;
 import com.desipal.Librerias.Herramientas;
+import com.desipal.Librerias.datepicker;
+import com.desipal.Librerias.timepicker;
 import com.desipal.Servidor.creacionEvento;
 import com.desipal.eventu.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,9 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +32,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings.Secure;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.view.View;
@@ -46,7 +45,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
@@ -55,7 +53,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -65,13 +62,6 @@ public class crearEventoActivity extends FragmentActivity {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd/MM/yyyy hh:mm", MainActivity.currentLocale);
 	private static Activity actividad;
-	private TextView txtFecha;
-	private TextView txtHora;
-	private int year;
-	private int month;
-	private int day;
-	private int hour;
-	private int minute;
 	public static int Creacionsatisfactoria = 0;
 	private boolean error = false;
 	private boolean[] errores = new boolean[6];
@@ -167,7 +157,6 @@ public class crearEventoActivity extends FragmentActivity {
 		relativeMapa = (RelativeLayout) findViewById(R.id.relativeMapa);
 		mapaLocalizacion = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapaLocalizacion)).getMap();
-
 		btnInicio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -224,32 +213,42 @@ public class crearEventoActivity extends FragmentActivity {
 		edFechaIni.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				txtFecha = (EditText) v.findViewById(R.id.editFechaInicio);
-				showDialog(0);
+
+				DialogFragment newFragment = new datepicker();
+				((datepicker) newFragment).establecerCampo(edFechaIni);
+				newFragment.show(getSupportFragmentManager(), "DatePicker");
+				//showDialog(0);
 			}
 		});
 
 		edFechaFin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				txtFecha = (EditText) v.findViewById(R.id.editFechaFin);
-				showDialog(0);
+				DialogFragment newFragment = new datepicker();
+				((datepicker) newFragment).establecerCampo(edFechaFin);
+				newFragment.show(getSupportFragmentManager(), "DatePicker");
+				//showDialog(0);
 			}
 		});
 
 		edHoraIni.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				txtHora = (EditText) v.findViewById(R.id.editHoraInicio);
-				showDialog(1);
+				DialogFragment newFragment = new timepicker();
+				((timepicker) newFragment).establecerCampo(edHoraIni);
+				newFragment.show(getSupportFragmentManager(), "TimePicker");
+				//txtHora = (EditText) v.findViewById(R.id.);
+				//showDialog(1);
 			}
 		});
 
 		edHoraFin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				txtHora = (EditText) v.findViewById(R.id.editHoraFin);
-				showDialog(1);
+				DialogFragment newFragment = new timepicker();
+				((timepicker) newFragment).establecerCampo(edHoraFin);
+				newFragment.show(getSupportFragmentManager(), "TimePicker");
+				//showDialog(1);
 			}
 		});
 
@@ -334,62 +333,6 @@ public class crearEventoActivity extends FragmentActivity {
 		});
 	}
 
-	// //////// VENTANA MODAL PARA INTRODUCIR FECHA y HORA
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		final Calendar c = Calendar.getInstance();
-		if (id == 0) {
-			year = c.get(Calendar.YEAR);
-			month = c.get(Calendar.MONTH);
-			day = c.get(Calendar.DAY_OF_MONTH);
-			DatePickerDialog datePicker = new DatePickerDialog(this,
-					datePickerListener, year, month, day);
-			datePicker.setTitle("Introduzca fecha");
-			return datePicker;
-		} else {
-			hour = c.get(Calendar.HOUR);
-			minute = c.get(Calendar.MINUTE);
-			TimePickerDialog timPicker = new TimePickerDialog(this,
-					timePickerListener, hour, minute, true);
-			timPicker.setTitle("Introduzca hora");
-			return timPicker;
-		}
-	}
-
-	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear,
-				int selectedMonth, int selectedDay) {
-			year = selectedYear;
-			month = selectedMonth;
-			day = selectedDay;
-			String dia = Integer.toString(day);
-			String mes = Integer.toString(month + 1);
-			if (day < 10)
-				dia = "0" + dia;
-			if (month + 1 < 10)
-				mes = "0" + mes;
-			// set selected date into textview
-			txtFecha.setText(new StringBuilder().append(dia).append("/")
-					.append(mes).append("/").append(year));
-		}
-	};
-
-	private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		@Override
-		public void onTimeSet(TimePicker arg0, int horaSel, int minSel) {
-			hour = horaSel;
-			minute = minSel;
-			String min = Integer.toString(minute);
-			String hor = Integer.toString(hour);
-			if (hour < 10)
-				hor = "0" + hor;
-			if (minute < 10)
-				min = "0" + min;
-			txtHora.setText(new StringBuilder().append(hor).append(":")
-					.append(min));
-		}
-	};
 
 	// //////// SELECCIONAR IMAGEN
 	protected void onActivityResult(int requestCode, int resultCode,

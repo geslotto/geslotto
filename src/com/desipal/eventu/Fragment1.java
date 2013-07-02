@@ -1,7 +1,6 @@
 package com.desipal.eventu;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -9,19 +8,20 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.adaptadorEventoEN;
+import com.desipal.Entidades.categoriaEN;
 import com.desipal.Librerias.Herramientas;
 import com.desipal.Librerias.LoadMoreListView;
 import com.desipal.Librerias.LoadMoreListView.OnLoadMoreListener;
+import com.desipal.Librerias.datepicker;
 import com.desipal.Servidor.buscarEventos;
 import com.google.android.gms.maps.model.LatLng;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +31,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.TranslateAnimation;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -45,15 +45,14 @@ import android.widget.AdapterView.OnItemClickListener;
 public class Fragment1 extends Fragment {
 
 	public static int ELEMENTOSLISTA = 8;
-	private int year;
-	private int month;
-	private int day;
 
 	public static List<adaptadorEventoEN> eventosFiltro = new ArrayList<adaptadorEventoEN>();
 	public static List<adaptadorEventoEN> eventos = new ArrayList<adaptadorEventoEN>();
 	AtomicReference<List<adaptadorEventoEN>> refFiltro = new AtomicReference<List<adaptadorEventoEN>>();
 
-	boolean bloquearPeticion = false;// bandera que bloquea para no poder jhacer la peticion
+	boolean bloquearPeticion = false;// bandera que bloquea para no poder jhacer
+										// la peticion
+	boolean categoriasActu = false;
 	Button btnRecoger;
 
 	LoadMoreListView gridResultados;
@@ -73,12 +72,14 @@ public class Fragment1 extends Fragment {
 
 	private boolean recogido = true;
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.tabinicio, container, false);
 
 		btnRecoger = (Button) view.findViewById(R.id.btn_recoger);
 
-		gridResultados = (LoadMoreListView) view.findViewById(R.id.gridResultados);
+		gridResultados = (LoadMoreListView) view
+				.findViewById(R.id.gridResultados);
 
 		btnFiltrar = (Button) view.findViewById(R.id.btnBuscar);
 		filtro = (LinearLayout) view.findViewById(R.id.linear_filtro);
@@ -87,16 +88,28 @@ public class Fragment1 extends Fragment {
 		campoFecha = (EditText) view.findViewById(R.id.campoFecha);
 		spiCategoria = (Spinner) view.findViewById(R.id.spiCategorias);
 		progressResult = (ProgressBar) view.findViewById(R.id.proResultados);
-		txtErrorResultados = (TextView) view.findViewById(R.id.txtErrorResultados);
+		txtErrorResultados = (TextView) view
+				.findViewById(R.id.txtErrorResultados);
 		txtFecha = (TextView) view.findViewById(R.id.txtfecha);
 
 		relFecha = (RelativeLayout) view.findViewById(R.id.rel_fecha);
 		relCampos = (RelativeLayout) view.findViewById(R.id.rel_campos);
 
+		spiCategoria.setEnabled(false);// se bloque las cat mientras asta que se
+										// actulicen
+		String a[] = new String[] { "Todos" };
+		ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
+				R.layout.spinner_item, a);
+		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spiCategoria.setAdapter(adapter1);
+
 		campoFecha.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				getActivity().showDialog(999);
+				// getActivity().showDialog(999);
+				DialogFragment newFragment = new datepicker();
+				((datepicker) newFragment).establecerCampo(campoFecha);
+				newFragment.show(getFragmentManager(), "DatePicker");
 			}
 		});
 
@@ -137,8 +150,10 @@ public class Fragment1 extends Fragment {
 
 		gridResultados.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-				Intent i = new Intent(getActivity(), detalleEventoActivity.class);
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+				Intent i = new Intent(getActivity(),
+						detalleEventoActivity.class);
 				i.putExtra("idEvento", id);
 				getActivity().startActivity(i);
 			}
@@ -168,15 +183,19 @@ public class Fragment1 extends Fragment {
 		int pagina = 0;
 		String URL = "http://desipal.hol.es/app/eventos/filtro.php";
 
-		parametros.add(new BasicNameValuePair("filtro", campoFiltro.getText().toString()));
-		parametros.add(new BasicNameValuePair("fecha", campoFecha.getText().toString()));
+		parametros.add(new BasicNameValuePair("filtro", campoFiltro.getText()
+				.toString()));
+		parametros.add(new BasicNameValuePair("fecha", campoFecha.getText()
+				.toString()));
 		pagina = ((int) eventos.size() / ELEMENTOSLISTA) + 1;
 
 		parametros.add(new BasicNameValuePair("page", pagina + ""));
-		final buscarEventos peticion = new buscarEventos(parametros, getActivity(), refFiltro);
+		final buscarEventos peticion = new buscarEventos(parametros,
+				getActivity(), refFiltro);
 		peticion.execute(new String[] { URL });
 
-		final GridViewAdapter adaptador = new GridViewAdapter(getActivity(), eventos);
+		final GridViewAdapter adaptador = new GridViewAdapter(getActivity(),
+				eventos);
 		gridResultados.setAdapter(adaptador);
 		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
@@ -185,7 +204,21 @@ public class Fragment1 extends Fragment {
 				Status s = peticion.getStatus();
 				if (s.name().equals("FINISHED")) {
 					eventosFiltro = refFiltro.get();
-
+					if (!categoriasActu) {// Se actualiza las categorias solo
+											// una vez
+						List<categoriaEN> lista = Herramientas
+								.Obtenercategorias(getActivity());
+						String a[] = new String[lista.size()];
+						for (int i = 0; i < lista.size(); i++) {
+							a[i] = lista.get(i).getTexto();
+						}
+						ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
+								getActivity(), R.layout.spinner_item, a);
+						adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+						spiCategoria.setAdapter(adapter1);
+						spiCategoria.setEnabled(true);
+						categoriasActu = true;
+					}
 					if (eventos.size() > 0 && eventosFiltro.size() == 0)
 						bloquearPeticion = true;
 					else
@@ -213,8 +246,10 @@ public class Fragment1 extends Fragment {
 	protected void recoger() {
 		Handler handler = new Handler();
 		if (recogido) {
-			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_up_float, 0);
-			TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0, filtro.getHeight());
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					android.R.drawable.arrow_up_float, 0);
+			TranslateAnimation anim_trans = new TranslateAnimation(0, 0, 0,
+					filtro.getHeight());
 			anim_trans.setDuration(200);
 			gridResultados.startAnimation(anim_trans);
 			handler.postDelayed(new Runnable() {
@@ -227,81 +262,57 @@ public class Fragment1 extends Fragment {
 			}, 220);
 			recogido = false;
 		} else {
-			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.arrow_down_float, 0);
+			btnRecoger.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					android.R.drawable.arrow_down_float, 0);
 			AlphaAnimation anim_trans = new AlphaAnimation(1, 0);
 			anim_trans.setDuration(200);
 			filtro.startAnimation(anim_trans);
-			
+
 			handler.postDelayed(new Runnable() {
 				public void run() {
 					filtro.setVisibility(View.GONE);
-					TranslateAnimation anim_trans = new TranslateAnimation(0, 0, filtro.getHeight(), 0);
+					TranslateAnimation anim_trans = new TranslateAnimation(0,
+							0, filtro.getHeight(), 0);
 					anim_trans.setDuration(200);
-					gridResultados.startAnimation(anim_trans);					
+					gridResultados.startAnimation(anim_trans);
 				}
 			}, 200);
 			recogido = true;
 		}
 	}
 
-	// //////// VENTANA MODAL PARA INTRODUCIR FECHA
-	
-	protected Dialog onCreateDialog(int id) {
-		final Calendar c = Calendar.getInstance();
-		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
-		day = c.get(Calendar.DAY_OF_MONTH);
-		return new DatePickerDialog(getActivity(), datePickerListener, year, month, day);
-	}
-
-	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-		// when dialog box is closed, below method will be called.
-		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-			year = selectedYear;
-			month = selectedMonth;
-			day = selectedDay;
-			String dia = Integer.toString(day);
-			String mes = Integer.toString(month + 1);
-			if (day < 10)
-				dia = "0" + dia;
-			if (month + 1 < 10)
-				mes = "0" + mes;
-			// set selected date into textview
-			campoFecha.setText(new StringBuilder().append(dia).append("/").append(mes).append("/").append(year));
-		}
-	};
-
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.RIGHT_OF, R.id.txtfiltro);
 			params.setMargins(0, 0, 10, 0);
 			campoFiltro.setWidth(190);
 			campoFiltro.setLayoutParams(params);
 
-			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.RIGHT_OF, R.id.campoFiltro);
 			relFecha.setLayoutParams(params);
-			
-			LinearLayout.LayoutParams linear = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT);
+
+			LinearLayout.LayoutParams linear = new LinearLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			linear.setMargins(0, 10, 0, 0);
 			relCampos.setLayoutParams(linear);
 
 		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-			RelativeLayout.LayoutParams linear = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams linear = new RelativeLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			linear.setMargins(0, 10, 0, 0);
 			linear.addRule(RelativeLayout.BELOW, R.id.campoFiltro);
 			relFecha.setLayoutParams(linear);
 
-			RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			params2.addRule(RelativeLayout.RIGHT_OF, R.id.txtfiltro);
 			campoFiltro.setLayoutParams(params2);
 		}

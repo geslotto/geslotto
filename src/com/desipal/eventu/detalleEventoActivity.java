@@ -3,7 +3,6 @@ package com.desipal.eventu;
 import java.text.DecimalFormat;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +34,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Gallery;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -58,11 +58,14 @@ public class detalleEventoActivity extends FragmentActivity {
 	ToggleButton togAsistencia;
 	ProgressBar progressBar;
 	Gallery galeria;
+	RelativeLayout relInformacion;
+	RelativeLayout relsituacion;
 
 	static List<Drawable> imagenes;
 	public static boolean asiste;
 
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", MainActivity.currentLocale);
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",
+			MainActivity.currentLocale);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,70 +90,87 @@ public class detalleEventoActivity extends FragmentActivity {
 			txtDetalleFechaFinal = (TextView) findViewById(R.id.txtDetalleFechaFinal);
 			togAsistencia = (ToggleButton) findViewById(R.id.togAsistencia);
 			progressBar = (ProgressBar) findViewById(R.id.progressBar);
+			relInformacion = (RelativeLayout) findViewById(R.id.relInformacion);
+			relsituacion = (RelativeLayout) findViewById(R.id.relsituacion);
 			ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 
 			long idEvento = e.getLong("idEvento");
 			parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
-			LatLng loc= Herramientas.ObtenerLocalizacion(detalleEventoActivity.this);
+			LatLng loc = Herramientas
+					.ObtenerLocalizacion(detalleEventoActivity.this);
 			if (loc != null) {
 				double latitud = loc.latitude;
 				double longitud = loc.longitude;
-				parametros.add(new BasicNameValuePair("latitud", String.valueOf(latitud)));
-				parametros.add(new BasicNameValuePair("longitud", String.valueOf(longitud)));
+				parametros.add(new BasicNameValuePair("latitud", String
+						.valueOf(latitud)));
+				parametros.add(new BasicNameValuePair("longitud", String
+						.valueOf(longitud)));
 			}
-			String android_id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
+			String android_id = Secure.getString(this.getContentResolver(),
+					Secure.ANDROID_ID);
 			parametros.add(new BasicNameValuePair("idDispositivo", android_id));
 			galeria.setOnItemClickListener(new OnItemClickListener() {
 				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-					Intent i = new Intent(detalleEventoActivity.this, galeriaActivity.class);
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					Intent i = new Intent(detalleEventoActivity.this,
+							galeriaActivity.class);
 					imagenes = evento.getImagenes();
 					startActivity(i);
 				}
 			});
 
-			togAsistencia.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (asiste != isChecked) {
-							ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+			togAsistencia
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							try {
+								if (asiste != isChecked) {
+									ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 
-							long idEvento = evento.getIdEvento();
-							parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
-							String android_id = Secure.getString(detalleEventoActivity.this.getContentResolver(),
-									Secure.ANDROID_ID);
-							parametros.add(new BasicNameValuePair("idDispositivo", android_id));
-							String asistire;
-							if (isChecked)
-								asistire = "true";
-							else
-								asistire = "false";
-							parametros.add(new BasicNameValuePair("asiste", asistire));
-							String URL = "http://desipal.hol.es/app/eventos/asistenciaEvento.php";
-							final asistenciaEvento peticion = new asistenciaEvento(parametros,
-									detalleEventoActivity.this);
-							peticion.execute(new String[] { URL });
-							final Handler handler = new Handler();
-							handler.postDelayed(new Runnable() {
-								@Override
-								public void run() {
-									Status s = peticion.getStatus();
-									if (!s.name().equals("FINISHED"))
-										handler.postDelayed(this, 500);
+									long idEvento = evento.getIdEvento();
+									parametros.add(new BasicNameValuePair(
+											"idEvento", idEvento + ""));
+									String android_id = Secure.getString(
+											detalleEventoActivity.this
+													.getContentResolver(),
+											Secure.ANDROID_ID);
+									parametros.add(new BasicNameValuePair(
+											"idDispositivo", android_id));
+									String asistire;
+									if (isChecked)
+										asistire = "true";
+									else
+										asistire = "false";
+									parametros.add(new BasicNameValuePair(
+											"asiste", asistire));
+									String URL = "http://desipal.hol.es/app/eventos/asistenciaEvento.php";
+									final asistenciaEvento peticion = new asistenciaEvento(
+											parametros);
+									peticion.execute(new String[] { URL });
+									final Handler handler = new Handler();
+									handler.postDelayed(new Runnable() {
+										@Override
+										public void run() {
+											Status s = peticion.getStatus();
+											if (!s.name().equals("FINISHED"))
+												handler.postDelayed(this, 500);
+										}
+									}, 500);
 								}
-							}, 500);
-						}
-					} catch (Exception ex) {
-						Toast.makeText(detalleEventoActivity.this, "Error: " + ex.toString(), Toast.LENGTH_SHORT)
-								.show();
-					}
+							} catch (Exception ex) {
+								Toast.makeText(detalleEventoActivity.this,
+										"Error: " + ex.toString(),
+										Toast.LENGTH_SHORT).show();
+							}
 
-				}
-			});
+						}
+					});
 
 			String URL = "http://desipal.hol.es/app/eventos/verEvento.php";
-			final detalleEvento peticion = new detalleEvento(parametros, detalleEventoActivity.this);
+			final detalleEvento peticion = new detalleEvento(parametros,
+					detalleEventoActivity.this);
 			peticion.execute(new String[] { URL });
 			final Handler handler = new Handler();
 			handler.postDelayed(new Runnable() {
@@ -166,27 +186,33 @@ public class detalleEventoActivity extends FragmentActivity {
 				}
 			}, 500);
 		} catch (Exception ex) {
-			Toast.makeText(this, "Error: " + ex.toString(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Error: " + ex.toString(), Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
 	public void verEvento() {
 		edNombre.setText(evento.getNombre());
 		edDesc.setText(evento.getDescripcion());
-		txtAsistentes.setText(evento.getAsistencia() + " "
-				+ detalleEventoActivity.this.getString(R.string.detalleEventoAsistencia));
+		txtAsistentes.setText(evento.getAsistencia()
+				+ " "
+				+ detalleEventoActivity.this
+						.getString(R.string.detalleEventoAsistencia));
 		Display display = getWindowManager().getDefaultDisplay();
-		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(), false, display));
+		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(),
+				false, display));
 		String direccion = "";
 		if (!evento.getDireccion().split(",")[4].equals(""))
 			direccion = direccion + evento.getDireccion().split(",")[4] + ",";
 		if (!evento.getDireccion().split(",")[5].equals(""))
 			direccion = direccion + evento.getDireccion().split(",")[5] + ",";
-		direccion = direccion + evento.getDireccion().split(",")[3] + "(" + evento.getDireccion().split(",")[2] + ")";
+		direccion = direccion + evento.getDireccion().split(",")[3] + "("
+				+ evento.getDireccion().split(",")[2] + ")";
 		txtDireccion.setText(direccion);
 		txtDir.setText("Dirección: ");
 		txtDetalleDist.setText("Distancia: ");
-		String distancia = new DecimalFormat("#.##").format(evento.getDistancia()) + " Km.";
+		String distancia = new DecimalFormat("#.##").format(evento
+				.getDistancia()) + " Km.";
 		txtDetalleDistancia.setText(distancia);
 
 		String fechaI = dateFormat.format(evento.getFechaInicio());
@@ -206,10 +232,14 @@ public class detalleEventoActivity extends FragmentActivity {
 		} else {
 			togAsistencia.setChecked(false);
 		}
-		map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa)).getMap();
+		map = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.mapa)).getMap();
 		Posicion = new LatLng(evento.getLatitud(), evento.getLongitud());
-		Marker posicion = map.addMarker(new MarkerOptions().position(Posicion).title(evento.getNombre()));
+		map.addMarker(new MarkerOptions().position(Posicion).title(
+				evento.getNombre()));
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(Posicion, 15));
+		relInformacion.setVisibility(View.VISIBLE);
+		relsituacion.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
 	}
 }
