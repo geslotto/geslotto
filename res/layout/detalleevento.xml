@@ -146,7 +146,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleDistancia"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/crearEventoFechaInicio" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaInicio"
@@ -161,7 +162,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium" 
+                    android:text="@string/crearEventoFechaFin"/>
 
                 <TextView
                     android:id="@+id/txtDetalleFechaFinal"
@@ -169,7 +171,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
                     android:layout_toRightOf="@+id/txtDetalleFechaFin"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium" 
+                    />
             </RelativeLayout>
 
             <ProgressBar

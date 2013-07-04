@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import com.desipal.Entidades.categoriaEN;
 import com.desipal.Entidades.eventoEN;
 import com.desipal.Entidades.seleccionUbicacionEN;
 import com.desipal.Librerias.Herramientas;
@@ -106,6 +108,11 @@ public class crearEventoActivity extends FragmentActivity {
 	private EditText[] editError = new EditText[] { edNombre, edDesc,
 			edDireccion, edCiudad, edFechaIni, edFechaFin };
 
+	// IdCategoria
+	int IdCategoriaSel = 0;
+	boolean errorspiner = true;
+	List<categoriaEN> listaCategorias = null;
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -150,13 +157,23 @@ public class crearEventoActivity extends FragmentActivity {
 		filaFin = (TableRow) findViewById(R.id.table2Row4);
 		filaTexFin = (TableRow) findViewById(R.id.table2Row3);
 		relImagenes = (RelativeLayout) findViewById(R.id.relImagenes);
-		ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-				this, R.array.categorias, R.layout.spinner_item);
-		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spiCategoria.setAdapter(adapter1);
 		relativeMapa = (RelativeLayout) findViewById(R.id.relativeMapa);
 		mapaLocalizacion = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapaLocalizacion)).getMap();
+
+		// Spinner catgorias
+
+		listaCategorias = Herramientas
+				.Obtenercategorias(crearEventoActivity.this);
+		String a[] = new String[listaCategorias.size()];
+		for (int i = 0; i < listaCategorias.size(); i++) {
+			a[i] = listaCategorias.get(i).getTexto();
+		}
+		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+				crearEventoActivity.this, R.layout.spinner_item, a);
+		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spiCategoria.setAdapter(adapter2);
+		spiCategoria.setEnabled(true);
 		btnInicio.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -217,7 +234,7 @@ public class crearEventoActivity extends FragmentActivity {
 				DialogFragment newFragment = new datepicker();
 				((datepicker) newFragment).establecerCampo(edFechaIni);
 				newFragment.show(getSupportFragmentManager(), "DatePicker");
-				//showDialog(0);
+				// showDialog(0);
 			}
 		});
 
@@ -227,7 +244,7 @@ public class crearEventoActivity extends FragmentActivity {
 				DialogFragment newFragment = new datepicker();
 				((datepicker) newFragment).establecerCampo(edFechaFin);
 				newFragment.show(getSupportFragmentManager(), "DatePicker");
-				//showDialog(0);
+				// showDialog(0);
 			}
 		});
 
@@ -237,8 +254,8 @@ public class crearEventoActivity extends FragmentActivity {
 				DialogFragment newFragment = new timepicker();
 				((timepicker) newFragment).establecerCampo(edHoraIni);
 				newFragment.show(getSupportFragmentManager(), "TimePicker");
-				//txtHora = (EditText) v.findViewById(R.id.);
-				//showDialog(1);
+				// txtHora = (EditText) v.findViewById(R.id.);
+				// showDialog(1);
 			}
 		});
 
@@ -248,7 +265,7 @@ public class crearEventoActivity extends FragmentActivity {
 				DialogFragment newFragment = new timepicker();
 				((timepicker) newFragment).establecerCampo(edHoraFin);
 				newFragment.show(getSupportFragmentManager(), "TimePicker");
-				//showDialog(1);
+				// showDialog(1);
 			}
 		});
 
@@ -333,7 +350,6 @@ public class crearEventoActivity extends FragmentActivity {
 		});
 	}
 
-
 	// //////// SELECCIONAR IMAGEN
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent imageReturnedIntent) {
@@ -375,6 +391,25 @@ public class crearEventoActivity extends FragmentActivity {
 				evento.setDescripcion(edDesc.getText().toString());
 			} else
 				errores[1] = true;
+
+			// id Categoria
+			String Text = spiCategoria.getSelectedItem().toString();
+			boolean encontrado = false;
+			if (listaCategorias != null)
+				for (int i = 0; i < listaCategorias.size() && !encontrado; i++) {
+					if (listaCategorias.get(i).getTexto().equals(Text)) {
+						IdCategoriaSel = listaCategorias.get(i)
+								.getIdCategoria();
+						encontrado = true;
+						error = false;
+					}
+				}
+			if (IdCategoriaSel == 1) {
+				errorspiner = true;
+				error = true;
+			} else
+				errorspiner = false;
+			// /
 
 			if (tgUbicacion.isChecked()) {
 				evento.setLongitud(Longitud);
@@ -463,8 +498,6 @@ public class crearEventoActivity extends FragmentActivity {
 
 				evento.setTodoElDia(false);
 			}
-			evento.setIdCategoria((int) spiCategoria.getSelectedItemId());
-
 			for (int i = 0; i < errores.length; i++) {
 				if (errores[i]) {
 					error = true;
@@ -475,6 +508,15 @@ public class crearEventoActivity extends FragmentActivity {
 							.getDrawable(R.drawable.campo));
 			}
 
+			if (errorspiner) {
+				spiCategoria.setBackgroundDrawable(getResources().getDrawable(
+						R.anim.anim_boton_rojo));
+				error = true;
+			} else {
+				spiCategoria.setBackgroundDrawable(getResources().getDrawable(
+						R.anim.anim_boton));
+				evento.setIdCategoria(IdCategoriaSel);
+			}
 			if (!error)
 				try {
 					ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();

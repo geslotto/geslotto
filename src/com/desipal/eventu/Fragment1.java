@@ -70,6 +70,8 @@ public class Fragment1 extends Fragment {
 	RelativeLayout relFecha;
 	RelativeLayout relCampos;
 
+	int IdCategoriaSel = 1;
+	List<categoriaEN> listaCategorias = null;
 	private boolean recogido = true;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,7 +104,6 @@ public class Fragment1 extends Fragment {
 				R.layout.spinner_item, a);
 		adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spiCategoria.setAdapter(adapter1);
-
 		campoFecha.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -190,6 +191,23 @@ public class Fragment1 extends Fragment {
 		pagina = ((int) eventos.size() / ELEMENTOSLISTA) + 1;
 
 		parametros.add(new BasicNameValuePair("page", pagina + ""));
+		// id categoria
+		String Text = spiCategoria.getSelectedItem().toString();
+		boolean encontrado = false;
+		if (listaCategorias != null)
+			for (int i = 0; i < listaCategorias.size() && !encontrado; i++) {
+				if (listaCategorias.get(i).getTexto().equals(Text)) {
+					IdCategoriaSel = listaCategorias.get(i).getIdCategoria();
+					parametros.add(new BasicNameValuePair("idCat",
+							IdCategoriaSel + ""));
+					encontrado = true;
+				}
+			}
+		else
+			// en la primera ejecucion traemos de todas las categorias
+			parametros
+					.add(new BasicNameValuePair("idCat", IdCategoriaSel + ""));
+
 		final buscarEventos peticion = new buscarEventos(parametros,
 				getActivity(), refFiltro);
 		peticion.execute(new String[] { URL });
@@ -206,11 +224,11 @@ public class Fragment1 extends Fragment {
 					eventosFiltro = refFiltro.get();
 					if (!categoriasActu) {// Se actualiza las categorias solo
 											// una vez
-						List<categoriaEN> lista = Herramientas
+						listaCategorias = Herramientas
 								.Obtenercategorias(getActivity());
-						String a[] = new String[lista.size()];
-						for (int i = 0; i < lista.size(); i++) {
-							a[i] = lista.get(i).getTexto();
+						String a[] = new String[listaCategorias.size()];
+						for (int i = 0; i < listaCategorias.size(); i++) {
+							a[i] = listaCategorias.get(i).getTexto();
 						}
 						ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
 								getActivity(), R.layout.spinner_item, a);
@@ -228,7 +246,7 @@ public class Fragment1 extends Fragment {
 						eventos.addAll(eventosFiltro);
 						gridResultados.setVisibility(View.VISIBLE);
 						adaptador.notifyDataSetChanged();
-						gridResultados.onLoadMoreComplete();
+
 						progressResult.setVisibility(View.GONE);
 						bloquearPeticion = false;
 					} else {
@@ -236,7 +254,7 @@ public class Fragment1 extends Fragment {
 							txtErrorResultados.setVisibility(View.VISIBLE);
 						progressResult.setVisibility(View.GONE);
 					}
-
+					gridResultados.onLoadMoreComplete();
 				} else
 					handler.postDelayed(this, 500);
 			}

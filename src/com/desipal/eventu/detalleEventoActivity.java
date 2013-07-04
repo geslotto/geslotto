@@ -64,7 +64,7 @@ public class detalleEventoActivity extends FragmentActivity {
 	static List<Drawable> imagenes;
 	public static boolean asiste;
 
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy",
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm",
 			MainActivity.currentLocale);
 
 	@Override
@@ -218,10 +218,15 @@ public class detalleEventoActivity extends FragmentActivity {
 		String fechaI = dateFormat.format(evento.getFechaInicio());
 		String fechaF = dateFormat.format(evento.getFechaFin());
 
-		txtDetalleFechaIni.setText(R.string.crearEventoFechaInicio);
-		txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
-		if (!evento.isTodoElDia()) {
-			txtDetalleFechaFin.setText(R.string.crearEventoFechaFin);
+		//txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
+		if (evento.isTodoElDia()) {
+			txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
+			txtDetalleFechaFin.setVisibility(View.GONE);
+			txtDetalleFechaFinal.setVisibility(View.GONE);
+		}
+		else
+		{
+			txtDetalleFechaInicio.setText(fechaI);
 			txtDetalleFechaFinal.setText(fechaF);
 		}
 

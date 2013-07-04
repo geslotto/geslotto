@@ -40,7 +40,7 @@
     <string name="crearEventoHoraInicio">Hora inicio:</string>
     <string name="crearEventoFechaInicio">Fecha inicio:</string>
     <string name="crearEventoHoraFin">Hora fin</string>
-    <string name="crearEventoFechaFin">Fecha fin</string>
+    <string name="crearEventoFechaFin">Fecha fin:</string>
     <string name="crearEventoBoton">Crear evento</string>
     <string name="crearEventoComentarios">Comentarios del evento</string>
     <string name="crearEventoPerComentarios">Permitir comentarios</string>
