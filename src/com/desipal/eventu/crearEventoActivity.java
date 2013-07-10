@@ -48,8 +48,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -289,8 +289,7 @@ public class crearEventoActivity extends FragmentActivity {
 						}
 					}, 200);
 					try {
-						LatLng loc = Herramientas
-								.ObtenerLocalizacion(crearEventoActivity.this);
+						LatLng loc = MainActivity.PosicionActual;
 						if (loc == null) {
 							Toast.makeText(actividad,
 									"La ubicación no se encuentra disponible",
@@ -301,6 +300,7 @@ public class crearEventoActivity extends FragmentActivity {
 							relativeMapa.setVisibility(View.VISIBLE);
 							Latitud = loc.latitude;
 							Longitud = loc.longitude;
+							mapaLocalizacion.clear();
 							LatLng Posicion = new LatLng(Latitud, Longitud);
 							mapaLocalizacion.addMarker(new MarkerOptions()
 									.position(Posicion).title("estas aquí"));
@@ -636,10 +636,10 @@ public class crearEventoActivity extends FragmentActivity {
 	}
 
 	protected static void refrescarLista() {
-		GridView gridview = (GridView) actividad
+		ListView gridview = (ListView) actividad
 				.findViewById(R.id.listImagenes);
 		gridview.setAdapter(new listaImagenesAdapter(actividad, arrayImagen));
-		int altura = 50 * arrayImagen.size();// Tamaño de la imagen
+		int altura = 70 * arrayImagen.size();// Tamaño de la imagen
 		if (altura > 0)
 			gridview.setVisibility(View.VISIBLE);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,

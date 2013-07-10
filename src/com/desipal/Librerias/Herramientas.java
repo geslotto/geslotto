@@ -13,14 +13,10 @@ import org.json.JSONObject;
 
 import com.desipal.Entidades.categoriaEN;
 import com.desipal.eventu.MainActivity;
-import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.location.Location;
-import android.location.LocationManager;
 
 public class Herramientas {
 
@@ -101,21 +97,6 @@ public class Herramientas {
 			zoom = 8;
 
 		return zoom;
-	}
-
-	public static LatLng ObtenerLocalizacion(Context c) {
-		LatLng loca = null;
-		try {
-			LocationManager lm = (LocationManager) c
-					.getSystemService(Context.LOCATION_SERVICE);
-			Location loc = lm
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			loca = new LatLng(loc.getLatitude(), loc.getLongitude());
-
-		} catch (Exception e) {
-			loca = null;
-		}
-		return loca;
 	}
 
 	public static List<categoriaEN> Obtenercategorias(Activity act) {

@@ -13,7 +13,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.desipal.Entidades.eventoEN;
-import com.desipal.Librerias.Herramientas;
 import com.desipal.eventu.R;
 import com.desipal.Servidor.asistenciaEvento;
 import com.desipal.Servidor.detalleEvento;
@@ -64,8 +63,8 @@ public class detalleEventoActivity extends FragmentActivity {
 	static List<Drawable> imagenes;
 	public static boolean asiste;
 
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm",
-			MainActivity.currentLocale);
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm", MainActivity.currentLocale);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -96,8 +95,7 @@ public class detalleEventoActivity extends FragmentActivity {
 
 			long idEvento = e.getLong("idEvento");
 			parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
-			LatLng loc = Herramientas
-					.ObtenerLocalizacion(detalleEventoActivity.this);
+			LatLng loc = MainActivity.PosicionActual;
 			if (loc != null) {
 				double latitud = loc.latitude;
 				double longitud = loc.longitude;
@@ -201,14 +199,18 @@ public class detalleEventoActivity extends FragmentActivity {
 		Display display = getWindowManager().getDefaultDisplay();
 		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(),
 				false, display));
+		// ///////////////////////////
 		String direccion = "";
-		if (!evento.getDireccion().split(",")[4].equals(""))
-			direccion = direccion + evento.getDireccion().split(",")[4] + ",";
-		if (!evento.getDireccion().split(",")[5].equals(""))
-			direccion = direccion + evento.getDireccion().split(",")[5] + ",";
-		direccion = direccion + evento.getDireccion().split(",")[3] + "("
-				+ evento.getDireccion().split(",")[2] + ")";
+		String[] spidesc = evento.getDireccion().split(",");
+		for (int i = 2; i < spidesc.length; i++) {
+			if (!spidesc[i].equals(""))
+				if (i == spidesc.length - 1)
+					direccion += spidesc[i];
+				else
+					direccion += spidesc[i] + ",";
+		}
 		txtDireccion.setText(direccion);
+		//
 		txtDir.setText("Dirección: ");
 		txtDetalleDist.setText("Distancia: ");
 		String distancia = new DecimalFormat("#.##").format(evento
@@ -218,14 +220,12 @@ public class detalleEventoActivity extends FragmentActivity {
 		String fechaI = dateFormat.format(evento.getFechaInicio());
 		String fechaF = dateFormat.format(evento.getFechaFin());
 
-		//txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
+		// txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
 		if (evento.isTodoElDia()) {
 			txtDetalleFechaInicio.setText(fechaI + " Durante todo el día");
 			txtDetalleFechaFin.setVisibility(View.GONE);
 			txtDetalleFechaFinal.setVisibility(View.GONE);
-		}
-		else
-		{
+		} else {
 			txtDetalleFechaInicio.setText(fechaI);
 			txtDetalleFechaFinal.setText(fechaF);
 		}

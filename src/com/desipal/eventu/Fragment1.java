@@ -76,8 +76,7 @@ public class Fragment1 extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.tabinicio, container, false);
-
+		View view = inflater.inflate(R.layout.tabinicio, container, false);		
 		btnRecoger = (Button) view.findViewById(R.id.btn_recoger);
 
 		gridResultados = (LoadMoreListView) view
@@ -174,91 +173,102 @@ public class Fragment1 extends Fragment {
 
 	protected void hacerPeticion() {
 
-		LatLng loc = Herramientas.ObtenerLocalizacion(getActivity());
-		final Double latitud = loc.latitude;
-		final Double longitud = loc.longitude;
+		LatLng loc = MainActivity.PosicionActual;
+		if (!MainActivity.errorServicios) {
+			final Double latitud = loc.latitude;
+			final Double longitud = loc.longitude;
 
-		ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
-		parametros.add(new BasicNameValuePair("latitud", latitud.toString()));
-		parametros.add(new BasicNameValuePair("longitud", longitud.toString()));
-		int pagina = 0;
-		String URL = "http://desipal.hol.es/app/eventos/filtro.php";
-
-		parametros.add(new BasicNameValuePair("filtro", campoFiltro.getText()
-				.toString()));
-		parametros.add(new BasicNameValuePair("fecha", campoFecha.getText()
-				.toString()));
-		pagina = ((int) eventos.size() / ELEMENTOSLISTA) + 1;
-
-		parametros.add(new BasicNameValuePair("page", pagina + ""));
-		// id categoria
-		String Text = spiCategoria.getSelectedItem().toString();
-		boolean encontrado = false;
-		if (listaCategorias != null)
-			for (int i = 0; i < listaCategorias.size() && !encontrado; i++) {
-				if (listaCategorias.get(i).getTexto().equals(Text)) {
-					IdCategoriaSel = listaCategorias.get(i).getIdCategoria();
-					parametros.add(new BasicNameValuePair("idCat",
-							IdCategoriaSel + ""));
-					encontrado = true;
-				}
-			}
-		else
-			// en la primera ejecucion traemos de todas las categorias
+			ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
 			parametros
-					.add(new BasicNameValuePair("idCat", IdCategoriaSel + ""));
+					.add(new BasicNameValuePair("latitud", latitud.toString()));
+			parametros.add(new BasicNameValuePair("longitud", longitud
+					.toString()));
+			int pagina = 0;
+			String URL = "http://desipal.hol.es/app/eventos/filtro.php";
 
-		final buscarEventos peticion = new buscarEventos(parametros,
-				getActivity(), refFiltro);
-		peticion.execute(new String[] { URL });
+			parametros.add(new BasicNameValuePair("filtro", campoFiltro
+					.getText().toString()));
+			parametros.add(new BasicNameValuePair("fecha", campoFecha.getText()
+					.toString()));
+			pagina = ((int) eventos.size() / ELEMENTOSLISTA) + 1;
 
-		final GridViewAdapter adaptador = new GridViewAdapter(getActivity(),
-				eventos);
-		gridResultados.setAdapter(adaptador);
-		final Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				Status s = peticion.getStatus();
-				if (s.name().equals("FINISHED")) {
-					eventosFiltro = refFiltro.get();
-					if (!categoriasActu) {// Se actualiza las categorias solo
-											// una vez
-						listaCategorias = Herramientas
-								.Obtenercategorias(getActivity());
-						String a[] = new String[listaCategorias.size()];
-						for (int i = 0; i < listaCategorias.size(); i++) {
-							a[i] = listaCategorias.get(i).getTexto();
+			parametros.add(new BasicNameValuePair("page", pagina + ""));
+			// id categoria
+			String Text = spiCategoria.getSelectedItem().toString();
+			boolean encontrado = false;
+			if (listaCategorias != null)
+				for (int i = 0; i < listaCategorias.size() && !encontrado; i++) {
+					if (listaCategorias.get(i).getTexto().equals(Text)) {
+						IdCategoriaSel = listaCategorias.get(i)
+								.getIdCategoria();
+						parametros.add(new BasicNameValuePair("idCat",
+								IdCategoriaSel + ""));
+						encontrado = true;
+					}
+				}
+			else
+				// en la primera ejecucion traemos de todas las categorias
+				parametros.add(new BasicNameValuePair("idCat", IdCategoriaSel
+						+ ""));
+
+			final buscarEventos peticion = new buscarEventos(parametros,
+					getActivity(), refFiltro);
+			peticion.execute(new String[] { URL });
+
+			final GridViewAdapter adaptador = new GridViewAdapter(
+					getActivity(), eventos);
+			gridResultados.setAdapter(adaptador);
+			final Handler handler = new Handler();
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					Status s = peticion.getStatus();
+					if (s.name().equals("FINISHED")) {
+						eventosFiltro = refFiltro.get();
+						if (!categoriasActu) {// Se actualiza las categorias
+												// solo
+												// una vez
+							listaCategorias = Herramientas
+									.Obtenercategorias(getActivity());
+							String a[] = new String[listaCategorias.size()];
+							for (int i = 0; i < listaCategorias.size(); i++) {
+								a[i] = listaCategorias.get(i).getTexto();
+							}
+							ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
+									getActivity(), R.layout.spinner_item, a);
+							adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+							spiCategoria.setAdapter(adapter1);
+							spiCategoria.setEnabled(true);
+							categoriasActu = true;
 						}
-						ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
-								getActivity(), R.layout.spinner_item, a);
-						adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-						spiCategoria.setAdapter(adapter1);
-						spiCategoria.setEnabled(true);
-						categoriasActu = true;
-					}
-					if (eventos.size() > 0 && eventosFiltro.size() == 0)
-						bloquearPeticion = true;
-					else
-						bloquearPeticion = false;
-					btnFiltrar.setEnabled(true);
-					if (eventosFiltro.size() > 0) {
-						eventos.addAll(eventosFiltro);
-						gridResultados.setVisibility(View.VISIBLE);
-						adaptador.notifyDataSetChanged();
+						if (eventos.size() > 0 && eventosFiltro.size() == 0)
+							bloquearPeticion = true;
+						else
+							bloquearPeticion = false;
+						btnFiltrar.setEnabled(true);
+						if (eventosFiltro.size() > 0) {
+							eventos.addAll(eventosFiltro);
+							gridResultados.setVisibility(View.VISIBLE);
+							adaptador.notifyDataSetChanged();
 
-						progressResult.setVisibility(View.GONE);
-						bloquearPeticion = false;
-					} else {
-						if (eventos.size() == 0)
-							txtErrorResultados.setVisibility(View.VISIBLE);
-						progressResult.setVisibility(View.GONE);
-					}
-					gridResultados.onLoadMoreComplete();
-				} else
-					handler.postDelayed(this, 500);
-			}
-		}, 500);
+							progressResult.setVisibility(View.GONE);
+							bloquearPeticion = false;
+						} else {
+							if (eventos.size() == 0)
+								txtErrorResultados.setVisibility(View.VISIBLE);
+							progressResult.setVisibility(View.GONE);
+						}
+						gridResultados.onLoadMoreComplete();
+					} else
+						handler.postDelayed(this, 500);
+				}
+			}, 500);
+		} else {
+			txtErrorResultados.setText("No hay servicios de ubicacion");
+			txtErrorResultados.setVisibility(View.VISIBLE);
+			progressResult.setVisibility(View.GONE);
+			btnFiltrar.setEnabled(true);
+		}
 	}
 
 	protected void recoger() {
@@ -297,6 +307,7 @@ public class Fragment1 extends Fragment {
 			}, 200);
 			recogido = true;
 		}
+
 	}
 
 	public void onConfigurationChanged(Configuration newConfig) {
