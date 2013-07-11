@@ -19,6 +19,7 @@ import android.widget.TextView;
 public class listaImagenesAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<Bitmap> items;
+	private String[] titulos= new String[]{"Imagen principal","Imagen 1","Imagen 2","Imagen 3","Imagen 4"};
 
 	public listaImagenesAdapter(Context c, List<Bitmap> imagenes) {
 		mContext = c;
@@ -48,7 +49,7 @@ public class listaImagenesAdapter extends BaseAdapter {
 				lsImagen.setImageBitmap(items.get(position));
 
 				TextView lsDesc = (TextView) gridView.findViewById(R.id.lsNombreImagen);
-				lsDesc.setText("Concierto Macaco");
+				lsDesc.setText(titulos[position].toString());
 				
 				ImageButton btnBorrar = (ImageButton) gridView.findViewById(R.id.lsBtnBorrar);
 				btnBorrar.setOnClickListener(new OnClickListener() {					

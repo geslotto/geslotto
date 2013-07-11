@@ -24,14 +24,12 @@ import android.os.Handler;
 import android.os.AsyncTask.Status;
 import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
-import android.view.Display;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,16 +54,16 @@ public class detalleEventoActivity extends FragmentActivity {
 	TextView txtDetalleFechaFinal;
 	ToggleButton togAsistencia;
 	ProgressBar progressBar;
-	Gallery galeria;
+	ImageView galeria;
 	RelativeLayout relInformacion;
 	RelativeLayout relsituacion;
 
-	static List<Drawable> imagenes;
 	public static boolean asiste;
 
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", MainActivity.currentLocale);
-
+///GALERIA
+	public static List<Drawable> fotosGaleria = null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +76,7 @@ public class detalleEventoActivity extends FragmentActivity {
 			edNombre = (TextView) findViewById(R.id.txtDetalleNombre);
 			edDesc = (TextView) findViewById(R.id.txtDetalleDesc);
 			txtAsistentes = (TextView) findViewById(R.id.txtDetalleAsistentes);
-			galeria = (Gallery) findViewById(R.id.imgDetalleImagen);
+			galeria = (ImageView) findViewById(R.id.imgDetalleImagen);
 			txtDir = (TextView) findViewById(R.id.txtDetalleDir);
 			txtDireccion = (TextView) findViewById(R.id.txtDetalleDireccion);
 			txtDetalleDist = (TextView) findViewById(R.id.txtDetalleDist);
@@ -107,13 +105,10 @@ public class detalleEventoActivity extends FragmentActivity {
 			String android_id = Secure.getString(this.getContentResolver(),
 					Secure.ANDROID_ID);
 			parametros.add(new BasicNameValuePair("idDispositivo", android_id));
-			galeria.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
+			galeria.setOnClickListener(new OnClickListener() {				
+				public void onClick(View v) {
 					Intent i = new Intent(detalleEventoActivity.this,
 							galeriaActivity.class);
-					imagenes = evento.getImagenes();
 					startActivity(i);
 				}
 			});
@@ -196,9 +191,8 @@ public class detalleEventoActivity extends FragmentActivity {
 				+ " "
 				+ detalleEventoActivity.this
 						.getString(R.string.detalleEventoAsistencia));
-		Display display = getWindowManager().getDefaultDisplay();
-		galeria.setAdapter(new galeriaAdapter(this, evento.getImagenes(),
-				false, display));
+		fotosGaleria = evento.getImagenes();
+		galeria.setImageDrawable(evento.getImagenes().get(0));
 		// ///////////////////////////
 		String direccion = "";
 		String[] spidesc = evento.getDireccion().split(",");
@@ -239,6 +233,7 @@ public class detalleEventoActivity extends FragmentActivity {
 		}
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapa)).getMap();
+		map.getUiSettings().setScrollGesturesEnabled(false);
 		Posicion = new LatLng(evento.getLatitud(), evento.getLongitud());
 		map.addMarker(new MarkerOptions().position(Posicion).title(
 				evento.getNombre()));

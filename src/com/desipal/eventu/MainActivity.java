@@ -119,7 +119,6 @@ public class MainActivity extends FragmentActivity {
 			}
 
 		} catch (Exception e) {
-			String a = "";
 		}
 		// //////
 

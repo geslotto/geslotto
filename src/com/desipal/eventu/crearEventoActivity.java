@@ -1,13 +1,11 @@
 package com.desipal.eventu;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
 import com.desipal.Entidades.categoriaEN;
 import com.desipal.Entidades.eventoEN;
 import com.desipal.Entidades.seleccionUbicacionEN;
@@ -21,14 +19,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -48,8 +44,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -304,6 +300,7 @@ public class crearEventoActivity extends FragmentActivity {
 							LatLng Posicion = new LatLng(Latitud, Longitud);
 							mapaLocalizacion.addMarker(new MarkerOptions()
 									.position(Posicion).title("estas aquí"));
+							mapaLocalizacion.getUiSettings().setScrollGesturesEnabled(false);
 							mapaLocalizacion.moveCamera(CameraUpdateFactory
 									.newLatLngZoom(Posicion, 15));
 							recoger = false;
@@ -338,6 +335,11 @@ public class crearEventoActivity extends FragmentActivity {
 						Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				startActivityForResult(pickPhoto, 1);
+				if (arrayImagen.size() == 0)
+					Toast.makeText(
+							actividad,
+							"La primera imagen seleccionada se utilizara como imagen principal",
+							Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -357,14 +359,14 @@ public class crearEventoActivity extends FragmentActivity {
 		if (resultCode == RESULT_OK) {
 			try {
 				Uri selectedImage = imageReturnedIntent.getData();
-				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver()
-						.openInputStream(selectedImage));
+				Bitmap bmp = Herramientas.reescalarBitmapPorUri(selectedImage,
+						crearEventoActivity.this, ESCALAMAXIMA);
 				arrayImagen.add(bmp);
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else
-			Toast.makeText(this, "No ha seleccionado ninguna imágen",
+		} else if (arrayImagen.size() == 0)
+			Toast.makeText(this, "No ha elegido ninguna imágen",
 					Toast.LENGTH_SHORT).show();
 		refrescarLista();
 	}
@@ -524,8 +526,10 @@ public class crearEventoActivity extends FragmentActivity {
 					int i = 1;
 					for (Bitmap imagen : arrayImagen) {
 						ByteArrayOutputStream bao = new ByteArrayOutputStream();
-						imagen = Herramientas.disminuirImagen(imagen,
-								ESCALAMAXIMA);
+						/*
+						 * imagen = Herramientas.disminuirImagen(imagen,
+						 * ESCALAMAXIMA);
+						 */
 						imagen.compress(Bitmap.CompressFormat.JPEG, 80, bao);
 						byte[] ba = bao.toByteArray();
 						String ba1 = Base64.encodeToString(ba, Base64.DEFAULT);
@@ -636,10 +640,10 @@ public class crearEventoActivity extends FragmentActivity {
 	}
 
 	protected static void refrescarLista() {
-		ListView gridview = (ListView) actividad
+		GridView gridview = (GridView) actividad
 				.findViewById(R.id.listImagenes);
 		gridview.setAdapter(new listaImagenesAdapter(actividad, arrayImagen));
-		int altura = 70 * arrayImagen.size();// Tamaño de la imagen
+		int altura = 58 * arrayImagen.size();// Tamaño de la imagen
 		if (altura > 0)
 			gridview.setVisibility(View.VISIBLE);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
