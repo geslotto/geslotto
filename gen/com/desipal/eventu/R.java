@@ -534,43 +534,51 @@ containing a value of this type.
         public static final int ic_pulltorefresh_arrow=0x7f02002c;
         public static final int informacion_ver_evento=0x7f02002d;
         public static final int mapa=0x7f02002e;
-        public static final int scrubber_control_disabled_holo=0x7f02002f;
-        public static final int scrubber_control_focused_holo=0x7f020030;
-        public static final int scrubber_control_normal_holo=0x7f020031;
-        public static final int scrubber_control_pressed_holo=0x7f020032;
-        public static final int scrubber_primary_holo=0x7f020033;
-        public static final int scrubber_secondary_holo=0x7f020034;
-        public static final int scrubber_track_holo_light=0x7f020035;
-        public static final int toggle=0x7f020036;
-        public static final int toggle_bg=0x7f020037;
-        public static final int toggle_bg_map=0x7f020038;
-        public static final int toggle_map=0x7f020039;
-        public static final int toggle_map_off=0x7f02003a;
-        public static final int toggle_map_on=0x7f02003b;
-        public static final int toggle_off=0x7f02003c;
-        public static final int toggle_on=0x7f02003d;
-        public static final int vpi__tab_indicator=0x7f02003e;
-        public static final int vpi__tab_selected_focused_holo=0x7f02003f;
-        public static final int vpi__tab_selected_holo=0x7f020040;
-        public static final int vpi__tab_selected_pressed_holo=0x7f020041;
-        public static final int vpi__tab_unselected_focused_holo=0x7f020042;
-        public static final int vpi__tab_unselected_holo=0x7f020043;
-        public static final int vpi__tab_unselected_pressed_holo=0x7f020044;
+        public static final int rate_star_big_half_holo_light=0x7f02002f;
+        public static final int rate_star_big_off_holo_light=0x7f020030;
+        public static final int rate_star_big_on_holo_light=0x7f020031;
+        public static final int ratingbar_holo_light=0x7f020032;
+        public static final int scrubber_control_disabled_holo=0x7f020033;
+        public static final int scrubber_control_focused_holo=0x7f020034;
+        public static final int scrubber_control_normal_holo=0x7f020035;
+        public static final int scrubber_control_pressed_holo=0x7f020036;
+        public static final int scrubber_primary_holo=0x7f020037;
+        public static final int scrubber_secondary_holo=0x7f020038;
+        public static final int scrubber_track_holo_light=0x7f020039;
+        public static final int toggle=0x7f02003a;
+        public static final int toggle_bg=0x7f02003b;
+        public static final int toggle_bg_map=0x7f02003c;
+        public static final int toggle_map=0x7f02003d;
+        public static final int toggle_map_off=0x7f02003e;
+        public static final int toggle_map_on=0x7f02003f;
+        public static final int toggle_off=0x7f020040;
+        public static final int toggle_on=0x7f020041;
+        public static final int vpi__tab_indicator=0x7f020042;
+        public static final int vpi__tab_selected_focused_holo=0x7f020043;
+        public static final int vpi__tab_selected_holo=0x7f020044;
+        public static final int vpi__tab_selected_pressed_holo=0x7f020045;
+        public static final int vpi__tab_unselected_focused_holo=0x7f020046;
+        public static final int vpi__tab_unselected_holo=0x7f020047;
+        public static final int vpi__tab_unselected_pressed_holo=0x7f020048;
     }
     public static final class id {
+        public static final int LayoutComentarios=0x7f06004e;
         public static final int Titulo=0x7f06000a;
         public static final int bottom=0x7f060003;
-        public static final int btnBuscar=0x7f06006d;
-        public static final int btnBuscarCerca=0x7f060060;
+        public static final int btnBuscar=0x7f060079;
+        public static final int btnBuscarCerca=0x7f06006c;
         public static final int btnCrearEvento=0x7f06000b;
         public static final int btnInicio=0x7f06000f;
-        public static final int btnLimpiar=0x7f06006e;
+        public static final int btnLimpiar=0x7f06007a;
+        public static final int btnOpinar=0x7f060050;
         public static final int btnSubirImagen=0x7f060037;
-        public static final int btn_recoger=0x7f060065;
-        public static final int campoFecha=0x7f06006c;
-        public static final int campoFiltro=0x7f060069;
+        public static final int btnVerMasComentarios=0x7f060053;
+        public static final int btn_recoger=0x7f060071;
+        public static final int campoFecha=0x7f060078;
+        public static final int campoFiltro=0x7f060075;
         public static final int chTodoElDia=0x7f060027;
         public static final int editCiudad=0x7f060022;
+        public static final int editComentario=0x7f060066;
         public static final int editDescrip=0x7f060014;
         public static final int editDireccion=0x7f060020;
         public static final int editFechaFin=0x7f060033;
@@ -579,41 +587,45 @@ containing a value of this type.
         public static final int editHoraInicio=0x7f06002e;
         public static final int editNombre=0x7f060012;
         public static final int editNumero=0x7f060021;
-        public static final int foto=0x7f060054;
-        public static final int gridResultados=0x7f060071;
-        public static final int gridResultadosCerca=0x7f060063;
+        public static final int foto=0x7f06005a;
+        public static final int gridResultados=0x7f06007d;
+        public static final int gridResultadosCerca=0x7f06006f;
+        public static final int hr=0x7f06005f;
         public static final int hybrid=0x7f060008;
         public static final int imgDetalleImagen=0x7f06003f;
-        public static final int imgEvento=0x7f060051;
-        public static final int linear_filtro=0x7f060066;
+        public static final int imgEvento=0x7f060057;
+        public static final int linear_filtro=0x7f060072;
+        public static final int listComentarios=0x7f06007e;
         public static final int listImagenes=0x7f060038;
-        public static final int load_more_footer=0x7f060058;
-        public static final int load_more_progressBar=0x7f06005a;
-        public static final int lsBtnBorrar=0x7f060057;
-        public static final int lsImagen=0x7f060055;
-        public static final int lsNombreImagen=0x7f060056;
+        public static final int load_more_footer=0x7f060063;
+        public static final int load_more_progressBar=0x7f060065;
+        public static final int lsBtnBorrar=0x7f060062;
+        public static final int lsImagen=0x7f060060;
+        public static final int lsNombreImagen=0x7f060061;
         public static final int mapa=0x7f060047;
-        public static final int mapaCercanos=0x7f060064;
+        public static final int mapaCercanos=0x7f060070;
         public static final int mapaLocalizacion=0x7f060024;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060005;
         public static final int pager=0x7f06000d;
-        public static final int proResulCerca=0x7f060062;
-        public static final int proResultados=0x7f060070;
-        public static final int progressBar=0x7f06004e;
+        public static final int proResulCerca=0x7f06006e;
+        public static final int proResultados=0x7f06007c;
+        public static final int progressBar=0x7f060054;
+        public static final int progressBarComentarios=0x7f060051;
+        public static final int ratingBar1=0x7f06005d;
         public static final int relCabecera=0x7f06000e;
         public static final int relComentarios=0x7f06003a;
         public static final int relFechas=0x7f060025;
         public static final int relImagenes=0x7f060035;
         public static final int relInformacion=0x7f06003e;
-        public static final int rel_campos=0x7f060067;
-        public static final int rel_fecha=0x7f06006a;
-        public static final int rel_gridView_item=0x7f06004f;
+        public static final int rel_campos=0x7f060073;
+        public static final int rel_fecha=0x7f060076;
+        public static final int rel_gridView_item=0x7f060055;
         public static final int relativeLayout1=0x7f060009;
         public static final int relativeMapa=0x7f060023;
         public static final int relsituacion=0x7f060044;
         public static final int satellite=0x7f060006;
-        public static final int seekRadio=0x7f06005e;
+        public static final int seekRadio=0x7f06006a;
         public static final int spiCategorias=0x7f060016;
         public static final int table2Row1=0x7f060029;
         public static final int table2Row2=0x7f06002c;
@@ -621,25 +633,28 @@ containing a value of this type.
         public static final int table2Row4=0x7f060032;
         public static final int tableFecha=0x7f060028;
         public static final int tableLocalizacion=0x7f06001a;
-        public static final int tableRadio=0x7f06005d;
+        public static final int tableRadio=0x7f060069;
         public static final int tableRow1=0x7f06001b;
         public static final int tableRow2=0x7f06001f;
         public static final int terrain=0x7f060007;
+        public static final int textNoHayComentarios=0x7f060052;
+        public static final int textView1=0x7f06004f;
         public static final int titles=0x7f06000c;
         public static final int togAsistencia=0x7f060043;
         public static final int togComentarios=0x7f06003c;
-        public static final int togOpcionMapa=0x7f06005c;
+        public static final int togOpcionMapa=0x7f060068;
         public static final int togUbicacion=0x7f060019;
         public static final int top=0x7f060004;
-        public static final int top_line=0x7f060059;
+        public static final int top_line=0x7f060064;
         public static final int triangle=0x7f060001;
         public static final int txtCategoria=0x7f060015;
         public static final int txtCiudad=0x7f06001e;
+        public static final int txtComentario=0x7f06005e;
         public static final int txtComentarios=0x7f06003b;
         public static final int txtComentariosEvento=0x7f060039;
-        public static final int txtComoVisualizar=0x7f06005b;
+        public static final int txtComoVisualizar=0x7f060067;
         public static final int txtDatosEvento=0x7f060010;
-        public static final int txtDescEvento=0x7f060053;
+        public static final int txtDescEvento=0x7f060059;
         public static final int txtDescrip=0x7f060013;
         public static final int txtDetalleAsistentes=0x7f060042;
         public static final int txtDetalleCategoria=0x7f060040;
@@ -654,23 +669,25 @@ containing a value of this type.
         public static final int txtDetalleFechaInicio=0x7f06004b;
         public static final int txtDetalleNombre=0x7f06003d;
         public static final int txtDireccion=0x7f06001c;
-        public static final int txtDistEvento=0x7f060052;
-        public static final int txtErrorCerca=0x7f060061;
-        public static final int txtErrorResultados=0x7f06006f;
+        public static final int txtDistEvento=0x7f060058;
+        public static final int txtErrorCerca=0x7f06006d;
+        public static final int txtErrorResultados=0x7f06007b;
+        public static final int txtFecha=0x7f06005b;
         public static final int txtFechaEvento=0x7f060026;
         public static final int txtFechaFin=0x7f060030;
         public static final int txtFechaInicio=0x7f06002a;
         public static final int txtHoraFin=0x7f060031;
         public static final int txtHoraInicio=0x7f06002b;
-        public static final int txtKm=0x7f06005f;
+        public static final int txtKm=0x7f06006b;
         public static final int txtLocalizacionEvento=0x7f060017;
         public static final int txtNombre=0x7f060011;
         public static final int txtNumero=0x7f06001d;
         public static final int txtSubirImagenes=0x7f060036;
-        public static final int txtTituloEvento=0x7f060050;
+        public static final int txtTituloEvento=0x7f060056;
         public static final int txtUbicacion=0x7f060018;
-        public static final int txtfecha=0x7f06006b;
-        public static final int txtfiltro=0x7f060068;
+        public static final int txtfecha=0x7f060077;
+        public static final int txtfiltro=0x7f060074;
+        public static final int txttitulo=0x7f06005c;
         public static final int underline=0x7f060002;
     }
     public static final class integer {
@@ -687,32 +704,52 @@ containing a value of this type.
         public static final int galeriacompleta=0x7f030003;
         public static final int gridview_item=0x7f030004;
         public static final int imagen_galeria_item=0x7f030005;
-        public static final int lis_itemcargaimagen=0x7f030006;
-        public static final int load_more_footer=0x7f030007;
-        public static final int main=0x7f030008;
-        public static final int spinner_item=0x7f030009;
-        public static final int tabcerca=0x7f03000a;
-        public static final int tabinicio=0x7f03000b;
+        public static final int item_comentario=0x7f030006;
+        public static final int lis_itemcargaimagen=0x7f030007;
+        public static final int load_more_footer=0x7f030008;
+        public static final int main=0x7f030009;
+        public static final int rating_dialog=0x7f03000a;
+        public static final int spinner_item=0x7f03000b;
+        public static final int tabcerca=0x7f03000c;
+        public static final int tabinicio=0x7f03000d;
+        public static final int ver_todos_comentarios=0x7f03000e;
     }
     public static final class string {
         public static final int Categorias=0x7f050020;
         public static final int EventosFallido=0x7f050023;
+        public static final int OpinionHintOpinion=0x7f05004a;
         public static final int OpnVisualizacion=0x7f050024;
         public static final int Radio=0x7f050021;
+        public static final int VerOpinionValoracion=0x7f05004d;
         public static final int action_settings=0x7f050016;
         public static final int app_name=0x7f050000;
-        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
+        /**   Title for notification shown when GooglePlayServices needs to be
+        enabled for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_availability_notification_title=0x7f050010;
+        public static final int auth_client_needs_enabling_title=0x7f050011;
+        /**   Title for notification shown when GooglePlayServices needs to be
+        installed for a application to work. [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_needs_installation_title=0x7f050012;
+        /**   Title for notification shown when GooglePlayServices needs to be
+        udpated for a application to work. [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_needs_update_title=0x7f050013;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int auth_client_play_services_err_notification_msg=0x7f050011;
+        public static final int auth_client_play_services_err_notification_msg=0x7f050014;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int auth_client_requested_by_msg=0x7f050012;
+        public static final int auth_client_requested_by_msg=0x7f050015;
+        /**   Title for notification shown when a bad version of GooglePlayServices
+        has been installed and needs correction for an application to work.
+        [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_using_bad_version_title=0x7f050010;
         /**  Crear evento 
          */
         public static final int btn_inicio=0x7f050025;
+        public static final int comentarios=0x7f050045;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -800,21 +837,24 @@ containing a value of this type.
         /**  Ver evento 
          */
         public static final int detalleEventoTitulo=0x7f05003e;
+        public static final int dialogCancelar=0x7f050050;
+        public static final int dialogComentadoNULL=0x7f050052;
+        public static final int dialogComentadoOK=0x7f050051;
+        public static final int dialogComentario=0x7f05004c;
+        public static final int dialogEnviar=0x7f05004f;
+        public static final int dialogNoComentado=0x7f050053;
+        public static final int dialogPuntua=0x7f05004b;
+        /**  Opiniones 
+         */
+        public static final int dialogTitle=0x7f050047;
+        public static final int dialog_negative_text=0x7f050049;
+        public static final int dialog_positive_text=0x7f050048;
         public static final int filtroFallido=0x7f050022;
         public static final int hint_fecha=0x7f05001a;
         public static final int hint_filtro=0x7f05001d;
         public static final int hint_hora=0x7f05001b;
-        /**  Location client code resources (prefix with location_client) 
-
-        Begin strings for location.reporting
-    
-
-        Some InactiveReason names.  See more in OneUp/package/location/res/values/strings.xml
-    
-         */
-        public static final int location_client_ulr_inactive_age_under_13=0x7f050013;
-        public static final int location_client_ulr_inactive_age_unknown=0x7f050014;
-        public static final int location_client_ulr_inactive_unknown_restriction=0x7f050015;
+        public static final int noHayComentarios=0x7f05004e;
+        public static final int opina=0x7f050044;
         public static final int titulo=0x7f050017;
         public static final int txtBuscar=0x7f05001e;
         public static final int txtComentarios=0x7f050043;
@@ -823,6 +863,7 @@ containing a value of this type.
          */
         public static final int txtFecha=0x7f050019;
         public static final int txtFiltro=0x7f05001c;
+        public static final int verMasComentarios=0x7f050046;
     }
     public static final class style {
         /** 

@@ -4,33 +4,42 @@ import java.text.DecimalFormat;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.atomic.AtomicReference;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
+import com.desipal.Entidades.comentarioEN;
 import com.desipal.Entidades.eventoEN;
+import com.desipal.Librerias.Herramientas;
+import com.desipal.Librerias.ratingpicker;
 import com.desipal.eventu.R;
 import com.desipal.Servidor.asistenciaEvento;
 import com.desipal.Servidor.detalleEvento;
+import com.desipal.Servidor.generalComentarios;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
 import android.provider.Settings.Secure;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +49,7 @@ public class detalleEventoActivity extends FragmentActivity {
 	public static eventoEN evento;
 	private GoogleMap map;
 	static LatLng Posicion = null;
+	public static Activity act = null;
 
 	TextView edNombre;
 	TextView edDesc;
@@ -57,22 +67,31 @@ public class detalleEventoActivity extends FragmentActivity {
 	ImageView galeria;
 	RelativeLayout relInformacion;
 	RelativeLayout relsituacion;
+	LinearLayout LayoutComentarios;
+	Button btnOpinar;
+	Button btnVerMasComentarios;
+	ProgressBar progressBarComentarios;
+	TextView textNoHayComentarios;
 
 	public static boolean asiste;
-
+	public static long idEvento;
+	AtomicReference<List<comentarioEN>> refListaComentarios = new AtomicReference<List<comentarioEN>>();
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm", MainActivity.currentLocale);
-///GALERIA
+	// /GALERIA
 	public static List<Drawable> fotosGaleria = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 		getWindow().setBackgroundDrawableResource(android.R.color.black);
 		try {
+			act = this;
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.detalleevento);
 			Bundle e = getIntent().getExtras();
+			idEvento = e.getLong("idEvento");
 			edNombre = (TextView) findViewById(R.id.txtDetalleNombre);
 			edDesc = (TextView) findViewById(R.id.txtDetalleDesc);
 			txtAsistentes = (TextView) findViewById(R.id.txtDetalleAsistentes);
@@ -89,9 +108,30 @@ public class detalleEventoActivity extends FragmentActivity {
 			progressBar = (ProgressBar) findViewById(R.id.progressBar);
 			relInformacion = (RelativeLayout) findViewById(R.id.relInformacion);
 			relsituacion = (RelativeLayout) findViewById(R.id.relsituacion);
+			LayoutComentarios = (LinearLayout) findViewById(R.id.LayoutComentarios);
+			Button btnOpinar = (Button) findViewById(R.id.btnOpinar);
+			progressBarComentarios = (ProgressBar) findViewById(R.id.progressBarComentarios);
+			btnVerMasComentarios = (Button) findViewById(R.id.btnVerMasComentarios);
+			textNoHayComentarios = (TextView) findViewById(R.id.textNoHayComentarios);
+			// Boton opinar
+			btnOpinar.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					DialogFragment newFragment = ratingpicker.newInstance();
+					newFragment.show(getSupportFragmentManager(), "dialog");
+				}
+			});
+			// Ver mas comentarios
+			btnVerMasComentarios.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Intent i = new Intent(detalleEventoActivity.this,
+							VerTodosComentariosActivity.class);
+					i.putExtra("idEvento", idEvento);
+					startActivity(i);
+				}
+			});
 			ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
-
-			long idEvento = e.getLong("idEvento");
 			parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
 			LatLng loc = MainActivity.PosicionActual;
 			if (loc != null) {
@@ -105,7 +145,7 @@ public class detalleEventoActivity extends FragmentActivity {
 			String android_id = Secure.getString(this.getContentResolver(),
 					Secure.ANDROID_ID);
 			parametros.add(new BasicNameValuePair("idDispositivo", android_id));
-			galeria.setOnClickListener(new OnClickListener() {				
+			galeria.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(detalleEventoActivity.this,
 							galeriaActivity.class);
@@ -240,6 +280,68 @@ public class detalleEventoActivity extends FragmentActivity {
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(Posicion, 15));
 		relInformacion.setVisibility(View.VISIBLE);
 		relsituacion.setVisibility(View.VISIBLE);
+		LayoutComentarios.setVisibility(View.VISIBLE);
+		//btnVerMasComentarios.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
+
+		// Ver comentarios
+		ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+		parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
+		parametros.add(new BasicNameValuePair("elementsPerPage", Herramientas
+				.ComentariosEnDetalleEvento() + ""));
+		String URL = "http://desipal.hol.es/app/eventos/listaComentarios.php";
+		final generalComentarios peticion = new generalComentarios(parametros,
+				refListaComentarios);
+		peticion.execute(new String[] { URL });
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				Status s = peticion.getStatus();
+				if (s.name().equals("FINISHED")) {
+					verComentarios();
+				} else
+					handler.postDelayed(this, 500);
+			}
+		}, 500);
+	}
+
+	private void verComentarios() {
+		try {
+			for (int i = 0; i < refListaComentarios.get().size(); i++) {
+				LayoutComentarios.addView(obtenerVistaComentarios(
+						refListaComentarios.get(), i, getApplicationContext()));
+			}
+			btnVerMasComentarios.setVisibility(View.VISIBLE);
+		} catch (Exception ex) {			
+			textNoHayComentarios.setVisibility(View.VISIBLE);
+		} finally {
+			progressBarComentarios.setVisibility(View.GONE);
+		}
+
+	}
+
+	private View obtenerVistaComentarios(List<comentarioEN> lista,
+			int Elemento, Context con) {
+		LayoutInflater inflater = (LayoutInflater) con
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View vista = inflater.inflate(R.layout.item_comentario, null);
+
+		TextView txtFecha = (TextView) vista.findViewById(R.id.txtFecha);
+		String fecha = dateFormat.format(lista.get(Elemento).getFecha());
+		txtFecha.setText(fecha);
+
+		RatingBar ratingBar1 = (RatingBar) vista.findViewById(R.id.ratingBar1);
+		ratingBar1.setEnabled(false);
+		ratingBar1.setRating((float) lista.get(Elemento).getValoracion());
+
+		TextView txtComentario = (TextView) vista
+				.findViewById(R.id.txtComentario);
+		txtComentario.setText(lista.get(Elemento).getComentario());
+		View vi = (View) vista.findViewById(R.id.hr);
+		if (lista.size() == Elemento + 1)
+			vi.setVisibility(View.GONE);
+		return vista;
+
 	}
 }

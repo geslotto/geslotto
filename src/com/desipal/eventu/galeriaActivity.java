@@ -12,29 +12,29 @@ import android.support.v4.view.ViewPager;
 import android.view.Window;
 
 public class galeriaActivity extends Activity {
- 
-    // Declare Variables
-    ViewPager viewPager;
-    PagerAdapter adapter;
-    String[] rank;
-    String[] country;
-    String[] population;
-    int[] flag;
- 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+	// Declare Variables
+	ViewPager viewPager;
+	PagerAdapter adapter;
+	String[] rank;
+	String[] country;
+	String[] population;
+	int[] flag;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
-        // Get the view from viewpager_main.xml
-        setContentView(R.layout.galeriacompleta);
-        List<Drawable> listimagenes= detalleEventoActivity.fotosGaleria;
- 
-        // Locate the ViewPager in viewpager_main.xml
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        // Pass results to ViewPagerAdapter Class
-        adapter = new galeriaCompletaAdapter(this,listimagenes);
-        // Binds the Adapter to the ViewPager
-        viewPager.setAdapter(adapter);
- 
-    }
+		super.onCreate(savedInstanceState);
+		// Get the view from viewpager_main.xml
+		setContentView(R.layout.galeriacompleta);
+		List<Drawable> listimagenes = detalleEventoActivity.fotosGaleria;
+
+		// Locate the ViewPager in viewpager_main.xml
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		// Pass results to ViewPagerAdapter Class
+		adapter = new galeriaCompletaAdapter(this, listimagenes);
+		// Binds the Adapter to the ViewPager
+		viewPager.setAdapter(adapter);
+
+	}
 }

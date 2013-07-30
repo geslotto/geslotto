@@ -108,6 +108,8 @@ public class crearEventoActivity extends FragmentActivity {
 	int IdCategoriaSel = 0;
 	boolean errorspiner = true;
 	List<categoriaEN> listaCategorias = null;
+	private int NUMTOTALFOTOS = 5;
+	public static int contaFotos = 0;
 
 	@Override
 	public void onBackPressed() {
@@ -300,7 +302,8 @@ public class crearEventoActivity extends FragmentActivity {
 							LatLng Posicion = new LatLng(Latitud, Longitud);
 							mapaLocalizacion.addMarker(new MarkerOptions()
 									.position(Posicion).title("estas aquí"));
-							mapaLocalizacion.getUiSettings().setScrollGesturesEnabled(false);
+							mapaLocalizacion.getUiSettings()
+									.setScrollGesturesEnabled(false);
 							mapaLocalizacion.moveCamera(CameraUpdateFactory
 									.newLatLngZoom(Posicion, 15));
 							recoger = false;
@@ -331,14 +334,21 @@ public class crearEventoActivity extends FragmentActivity {
 		btnSubirImagen.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent pickPhoto = new Intent(
-						Intent.ACTION_PICK,
-						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				startActivityForResult(pickPhoto, 1);
-				if (arrayImagen.size() == 0)
+				if (contaFotos != NUMTOTALFOTOS) {
+					Intent pickPhoto = new Intent(
+							Intent.ACTION_PICK,
+							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+					startActivityForResult(pickPhoto, 1);
+					if (arrayImagen.size() == 0)
+						Toast.makeText(
+								actividad,
+								"La primera imagen seleccionada se utilizara como imagen principal",
+								Toast.LENGTH_LONG).show();
+				}
+				else
 					Toast.makeText(
 							actividad,
-							"La primera imagen seleccionada se utilizara como imagen principal",
+							"Se ha cumplido el maximo de fotos",
 							Toast.LENGTH_LONG).show();
 			}
 		});
@@ -361,6 +371,7 @@ public class crearEventoActivity extends FragmentActivity {
 				Uri selectedImage = imageReturnedIntent.getData();
 				Bitmap bmp = Herramientas.reescalarBitmapPorUri(selectedImage,
 						crearEventoActivity.this, ESCALAMAXIMA);
+				contaFotos++;
 				arrayImagen.add(bmp);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -643,11 +654,12 @@ public class crearEventoActivity extends FragmentActivity {
 		GridView gridview = (GridView) actividad
 				.findViewById(R.id.listImagenes);
 		gridview.setAdapter(new listaImagenesAdapter(actividad, arrayImagen));
-		int altura = 58 * arrayImagen.size();// Tamaño de la imagen
+		float altura = Herramientas.convertDpToPixel(55 * arrayImagen.size(),
+				actividad);// Tamaño de la imagen
 		if (altura > 0)
 			gridview.setVisibility(View.VISIBLE);
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
-				altura);
+				(int) altura);
 		gridview.setLayoutParams(params);
 	}
 

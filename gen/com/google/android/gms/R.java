@@ -71,9 +71,12 @@ public final class R {
 		public static final int terrain = 0x7f060007;
 	}
 	public static final class string {
-		public static final int auth_client_availability_notification_title = 0x7f050010;
-		public static final int auth_client_play_services_err_notification_msg = 0x7f050011;
-		public static final int auth_client_requested_by_msg = 0x7f050012;
+		public static final int auth_client_needs_enabling_title = 0x7f050011;
+		public static final int auth_client_needs_installation_title = 0x7f050012;
+		public static final int auth_client_needs_update_title = 0x7f050013;
+		public static final int auth_client_play_services_err_notification_msg = 0x7f050014;
+		public static final int auth_client_requested_by_msg = 0x7f050015;
+		public static final int auth_client_using_bad_version_title = 0x7f050010;
 		public static final int common_google_play_services_enable_button = 0x7f050007;
 		public static final int common_google_play_services_enable_text = 0x7f050006;
 		public static final int common_google_play_services_enable_title = 0x7f050005;
@@ -89,9 +92,6 @@ public final class R {
 		public static final int common_google_play_services_update_title = 0x7f050008;
 		public static final int common_signin_button_text = 0x7f05000e;
 		public static final int common_signin_button_text_long = 0x7f05000f;
-		public static final int location_client_ulr_inactive_age_under_13 = 0x7f050013;
-		public static final int location_client_ulr_inactive_age_unknown = 0x7f050014;
-		public static final int location_client_ulr_inactive_unknown_restriction = 0x7f050015;
 	}
 	public static final class styleable {
 		public static final int[] MapAttrs = { 0x7f01001f, 0x7f010020, 0x7f010021, 0x7f010022, 0x7f010023, 0x7f010024, 0x7f010025, 0x7f010026, 0x7f010027, 0x7f010028, 0x7f010029, 0x7f01002a, 0x7f01002b, 0x7f01002c };

@@ -17,9 +17,9 @@
     <string name="Categorias">Categorias</string>
     <string name="Radio">Radio</string>
     <string name="filtroFallido">El filtro no ha obtenido resultados</string>
-	<string name="EventosFallido">No hay eventos cerca de su posicion</string>
-	 <string name="OpnVisualizacion">Opciones de visualización</string>
-	
+    <string name="EventosFallido">No hay eventos cerca de su posicion</string>
+    <string name="OpnVisualizacion">Opciones de visualización</string>
+
     <!-- Crear evento -->
     <string name="btn_inicio">Inicio</string>
     <string name="crearEventoTitulo">Nuevo evento</string>
@@ -54,5 +54,22 @@
     <string name="detalleEventoAsistencia"> personas asistiran, ¿iras?</string>
     <string name="detalleEventoDir">Dirección: </string>
     <string name="txtComentarios">Ver Comentarios</string>
+    <string name="opina">Opina</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="verMasComentarios">Ver mas comentarios</string>
+    <!-- Opiniones -->
+    <string name="dialogTitle">Comenta y puntua el evento</string>
+    <string name="dialog_positive_text">Enviar</string>
+    <string name="dialog_negative_text">Cancelar</string>
+    <string name="OpinionHintOpinion">Escribe tu comentario</string>
+    <string name="dialogPuntua">Puntuacion:</string>
+    <string name="dialogComentario">Comentario:</string>
+    <string name="VerOpinionValoracion">Valoracion:</string>
+    <string name="noHayComentarios">Aun no hay comentarios. ¡Sé el primero!</string>
+    <string name="dialogEnviar">Enviar</string>
+    <string name="dialogCancelar">Cancelar</string>
+    <string name="dialogComentadoOK">Comentario enviado</string>
+    <string name="dialogComentadoNULL">Error al enviar el comentario. Intentelo mas tarde</string>
+    <string name="dialogNoComentado">El campo comentario no puede estar vacio</string>
 
 </resources>

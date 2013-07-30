@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -31,6 +32,8 @@ public class MainActivity extends FragmentActivity {
 	boolean finPaginadoCerca = false;// bandera para saber que no tiene que
 										// hacer mas peticiones en cerca
 
+	//Id Dispositivo
+	public static String IDDISPOSITIVO = null;
 	Button btnCrearEvento;
 
 	TestFragmentAdapter mAdapter;
@@ -79,6 +82,9 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
+			//obtener id dispositivo
+			IDDISPOSITIVO = Secure.getString(
+					this.getContentResolver(), Secure.ANDROID_ID);
 			// LOCALIZACION
 			locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 			// Obtenemos la última posición conocida

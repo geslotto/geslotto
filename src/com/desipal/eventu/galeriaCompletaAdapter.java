@@ -11,9 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
 @SuppressWarnings("unused")
@@ -21,6 +23,7 @@ public class galeriaCompletaAdapter extends PagerAdapter {
 	// Declare Variables
 	Context context;
 	LayoutInflater inflater;
+	
 	List<Drawable> listimagenes;
 	private PhotoViewAttacher mAttacher;
 
@@ -42,7 +45,7 @@ public class galeriaCompletaAdapter extends PagerAdapter {
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 
-		// Declare Variables
+		// Declare Variablesz
 		ImageView foto;
 
 		inflater = (LayoutInflater) context
@@ -54,6 +57,7 @@ public class galeriaCompletaAdapter extends PagerAdapter {
 		foto.setImageDrawable(listimagenes.get(position));
 		// The MAGIC happens here!
 		mAttacher = new PhotoViewAttacher(foto);
+		mAttacher.setOnPhotoTapListener(new PhotoTapListener());
 		((ViewPager) container).addView(itemView);
 
 		return itemView;
@@ -74,5 +78,4 @@ public class galeriaCompletaAdapter extends PagerAdapter {
 			float yPercentage = y * 100f;
 		}
 	}
-
 }

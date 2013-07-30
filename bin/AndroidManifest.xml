@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <permission
         android:name="com.desipal.eventu.permission.MAPS_RECEIVE"
@@ -52,6 +52,11 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.desipal.eventu.galeriaActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.desipal.eventu.VerTodosComentariosActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" />

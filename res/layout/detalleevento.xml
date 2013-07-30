@@ -99,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relInformacion"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/informacion_ver_evento"
                 android:paddingBottom="10dp"
@@ -147,8 +148,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleDistancia"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/crearEventoFechaInicio" />
+                    android:text="@string/crearEventoFechaInicio"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaInicio"
@@ -163,8 +164,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
-                    android:textAppearance="?android:attr/textAppearanceMedium" 
-                    android:text="@string/crearEventoFechaFin"/>
+                    android:text="@string/crearEventoFechaFin"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaFinal"
@@ -172,9 +173,67 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
                     android:layout_toRightOf="@+id/txtDetalleFechaFin"
-                    android:textAppearance="?android:attr/textAppearanceMedium" 
-                    />
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/LayoutComentarios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relsituacion"
+                android:background="@drawable/informacion_ver_evento"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/comentarios"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <Button
+                    android:id="@+id/btnOpinar"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@anim/anim_boton"
+                    android:padding="5dp"
+                    android:text="@string/opina" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarComentarios"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="70dp" />
+
+                <TextView
+                    android:id="@+id/textNoHayComentarios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:text="@string/noHayComentarios"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnVerMasComentarios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LayoutComentarios"
+                android:background="@anim/anim_boton"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/verMasComentarios"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -183,8 +242,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:paddingTop="70dp"
-                android:paddingBottom="20dp" />
+                android:paddingBottom="20dp"
+                android:paddingTop="70dp" />
         </RelativeLayout>
     </ScrollView>
 
