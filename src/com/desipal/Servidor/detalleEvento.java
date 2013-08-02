@@ -74,10 +74,12 @@ public class detalleEvento extends AsyncTask<String, Void, Void> {
 					e.setLatitud(jsEvento.getDouble("latitud"));
 					e.setLongitud(jsEvento.getDouble("longitud"));
 					e.setAsistencia(jsEvento.getInt("asistencia"));
-					e.setValidado(Boolean.parseBoolean(jsEvento
-							.getString("validado")));
-					e.setComentarios(Boolean.parseBoolean(jsEvento
-							.getString("comentarios")));
+					int temp = jsEvento.getInt("validado");
+					boolean val = temp == 1 ? true : false;
+					e.setValidado(val);
+					temp = jsEvento.getInt("comentarios");
+					val  = temp == 1 ? true : false;
+					e.setComentarios(val);
 					e.setDireccion(jsEvento.getString("direccion"));
 					e.setIdCategoria(jsEvento.getInt("idCategoria"));
 					e.setDistancia(jsEvento.getDouble("distancia"));
@@ -85,9 +87,9 @@ public class detalleEvento extends AsyncTask<String, Void, Void> {
 							.getString("fechaInicio")));
 					e.setFechaFin(dateFormat.parse(jsEvento
 							.getString("fechaFin")));
-					int todoeldia = jsEvento.getInt("todoElDia");
-					boolean retorno = todoeldia == 1 ? true : false;
-					e.setTodoElDia(retorno);
+					temp = jsEvento.getInt("todoElDia");
+					val= temp == 1 ? true : false;
+					e.setTodoElDia(val);
 					e.setUrl(jsEvento.getString("url"));
 					asiste = jobj.getBoolean("asiste");
 					JSONObject jurls = new JSONObject(

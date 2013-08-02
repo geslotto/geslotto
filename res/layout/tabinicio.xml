@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ddd"
+    android:background="#343838"
     android:orientation="vertical" >
 
     <Button
         android:id="@+id/btn_recoger"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:background="@anim/anim_boton"
         android:contentDescription="@string/action_settings"
@@ -24,21 +24,23 @@
         android:layout_height="wrap_content"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@android:color/transparent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
 
         <LinearLayout
             android:id="@+id/linear_filtro"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
+            android:background="#3E3E3E"
             android:orientation="vertical"
+            android:padding="5dp"
             android:visibility="gone" >
 
             <RelativeLayout
                 android:id="@+id/rel_campos"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" >
 
                 <TextView
                     android:id="@+id/txtfiltro"
@@ -46,7 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/campoFiltro"
                     android:layout_marginTop="10dp"
-                    android:text="@string/txtFiltro" />
+                    android:text="@string/txtFiltro"
+                    android:textColor="#ffffff" />
 
                 <EditText
                     android:id="@+id/campoFiltro"
@@ -75,7 +78,8 @@
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@+id/campoFecha"
-                        android:text="@string/txtFecha" />
+                        android:text="@string/txtFecha"
+                         android:textColor="#fff" />
 
                     <EditText
                         android:id="@+id/campoFecha"
@@ -150,10 +154,10 @@
         android:id="@+id/gridResultados"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@android:color/transparent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:padding="5dp" />
 
 </LinearLayout>

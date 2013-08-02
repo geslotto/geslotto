@@ -32,7 +32,7 @@ public class MainActivity extends FragmentActivity {
 	boolean finPaginadoCerca = false;// bandera para saber que no tiene que
 										// hacer mas peticiones en cerca
 
-	//Id Dispositivo
+	// Id Dispositivo
 	public static String IDDISPOSITIVO = null;
 	Button btnCrearEvento;
 
@@ -51,11 +51,9 @@ public class MainActivity extends FragmentActivity {
 			if (LocAnterior == null) {
 				LocAnterior = location;
 			}
-			if (location.getAccuracy() < 300
-					|| LocAnterior.getAccuracy() > location.getAccuracy()) {
+			if (location.getAccuracy() < 300 || LocAnterior.getAccuracy() > location.getAccuracy()) {
 				LocAnterior = location;
-				PosicionActual = new LatLng(location.getLatitude(),
-						location.getLongitude());
+				PosicionActual = new LatLng(location.getLatitude(), location.getLongitude());
 			}
 		}
 
@@ -66,8 +64,7 @@ public class MainActivity extends FragmentActivity {
 		public void onProviderEnabled(String provider) {
 			// Agregamos el proveedor
 			if (provider.equals("gps")) {
-				locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-						0, 0, locationListener);
+				locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 			}
 		}
 
@@ -82,46 +79,33 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-			//obtener id dispositivo
-			IDDISPOSITIVO = Secure.getString(
-					this.getContentResolver(), Secure.ANDROID_ID);
+			// obtener id dispositivo
+			IDDISPOSITIVO = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
 			// LOCALIZACION
 			locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 			// Obtenemos la última posición conocida
-			Location locGps = locManager
-					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			Location locNet = locManager
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Location locGps = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Location locNet = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			if (locGps != null) {
-				PosicionActual = new LatLng(locGps.getLatitude(),
-						locGps.getLongitude());
+				PosicionActual = new LatLng(locGps.getLatitude(), locGps.getLongitude());
 				errorServicios = false;
 			} else if (locNet != null) {
-				PosicionActual = new LatLng(locNet.getLatitude(),
-						locNet.getLongitude());
+				PosicionActual = new LatLng(locNet.getLatitude(), locNet.getLongitude());
 				errorServicios = false;
 			} else {
-				Toast.makeText(this,
-						"Se necesita servicios de localizacion como Wifi,Gps",
-						Toast.LENGTH_LONG).show();
-				Intent intent = new Intent(
-						Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				Toast.makeText(this, "Se necesita servicios de localizacion como Wifi,Gps", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 				startActivityForResult(intent, 1);
 				errorServicios = true;
 			}
 			if (!errorServicios) {
 				// Se llama al listener con ambos proveedores
-				locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-						0, 0, locationListener);
-				locManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 0, 0,
-						locationListener);
+				locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 			}
 			if (!locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				Toast.makeText(
-						this,
-						"Si habilita el gps tendra una mejor precision de su situacion",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "Si habilita el gps tendra una mejor precision de su situacion", Toast.LENGTH_LONG)
+						.show();
 			}
 
 		} catch (Exception e) {
@@ -149,8 +133,7 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(MainActivity.this,
-						crearEventoActivity.class);
+				Intent i = new Intent(MainActivity.this, crearEventoActivity.class);
 				startActivity(i);
 			}
 		});

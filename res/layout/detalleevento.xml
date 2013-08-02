@@ -7,8 +7,8 @@
     <RelativeLayout
         android:id="@+id/relCabecera"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/cabecera" >
+        android:layout_height="40dp"
+        android:background="#005F6B" >
 
         <TextView
             android:id="@+id/txtDetalleNombre"
@@ -18,18 +18,17 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/background_light" />
+            android:textColor="#FFF" />
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#ddd" >
+        android:background="#343838" >
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp" >
 
@@ -38,8 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/informacion_ver_evento"
+                android:background="#008C9E"
+                android:padding="5dp"
                 android:paddingBottom="10dp"
                 android:visibility="gone" >
 
@@ -48,7 +47,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#005F6B"
                     android:contentDescription="@string/descImagen" />
 
                 <TextView
@@ -57,26 +57,40 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/imgDetalleImagen"
                     android:layout_centerHorizontal="true"
-                    android:paddingTop="5dp"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtDetaDescrip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleCategoria"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:text="@string/crearEventoDescrip"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtDetalleDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtDetalleCategoria"
+                    android:layout_below="@+id/txtDetaDescrip"
                     android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <TextView
                     android:id="@+id/txtDetalleAsistentes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleDesc"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="5dp"
                     android:paddingLeft="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <ToggleButton
                     android:id="@+id/togAsistencia"
@@ -101,25 +115,25 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/informacion_ver_evento"
-                android:paddingBottom="10dp"
-                android:paddingTop="5dp"
                 android:visibility="gone" >
 
                 <TextView
-                    android:id="@+id/txtDetalleDir"
+                    android:id="@+id/txtDetalleTitDire"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/crearEventoLocalEvento"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtDetalleDireccion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/txtDetalleDir"
+                    android:layout_below="@+id/txtDetalleTitDire"
                     android:paddingBottom="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <fragment
                     android:id="@+id/mapa"
@@ -133,7 +147,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mapa"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <TextView
                     android:id="@+id/txtDetalleDistancia"
@@ -141,23 +156,37 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/mapa"
                     android:layout_toRightOf="@+id/txtDetalleDist"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
+
+                <TextView
+                    android:id="@+id/txtDetalleTitFecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDetalleDistancia"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/crearEventoFechaDelEvento"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaIni"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtDetalleDistancia"
+                    android:layout_below="@+id/txtDetalleTitFecha"
                     android:text="@string/crearEventoFechaInicio"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaInicio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtDetalleDistancia"
+                    android:layout_below="@+id/txtDetalleTitFecha"
                     android:layout_toRightOf="@+id/txtDetalleFechaIni"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaFin"
@@ -165,7 +194,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
                     android:text="@string/crearEventoFechaFin"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
 
                 <TextView
                     android:id="@+id/txtDetalleFechaFinal"
@@ -173,7 +203,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDetalleFechaInicio"
                     android:layout_toRightOf="@+id/txtDetalleFechaFin"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFF" />
             </RelativeLayout>
 
             <LinearLayout
@@ -181,8 +212,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relsituacion"
-                android:background="@drawable/informacion_ver_evento"
+                android:background="#343838"
                 android:orientation="vertical"
+                android:paddingBottom="10dp"
                 android:visibility="gone" >
 
                 <TextView
@@ -229,6 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/LayoutComentarios"
+                android:layout_marginTop="5dp"
                 android:background="@anim/anim_boton"
                 android:gravity="center"
                 android:padding="5dp"

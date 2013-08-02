@@ -2,12 +2,9 @@ package com.desipal.eventu;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-
 import com.desipal.Entidades.adaptadorEventoEN;
 import com.desipal.eventu.R;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,12 +18,10 @@ public class GridViewAdapter extends BaseAdapter {
 	private Context mContext;
 	protected List<adaptadorEventoEN> items;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", MainActivity.currentLocale);
-	protected ArrayList<View> ArList;
 
 	public GridViewAdapter(Context c, List<adaptadorEventoEN> eventos) {
 		mContext = c;
 		this.items = eventos;
-		this.ArList = new ArrayList<View>(eventos.size());
 	}
 
 	public int getCount() {
@@ -44,17 +39,7 @@ public class GridViewAdapter extends BaseAdapter {
 	// create a new ImageView for each item referenced by the Adapter
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View vista = convertView;
-		View a;
-		try {
-			a = this.ArList.get(position);
-		} catch (Exception e) {
-			a = null;
-		}
-		if (a != null) {
-			vista = a;
-			return a;
-		}
+		View vista = convertView;		
 		try {
 			adaptadorEventoEN item = items.get(position);
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -54,7 +54,6 @@ public class detalleEventoActivity extends FragmentActivity {
 	TextView edNombre;
 	TextView edDesc;
 	TextView txtAsistentes;
-	TextView txtDir;
 	TextView txtDireccion;
 	TextView txtDetalleDist;
 	TextView txtDetalleDistancia;
@@ -96,7 +95,6 @@ public class detalleEventoActivity extends FragmentActivity {
 			edDesc = (TextView) findViewById(R.id.txtDetalleDesc);
 			txtAsistentes = (TextView) findViewById(R.id.txtDetalleAsistentes);
 			galeria = (ImageView) findViewById(R.id.imgDetalleImagen);
-			txtDir = (TextView) findViewById(R.id.txtDetalleDir);
 			txtDireccion = (TextView) findViewById(R.id.txtDetalleDireccion);
 			txtDetalleDist = (TextView) findViewById(R.id.txtDetalleDist);
 			txtDetalleDistancia = (TextView) findViewById(R.id.txtDetalleDistancia);
@@ -236,16 +234,18 @@ public class detalleEventoActivity extends FragmentActivity {
 		// ///////////////////////////
 		String direccion = "";
 		String[] spidesc = evento.getDireccion().split(",");
-		for (int i = 2; i < spidesc.length; i++) {
-			if (!spidesc[i].equals(""))
-				if (i == spidesc.length - 1)
-					direccion += spidesc[i];
-				else
-					direccion += spidesc[i] + ",";
-		}
+		if (spidesc.length == 6)
+			// Direccion=Calle,Numero Localidad(Provincia)
+			direccion = spidesc[4] + ", " + spidesc[5] + " " + spidesc[3]
+					+ " (" + spidesc[2] + ")";
+		else if (spidesc.length == 5)
+			// Direccion=Calle Localidad(Provincia)
+			direccion = spidesc[4] + " " + spidesc[3] + " (" + spidesc[2] + ")";
+		else
+			// Direccion= Provincia
+			direccion = spidesc[2];
 		txtDireccion.setText(direccion);
 		//
-		txtDir.setText("Dirección: ");
 		txtDetalleDist.setText("Distancia: ");
 		String distancia = new DecimalFormat("#.##").format(evento
 				.getDistancia()) + " Km.";
@@ -281,29 +281,33 @@ public class detalleEventoActivity extends FragmentActivity {
 		relInformacion.setVisibility(View.VISIBLE);
 		relsituacion.setVisibility(View.VISIBLE);
 		LayoutComentarios.setVisibility(View.VISIBLE);
-		//btnVerMasComentarios.setVisibility(View.VISIBLE);
+		// btnVerMasComentarios.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
 
 		// Ver comentarios
-		ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
-		parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
-		parametros.add(new BasicNameValuePair("elementsPerPage", Herramientas
-				.ComentariosEnDetalleEvento() + ""));
-		String URL = "http://desipal.hol.es/app/eventos/listaComentarios.php";
-		final generalComentarios peticion = new generalComentarios(parametros,
-				refListaComentarios);
-		peticion.execute(new String[] { URL });
-		final Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				Status s = peticion.getStatus();
-				if (s.name().equals("FINISHED")) {
-					verComentarios();
-				} else
-					handler.postDelayed(this, 500);
-			}
-		}, 500);
+		if (evento.isComentarios()) {
+			ArrayList<NameValuePair> parametros = new ArrayList<NameValuePair>();
+			parametros.add(new BasicNameValuePair("idEvento", idEvento + ""));
+			parametros.add(new BasicNameValuePair("elementsPerPage",
+					Herramientas.ComentariosEnDetalleEvento() + ""));
+			String URL = "http://desipal.hol.es/app/eventos/listaComentarios.php";
+			final generalComentarios peticion = new generalComentarios(
+					parametros, refListaComentarios);
+			peticion.execute(new String[] { URL });
+			final Handler handler = new Handler();
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					Status s = peticion.getStatus();
+					if (s.name().equals("FINISHED")) {
+						verComentarios();
+					} else
+						handler.postDelayed(this, 500);
+				}
+			}, 500);
+		} else {
+			LayoutComentarios.setVisibility(View.GONE);
+		}
 	}
 
 	private void verComentarios() {
@@ -313,7 +317,7 @@ public class detalleEventoActivity extends FragmentActivity {
 						refListaComentarios.get(), i, getApplicationContext()));
 			}
 			btnVerMasComentarios.setVisibility(View.VISIBLE);
-		} catch (Exception ex) {			
+		} catch (Exception ex) {
 			textNoHayComentarios.setVisibility(View.VISIBLE);
 		} finally {
 			progressBarComentarios.setVisibility(View.GONE);

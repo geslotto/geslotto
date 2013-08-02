@@ -2,63 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rel_gridView_item"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:background="@drawable/fondo_item"
-    android:padding="5dp" >
+    android:layout_height="75dp"
+    android:background="#343838">
 
-    <TextView
-        android:id="@+id/txtTituloEvento"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imgEvento"
-        android:paddingLeft="10dp"
-        android:text="@string/titulo"
-        android:textColor="#000"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:background="#008C9E"
+        android:layout_marginTop="5dp"
+        android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/txtFechaEvento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/txtTituloEvento"
-        android:paddingLeft="10dp"
-        android:text="@string/hint_fecha"
-        android:textColor="#000"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/txtTituloEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imgEvento"
+            android:paddingLeft="5dp"
+            android:text="@string/titulo"
+            android:textColor="#FFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txtDistEvento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:paddingLeft="10dp"
-        android:text="@string/Radio"
-        android:textColor="#000"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/txtFechaEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txtTituloEvento"
+            android:layout_toRightOf="@+id/txtTituloEvento"
+            android:paddingLeft="10dp"
+            android:text="@string/hint_fecha"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
 
-    <ImageView
-        android:id="@+id/imgEvento"
-        android:layout_width="80dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:background="#585858"
-        android:contentDescription="@string/descImagen"
-        android:src="@drawable/bordes" />
+        <TextView
+            android:id="@+id/txtDistEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txtTituloEvento"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="5dp"
+            android:text="@string/Radio"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/txtDescEvento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtTituloEvento"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/imgEvento"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:text="@string/crearEventoComentarios"
-        android:textColor="#000"
-        android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/imgEvento"
+            android:layout_width="75dp"
+            android:layout_height="65dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="#005F6B"
+            android:contentDescription="@string/descImagen"
+            android:src="@drawable/bordes" />
+
+        <TextView
+            android:id="@+id/txtDescEvento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTituloEvento"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imgEvento"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/crearEventoComentarios"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
